@@ -1,6 +1,6 @@
-package com.example.szakdoga.repository;
+package com.example.szakdoga.data.repository;
 
-import com.example.szakdoga.model.User;
+import com.example.szakdoga.data.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
