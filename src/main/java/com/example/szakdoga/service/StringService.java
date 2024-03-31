@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class StringService {
     public ProbaString probaString;
+    public ConnectionService connectionService;
 
     @Autowired
-    public StringService(ProbaString probaString) {
+    public StringService(ProbaString probaString, ConnectionService connectionService) {
         this.probaString = probaString;
+        this.connectionService = connectionService;
     }
 }

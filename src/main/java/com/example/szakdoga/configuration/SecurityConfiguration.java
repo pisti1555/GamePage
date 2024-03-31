@@ -42,7 +42,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> {
                     auth
                             .requestMatchers("/").permitAll()
-                            .requestMatchers("/ez").permitAll()
+                            .requestMatchers("/ez").authenticated()
+                            .requestMatchers("/user/**").authenticated()
+                            .requestMatchers("/{id}").permitAll()
                             .requestMatchers("/register").permitAll();
                         })
                 .formLogin(login -> {
