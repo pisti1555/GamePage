@@ -3,9 +3,11 @@ package com.example.szakdoga.data.model;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user",
@@ -18,7 +20,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String username;
     private String email;
     private String password;
@@ -31,8 +32,11 @@ public class User implements UserDetails {
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
-
     private Collection<Role> roles;
+
+    @ManyToMany
+    @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id") )
+    private Set<User> userFriends;
     private int gamesPlayed;
     private int gamesWon;
     private int movesDone;
@@ -55,6 +59,13 @@ public class User implements UserDetails {
         this.movesDone = movesDone;
     }
 
+    public void addUserFriends(User user) {
+        if (CollectionUtils.isEmpty(this.userFriends)) {
+            this.userFriends = new HashSet<>();
+        }
+        this.userFriends.add(user);
+    }
+
     public Long getId() {
         return id;
     }
@@ -65,6 +76,14 @@ public class User implements UserDetails {
 
     public String getUsername() {
         return username;
+    }
+
+    public Set<User> getUserFriends() {
+        return userFriends;
+    }
+
+    public void setUserFriends(Set<User> userFriends) {
+        this.userFriends = userFriends;
     }
 
     @Override
