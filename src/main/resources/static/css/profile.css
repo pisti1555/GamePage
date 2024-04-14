@@ -1,0 +1,100 @@
+body {
+    background-color:#070053;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    height: fit-content;
+
+    font-family: Franklin Gothic;
+    color: #ffffff80;
+}
+
+a {
+    color: #ffffff80;
+}
+
+label {
+    padding-right: 2vh;
+}
+
+.title {
+    padding: 1vh;
+}
+
+
+.container {
+    min-width: 40%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ffffff80;
+    border-radius: 50px;
+    padding: 10px;
+    width: fit-content;
+    height: fit-content;
+    background: transparent;
+    backdrop-filter: blur(20px);
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .userdata {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        height: fit-content;
+
+        .row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+
+    .buttonContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin: 10px;
+    }
+}
+
+.button {
+    backdrop-filter: blur(10px);
+    background: transparent;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    width: fit-content;
+    height: fit-content;
+    padding: 2vh;
+    margin: 2vh;
+    margin-bottom: 1vh;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    text-shadow: 0 0 5px darkblue;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid #ffffff80;
+    transition: 0.3s ease;
+    user-select: none;
+}
+
+.button:hover,
+:focus {
+color: #ffffff;
+background: #008cff;
+border: 1px solid #008cff;
+text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}

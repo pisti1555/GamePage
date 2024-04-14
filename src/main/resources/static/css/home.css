@@ -1,0 +1,73 @@
+body {
+    background-color:#070053;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    height: fit-content;
+}
+
+a {
+    color: #ffffff80;
+    font-family: Franklin Gothic;
+}
+
+h2 {
+    color: #ffffff80;
+    font-family: Franklin Gothic;
+}
+
+
+/********* Main menu *********/
+.container {
+    margin-top: 5%;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+}
+
+.container .row {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5%;
+}
+
+.container .row .button {
+    backdrop-filter: blur(10px);
+    background: transparent;
+    width: 100%;
+    padding: 5%;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border-radius: 30px;
+    font-size: 30px;
+    font-weight: 600;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid #ffffff80;
+    transition: 0.3s ease;
+    user-select: none;
+}
+
+.container .row .button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}

@@ -8,16 +8,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 
 @Controller
+@RequestMapping("/playGame")
 public class StringController {
+    /*
+
     StringService service;
 
     @Autowired
     public StringController(StringService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public String play(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
+        return "string";
     }
 
     @GetMapping("/ez")
@@ -33,4 +43,10 @@ public class StringController {
         model.addAttribute("string", service.connectionService.getStringFromUser(username));
         return "index";
     }
+
+
+     */
+
+
+
 }

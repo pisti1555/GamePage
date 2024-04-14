@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Play</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gameBoard.css}">
+    <link rel="stylesheet" th:href="@{/css/gamePage.css}">
+
+    <style th:inline="text">
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/GamePageBackground.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body onload="checkForAnyUnfinishedGame()">
+
+    <div class="menu" id="gameModeMain">
+        <div class="row">
+            <a type="button" class="button" id="pvp" th:href="@{/lobby}">Play against a friend</a>
+        </div>
+        <div class="row">
+            <a type="button" class="button" id="pvcomputer" onclick="openPopUp('playVsComputer'); closePopUp('gameModeMain');">Play against computer</a>
+        </div>
+        <div class="row">
+            <a th:href="@{'/'}" type="button" class="button" id="back">Back</a>
+        </div>   
+    </div>
+
+    <div class="popup closed" id="playVsComputer">
+        <a type="button" class="button" id="pvs" onclick="newGame('pvs'); openPopUp('gameboard'); closePopUp('playVsComputer');">Play vs Spider</a>
+        <a type="button" class="button" id="pvf" onclick="newGame('pvf'); openPopUp('gameboard'); closePopUp('playVsComputer');">Play vs Fly</a>
+        <a type="button" class="button" id="back" onclick="closePopUp('playVsComputer'); openPopUp('gameModeMain');">Back</a>
+    </div>
+
+    <div class="popup closed" id="gameFoundPopUp">
+        <h2>A game you started is found unfinished</h2>
+        <div class="row">
+            <a type="button" class="button" id="loadGame" onclick=" loadGame(); openPopUp('gameboard'); closePopUp('gameFoundPopUp');">Load</a>
+            <a type="button" class="button" id="back" onclick="openPopUp('gameModeMain'); closePopUp('gameFoundPopUp');">Cancel</a>
+        </div>
+    </div>
+
+    <div class="popup closed" id="gameOver"></div>
+
+
+
+    <div class="gameboard closed" id="gameboard">
+        <canvas id="canvas" width="700" height="700"></canvas>
+    </div>
+
+
+
+    <script th:src="@{/js/gamePage.js}"></script>
+    <script th:src="@{/js/gameBoard.js}"></script>
+    <script th:src="@{/js/popup.js}"></script>
+</body>
+</html>

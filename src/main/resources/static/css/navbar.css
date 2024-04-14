@@ -1,0 +1,81 @@
+.header {
+    width: 100%;
+    height: fit-content;
+    background: transparent;
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ffffff80;
+    transition: 0.5s ease;
+    user-select: none;
+
+    .navLeftSide {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        a {
+            display: flex;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 400;
+            text-decoration: none;
+            text-shadow: none;
+
+            #title {
+                white-space: nowrap;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+        }
+    }
+
+    .navRightSide {
+        padding-left: 10px;
+        padding-right: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        a {
+            display: flex;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 400;
+            text-decoration: none;
+            text-shadow: none;
+
+            .logo {
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+.navLeftSide:hover {
+    cursor: pointer;
+    background: #008cff;
+    border: 1px solid #008cff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
+}
+
+.navLeftSide:hover h2 {
+    color: #ffffff;
+}
+
+.navRightSide:hover {
+    cursor: pointer;
+    background: #008cff;
+    border: 1px solid #008cff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
+}
+
+.navRightSide:hover h3 {
+    color: #ffffff;
+}

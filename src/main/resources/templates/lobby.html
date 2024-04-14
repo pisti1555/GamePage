@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Scoreboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/lobby.css}"/>
+
+    <style th:inline="text">
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/GamePageBackground.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
+        }
+    </style>
+
+</head>
+<body>
+    <header class="header">
+        <div class="navLeftSide">
+            <a th:href="@{'/'}" class="homeContainer" id="homeButton">
+                <img class="logo" id="homeLogo" th:src="@{/img/HomeLogo.svg}" alt="">
+                <h2 id="title">Spiderweb game</h2>
+            </a>
+        </div>
+        <div class="navRightSide">
+            <a id="login" th:href="@{/profile}">
+                <h3 class="username" th:text="${username}"></h3>
+                <img class="logo" id="playerLogo" th:src="@{/img/LoginLogo.svg}" alt="">
+            </a>
+        </div>
+    </header>
+
+    <div class="inv_container">
+        <h2>Invitations:</h2>
+        <ul>
+            <li th:each="inviter : ${invites}">
+                <span th:text="${inviter}"></span> invited you to play.
+                <form action="/lobby/join" method="post" style="display: inline;">
+                    <input type="hidden" name="inviterName" th:value="${inviter}" />
+                    <button type="submit">Join</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div class="lobby_container">
+        <div class="player_container" id="player1">
+            <img th:src="@{/img/LoginLogoBig.svg}" alt="Player 1">
+            <h1 th:text="${player1}"></h1>
+        </div>
+
+        <div class="player_container" id="player2">
+            <img th:src="@{/img/inviteLogo.svg}" alt="Invite a friend">
+            <h1 th:text="${player2}"></h1>
+        </div>
+    </div>
+
+  
+
+    <h1>Welcome to the Lobby <span th:text="${username}"></span>!</h1>
+    <h2>Your game code is <span th:text="${string}"></span></h2>
+
+    <form action="/lobby/updateGameCode" method="post">
+        <label for="newGameCode">New Game Code:</label>
+        <input type="text" id="newGameCode" name="newGameCode" required>
+        <button type="submit">Update Game Code</button>
+    </form>
+    
+    <form action="/lobby/invite" method="post">
+        <label for="friendUsername">Friend's Username:</label>
+        <input type="text" id="friendUsername" name="friendUsername" required>
+        <button type="submit">Invite</button>
+    </form>
+   
+</body>
+</html>

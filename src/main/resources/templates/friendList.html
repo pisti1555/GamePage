@@ -8,8 +8,8 @@
 
     <title>Home</title>
     
-    <link rel="stylesheet" th:href="@{/css/home.css}"/>
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/scoreboard.css}"/>
     <style th:inline="text">
         body {
             background: url([[@{/img/HomePageBackground4k.jpg}]]) no-repeat center center fixed;
@@ -33,17 +33,33 @@
             </a>
         </div>
     </header>
-    
-    <div class="container">
-        <div class="row">
-            <a th:href="@{'/play'}" type="button" class="button">Play</a>
-        </div>
-        <div class="row">
-            <a th:href="@{'/friends'}" type="button" class="button">Friends</a>
-        </div>
-        <div class="row">
-            <a th:href="@{'/scoreboard'}" type="button" class="button">Scoreboard</a>
-        </div>
+
+    <div>
+        <a th:href="@{'/friends/add'}">
+            Add new friend
+        </a>
     </div>
-</body>
+
+    <div th:if="${success}" class="container">
+        <h2 class="title">Friend list</h2>
+
+        <table>
+            <p>Total Friends: <span th:text="${count}"></span></p>
+            <thead>
+                <tr>
+                    <th>Username</th>               
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="friend : ${friends}">
+                    <td>
+                        <a th:href="@{'/profile/' + ${friend}}" th:text="${friend}"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    
+    </body>
 </html>

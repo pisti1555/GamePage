@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Home</title>
+    
+    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <style th:inline="text">
+        body {
+            background: url([[@{/img/HomePageBackground4k.jpg}]]) no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Add Friend</h2>
+    <form action="#" th:action="@{/friends/add}" th:object="${userFriendsRequestEntity}" method="post">
+        <label for="friend1">Friend 1:</label>
+        <input type="text" id="friend1" name="friends[0]" required><br><br>
+        
+        <label for="friend2">Friend 2:</label>
+        <input type="text" id="friend2" name="friends[1]" required><br><br>
+        
+        <button type="submit">Add Friend</button>
+    </form>
+    
+</body>
+
+</html>

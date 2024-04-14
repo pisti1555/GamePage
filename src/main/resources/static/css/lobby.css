@@ -1,0 +1,77 @@
+html, body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+	font-family: Franklin Gothic;
+	font-weight: 200;
+    color: #ffffff80;
+	scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
+
+a {
+	color: #ffffff80;
+    font-family: Franklin Gothic;
+}
+
+h1 {
+    color: #ffffff80;
+    font-family: Franklin Gothic;
+	padding-left: 5%;
+	letter-spacing: 1px;
+}
+
+
+.lobby_container {
+    position: relative;
+	margin: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 30px;
+    overflow: auto;
+    scrollbar-width: none;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inv_container {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    margin: 10px;
+}
+
+.player_container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border: 1px solid aliceblue;
+    border-radius: 30px;
+    position: relative;
+    width: 40%;
+    height: 80%;
+    align-items: center;
+    justify-content: center;
+}
+
+.container::-webkit-scrollbar {
+	display: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #ffffff;
+	text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+}
+

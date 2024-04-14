@@ -39,13 +39,19 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     auth
+                            .requestMatchers("/js/**", "/img/**", "/css/**").permitAll()
+                            .requestMatchers(HttpMethod.POST).permitAll()
                             .requestMatchers("/").permitAll()
                             .requestMatchers("/ez").authenticated()
                             .requestMatchers("/user/**").authenticated()
                             .requestMatchers("/{id}").permitAll()
-                            .requestMatchers("/register").permitAll();
+                            .requestMatchers("/register").permitAll()
+                            .requestMatchers("/lobby/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/lobby/invite").permitAll()
+                            .anyRequest().permitAll();
                         })
                 .formLogin(login -> {
                     login

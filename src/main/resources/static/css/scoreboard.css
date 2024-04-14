@@ -1,0 +1,89 @@
+html, body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+	font-family: Franklin Gothic;
+	font-weight: 200;
+    color: #ffffff80;
+	scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
+
+a {
+	color: #ffffff80;
+    font-family: Franklin Gothic;
+}
+
+h2 {
+    color: #ffffff80;
+    font-family: Franklin Gothic;
+	padding-left: 5%;
+	letter-spacing: 1px;
+}
+
+
+.container {
+	position: relative;
+	left: 50%;
+	transform: translate(-50%, 0%);
+	margin-top: 10px;
+    width: 80%;
+    height: fit-content;
+    border: 1px solid aliceblue;
+    border-radius: 30px;
+    overflow: auto;
+    scrollbar-width: none;
+    
+    background: transparent;
+    backdrop-filter: blur(20px);
+}
+
+.container::-webkit-scrollbar {
+	display: none;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	overflow: hidden;
+	box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+th,
+td {
+	padding: 15px;
+    text-align: center;
+}
+
+thead {
+	th {
+		border-bottom: 1px solid aliceblue;
+        letter-spacing: 1px;
+	}
+}
+
+tbody {
+	tr {
+        border-bottom: 1px solid  aliceblue;
+	}
+	td {
+		position: relative;
+	}
+}
+
+tbody tr:hover {
+	background: #0099ff1c;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #ffffff;
+	text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+}

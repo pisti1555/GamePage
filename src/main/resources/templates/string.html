@@ -19,6 +19,7 @@
 </head>
 
 <body>
+
     <header class="header">
         <div class="navLeftSide">
             <a th:href="@{'/'}" class="homeContainer" id="homeButton">
@@ -33,17 +34,18 @@
             </a>
         </div>
     </header>
-    
-    <div class="container">
-        <div class="row">
-            <a th:href="@{'/play'}" type="button" class="button">Play</a>
-        </div>
-        <div class="row">
-            <a th:href="@{'/friends'}" type="button" class="button">Friends</a>
-        </div>
-        <div class="row">
-            <a th:href="@{'/scoreboard'}" type="button" class="button">Scoreboard</a>
-        </div>
-    </div>
+
+    <h2 id="text" th:text="${string}"></h2>
+    <input type="text" id="input">
+    <button onclick="changeText()">OK</button>
+
+    <script>
+        function changeText() {
+            var h2 = document.getElementById("text");
+            var input = document.getElementById("input").value;
+
+            h2.innerText = input;
+        }
+    </script>
 </body>
 </html>

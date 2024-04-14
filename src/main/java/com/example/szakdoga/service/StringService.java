@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StringService {
+
     public ProbaString probaString;
     public ConnectionService connectionService;
 
@@ -14,4 +15,6 @@ public class StringService {
         this.probaString = probaString;
         this.connectionService = connectionService;
     }
+
+
 }
