@@ -66,7 +66,8 @@
         </div>
 
         <div class="player_container" id="player2">
-            <img th:src="@{/img/inviteLogo.svg}" alt="Invite a friend">
+            <img th:if="${player2 != 'Invite a friend'}" th:src="@{/img/LoginLogoBig.svg}" alt="Player 2">
+            <img th:if="${player2 == 'Invite a friend'}" th:src="@{/img/inviteLogo.svg}" alt="Invite a friend">
             <h1 th:text="${player2}"></h1>
         </div>
     </div>
