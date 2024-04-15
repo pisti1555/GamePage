@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -45,6 +47,14 @@ public class FriendController {
 
     @PostMapping("/add")
     public String addFriend(Model model, Principal principal, UserFriendsRequestEntity request) {
+        List<String> friends = new ArrayList<>();
+        String inviter = principal.getName();
+        String invited = request.getFriends().get(1);
+
+        friends.add(inviter);
+        friends.add(invited);
+        request.setFriends(friends);
+
         service.addUserFriends(request);
         return "redirect:/friends/add";
     }

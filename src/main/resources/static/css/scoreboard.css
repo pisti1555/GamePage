@@ -46,6 +46,32 @@ h2 {
 	display: none;
 }
 
+.friendCount {
+	margin: 10px;
+}
+
+.button {
+	color: #ffffff80;
+    backdrop-filter: blur(10px);
+    background: transparent;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 400;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid #ffffff80;
+    transition: 0.3s ease;
+    user-select: none;
+    margin: 10px;
+}
+
+
 table {
 	width: 100%;
 	border-collapse: collapse;

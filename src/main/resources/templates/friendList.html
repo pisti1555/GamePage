@@ -34,17 +34,15 @@
         </div>
     </header>
 
-    <div>
-        <a th:href="@{'/friends/add'}">
-            Add new friend
-        </a>
-    </div>
 
     <div th:if="${success}" class="container">
         <h2 class="title">Friend list</h2>
 
         <table>
-            <p>Total Friends: <span th:text="${count}"></span></p>
+            <p class="friendCount">Total Friends: <span th:text="${count}"></span></p>
+            <a class="button" th:href="@{'/friends/add'}">
+                Add new friend
+            </a>
             <thead>
                 <tr>
                     <th>Username</th>               

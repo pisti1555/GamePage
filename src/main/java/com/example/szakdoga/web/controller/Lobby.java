@@ -1,21 +1,28 @@
 package com.example.szakdoga.web.controller;
 
 import com.example.szakdoga.data.model.game.PvP;
+import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.service.GameService;
+import com.example.szakdoga.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/lobby")
 public class Lobby {
     GameService service;
+    UserFriendsService friendsService;
     @Autowired
-    public Lobby(GameService service) {
+    public Lobby(GameService service, UserFriendsService friendsService) {
         this.service = service;
+        this.friendsService = friendsService;
     }
 
     @GetMapping
@@ -28,6 +35,12 @@ public class Lobby {
         model.addAttribute("invites", service.getInvites(username));
         model.addAttribute("player1", game.getUser1());
         model.addAttribute("player2", game.getUser2());
+
+        ResponseEntity<Map<String, Object>> responseEntity = friendsService.getUserFriendsList(new UserFriendsListRequestEntity(principal.getName()));
+        Map<String, Object> responseBody = responseEntity.getBody();
+        if (responseEntity.getStatusCode() == HttpStatus.OK && responseBody != null) {
+            model.addAttribute("friends", responseBody.get("friends"));
+        }
         return "lobby";
     }
 

@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class GameService {
+
     List<PvP> gameList = new ArrayList<>();
     Map<String, String> invites = new ConcurrentHashMap<>();
 

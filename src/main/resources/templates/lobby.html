@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/lobby.css}"/>
+    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
 
     <style th:inline="text">
         body {
@@ -59,23 +60,37 @@
         </ul>
     </div>
 
-    <div class="lobby_container">
+    <div id="lobby" class="lobby_container">
         <div class="player_container" id="player1">
             <img th:src="@{/img/LoginLogoBig.svg}" alt="Player 1">
             <h1 th:text="${player1}"></h1>
         </div>
 
-        <div class="player_container" id="player2">
+        <a class="player_container" id="player2" onclick="openPopUp('friendlist'); closePopUp('lobby');">
             <img th:if="${player2 != 'Invite a friend'}" th:src="@{/img/LoginLogoBig.svg}" alt="Player 2">
             <img th:if="${player2 == 'Invite a friend'}" th:src="@{/img/inviteLogo.svg}" alt="Invite a friend">
             <h1 th:text="${player2}"></h1>
-        </div>
+        </a>
+        
+    </div>
+
+    <div id="friendlist" class="popup_container closed">
+        <ul>
+            <li class="row" th:each="friend : ${friends}">
+                <span th:text="${friend}"></span>
+                <form th:action="@{/lobby/invite}" method="post">
+                    <input type="hidden" name="friendUsername" th:value="${friend}" />
+                    <button class="button" type="submit">Invite</button>
+                </form>          
+            </li>
+            <button class="button" onclick="closePopUp('friendlist'); openPopUp('lobby');">Close</button>
+        </ul>
     </div>
 
   
 
     <h1>Welcome to the Lobby <span th:text="${username}"></span>!</h1>
-    <h2>Your game code is <span th:text="${string}"></span></h2>
+    <h2 id="gameCode">Your game code is <span th:text="${string}"></span></h2>
 
     <form action="/lobby/updateGameCode" method="post">
         <label for="newGameCode">New Game Code:</label>
@@ -88,6 +103,61 @@
         <input type="text" id="friendUsername" name="friendUsername" required>
         <button type="submit">Invite</button>
     </form>
+
+    <script>
+
+        var socket = new SockJS('/websocket');
+        var stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/user/queue/gameUpdate', function(gameUpdate) {
+                // Frissítsd a weboldalt az új játék kóddal
+                var newGameCode = JSON.parse(gameUpdate.body);
+                updateGame(newGameCode);
+            });
+        });
+
+        function updateGame(newGameCode) {
+            document.getElementById("gameCode").innerText = newGameCode;
+        }
+
+    </script>
+
+    <script>
+        // Barát meghívása gomb eseménykezelő
+        document.getElementById("inviteFriendButton").addEventListener("click", function() {
+            // Barátok listájának megjelenítése
+        });
+
+        // Barát meghívása
+        function inviteFriend(friendName) {
+            fetch('/lobby/invite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'friendUsername=' + encodeURIComponent(friendName)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Sikeres válasz esetén frissítsd az oldalt vagy végezz egyéb műveleteket
+                    console.log("Invitation sent to " + friendName);
+                } else {
+                    console.error('Hiba történt a kérés során:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Hiba történt a fetch hívás során:', error);
+            });
+        }
+
+        function showInviteWindow() {
+        document.getElementById("friendlist").style.display = "block";
+        }
+    </script>
+
+    <script th:src="@{/js/popup.js}"></script>
    
 </body>
 </html>

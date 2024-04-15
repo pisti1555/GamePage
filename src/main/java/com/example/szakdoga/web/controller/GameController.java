@@ -13,6 +13,7 @@ import java.security.Principal;
 @RequestMapping("/play")
 public class GameController {
     GameService service;
+
     @Autowired
     public GameController(GameService service) {
         this.service = service;
