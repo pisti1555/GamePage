@@ -66,10 +66,10 @@
             <h1 th:text="${player1}"></h1>
         </div>
 
-        <a class="player_container" id="player2" onclick="openPopUp('friendlist'); closePopUp('lobby');">
+        <a class="player_container" id="player2" onclick="showInvite()">
             <img th:if="${player2 != 'Invite a friend'}" th:src="@{/img/LoginLogoBig.svg}" alt="Player 2">
             <img th:if="${player2 == 'Invite a friend'}" th:src="@{/img/inviteLogo.svg}" alt="Invite a friend">
-            <h1 th:text="${player2}"></h1>
+            <h1 id="player2" th:text="${player2}"></h1>
         </a>
         
     </div>
@@ -157,7 +157,19 @@
         }
     </script>
 
+    
+
     <script th:src="@{/js/popup.js}"></script>
+
+    <script>
+        function showInvite() {
+            var name = document.getElementById('player2').innerText;
+            if(name == "Invite a friend") {
+                openPopUp('friendlist'); 
+                closePopUp('lobby');
+            }
+        }
+    </script>
    
 </body>
 </html>
