@@ -3,6 +3,7 @@ package com.example.szakdoga.web.controller;
 import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.request.UserFriendsRequestEntity;
 import com.example.szakdoga.service.UserFriendsService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,11 +43,12 @@ public class FriendController {
 
     @GetMapping("/add")
     public String getAddFriend(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
         return "addFriend";
     }
 
     @PostMapping("/add")
-    public String addFriend(Model model, Principal principal, UserFriendsRequestEntity request) {
+    public String addFriend(Model model, Principal principal, UserFriendsRequestEntity request, HttpServletRequest http) {
         List<String> friends = new ArrayList<>();
         String inviter = principal.getName();
         String invited = request.getFriends().get(1);
@@ -56,8 +58,6 @@ public class FriendController {
         request.setFriends(friends);
 
         service.addUserFriends(request);
-        return "redirect:/friends/add";
+        return "redirect:" + http.getHeader("Referer");
     }
-
-
 }

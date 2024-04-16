@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Profile</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/profile.css}"/>
+
+    <style th:inline="text">
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/GamePageBackground.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
+        }
+    </style>
+
+</head>
+<body>
+    <header class="header">
+        <div class="navLeftSide">
+            <a th:href="@{'/'}" class="homeContainer" id="homeButton">
+                <img class="logo" id="homeLogo" th:src="@{/img/HomeLogo.svg}" alt="">
+                <h2 id="title">Spiderweb game</h2>
+            </a>
+        </div>
+        <div class="navRightSide">
+            <a id="login" th:href="@{/profile}">
+                <h3 class="username" th:text="${username}"></h3>
+                <img class="logo" id="playerLogo" th:src="@{/img/LoginLogo.svg}" alt="">
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="title" th:text="'Profile of ' + ${name}"></h1>
+        <form action="#" th:action="@{/friends/add}" method="post">
+            <input type="hidden" name="friends[1]" th:value="${name}" />
+            <button class="button" type="submit">Add Friend</button>
+        </form>
+        
+
+        <div class="userdata">
+            <div class="row">
+                <h3 th:text="'Username: ' + ${name}">
+                </h3>
+            </div>
+            <div class="row">
+                <h3 th:text="'Games played: ' + ${gamesPlayed}"></h3>
+            </div>
+            <div class="row">
+                <h3 th:text="'Games won: ' + ${gamesWon}"></h3>
+            </div>
+            <div class="row">
+                <h3 th:text="'Steps made: ' + ${movesDone}"></h3>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -8,7 +8,9 @@
 
     <title>Home</title>
     
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/addFriend.css}"/>
+    
     <style th:inline="text">
         body {
             background: url([[@{/img/HomePageBackground4k.jpg}]]) no-repeat center center fixed;
@@ -18,6 +20,20 @@
 </head>
 
 <body>
+    <header class="header">
+        <div class="navLeftSide">
+            <a th:href="@{'/'}" class="homeContainer" id="homeButton">
+                <img class="logo" id="homeLogo" th:src="@{/img/HomeLogo.svg}" alt="">
+                <h2 id="title">Spiderweb game</h2>
+            </a>
+        </div>
+        <div class="navRightSide">
+            <a id="login" th:href="@{/profile}">
+                <h3 class="username" th:text="${username}"></h3>
+                <img class="logo" id="playerLogo" th:src="@{/img/LoginLogo.svg}" alt="">
+            </a>
+        </div>
+    </header>
 
     <div class="container">
         <h2>Add Friend</h2>
