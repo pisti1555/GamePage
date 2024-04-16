@@ -1,6 +1,8 @@
 package com.example.szakdoga.web.controller;
 
 import com.example.szakdoga.data.model.User;
+import com.example.szakdoga.data.repository.UserFriendDao;
+import com.example.szakdoga.service.UserFriendsService;
 import com.example.szakdoga.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,12 @@ import java.security.Principal;
 @RequestMapping("/profile")
 public class ProfileController {
     UserService service;
+    UserFriendsService friendsService;
 
     @Autowired
-    public ProfileController(UserService service) {
+    public ProfileController(UserService service, UserFriendsService friendsService) {
         this.service = service;
+        this.friendsService = friendsService;
     }
 
     @GetMapping
@@ -30,6 +34,7 @@ public class ProfileController {
     public String otherUserProfile(Model model, @PathVariable String userToFind, Principal principal) {
         boolean selfProfile = userToFind.equals(principal.getName());
         User user = service.findByUsername(userToFind);
+        model.addAttribute("friend", friendsService.isFriend(principal.getName(), userToFind));
         model.addAttribute("username", principal.getName());
         model.addAttribute("name", user.getUsername());
         model.addAttribute("gamesPlayed", user.getGamesPlayed());

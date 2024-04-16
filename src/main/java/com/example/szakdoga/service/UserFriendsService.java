@@ -12,4 +12,5 @@ public interface UserFriendsService {
     ResponseEntity<Map<String, Object>> getUserFriendsList(UserFriendsListRequestEntity userFriendsListRequestEntity);
 
     ResponseEntity<Map<String, Object>> getCommonUserFriends(UserFriendsRequestEntity userFriendsRequestEntity);
+    boolean isFriend(String principal, String user);
 }

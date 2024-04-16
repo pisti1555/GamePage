@@ -87,6 +87,10 @@
         </ul>
     </div>
 
+    <form action="/lobby/start" method="post">
+        <button class="button" type="submit">Start Game</button>
+    </form>
+    
   
 
     <h1>Welcome to the Lobby <span th:text="${username}"></span>!</h1>
@@ -104,63 +108,7 @@
         <button type="submit">Invite</button>
     </form>
 
-    <script>
-
-        var socket = new SockJS('/websocket');
-        var stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function(frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/user/queue/gameUpdate', function(gameUpdate) {
-                // Frissítsd a weboldalt az új játék kóddal
-                var newGameCode = JSON.parse(gameUpdate.body);
-                updateGame(newGameCode);
-            });
-        });
-
-        function updateGame(newGameCode) {
-            document.getElementById("gameCode").innerText = newGameCode;
-        }
-
-    </script>
-
-    <script>
-        // Barát meghívása gomb eseménykezelő
-        document.getElementById("inviteFriendButton").addEventListener("click", function() {
-            // Barátok listájának megjelenítése
-        });
-
-        // Barát meghívása
-        function inviteFriend(friendName) {
-            fetch('/lobby/invite', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'friendUsername=' + encodeURIComponent(friendName)
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Sikeres válasz esetén frissítsd az oldalt vagy végezz egyéb műveleteket
-                    console.log("Invitation sent to " + friendName);
-                } else {
-                    console.error('Hiba történt a kérés során:', response.status);
-                }
-            })
-            .catch(error => {
-                console.error('Hiba történt a fetch hívás során:', error);
-            });
-        }
-
-        function showInviteWindow() {
-        document.getElementById("friendlist").style.display = "block";
-        }
-    </script>
-
-    
-
     <script th:src="@{/js/popup.js}"></script>
-
     <script>
         function showInvite() {
             var name = document.getElementById('player2').innerText;

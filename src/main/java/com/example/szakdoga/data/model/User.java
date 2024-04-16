@@ -35,8 +35,11 @@ public class User implements UserDetails {
     private Collection<Role> roles;
 
     @ManyToMany
+    @JoinTable(name = "user_friend_requests", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id") )
+    private Set<User> userFriendRequest;
+    @ManyToMany
     @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id") )
-    private Set<User> userFriends;
+    private Set<User> userFriend;
     private int gamesPlayed;
     private int gamesWon;
     private int movesDone;
@@ -59,11 +62,18 @@ public class User implements UserDetails {
         this.movesDone = movesDone;
     }
 
-    public void addUserFriends(User user) {
-        if (CollectionUtils.isEmpty(this.userFriends)) {
-            this.userFriends = new HashSet<>();
+    public void sendFriendRequest(User user) {
+        if (CollectionUtils.isEmpty(this.userFriendRequest)) {
+            this.userFriendRequest = new HashSet<>();
         }
-        this.userFriends.add(user);
+        this.userFriendRequest.add(user);
+    }
+
+    public void addFriend(User user) {
+        if (CollectionUtils.isEmpty(this.userFriend)) {
+            this.userFriend = new HashSet<>();
+        }
+        this.userFriend.add(user);
     }
 
     public Long getId() {
@@ -78,12 +88,20 @@ public class User implements UserDetails {
         return username;
     }
 
-    public Set<User> getUserFriends() {
-        return userFriends;
+    public Set<User> getUserFriendRequest() {
+        return userFriendRequest;
     }
 
-    public void setUserFriends(Set<User> userFriends) {
-        this.userFriends = userFriends;
+    public Set<User> getUserFriend() {
+        return userFriend;
+    }
+
+    public void setUserFriend(Set<User> userFriend) {
+        this.userFriend = userFriend;
+    }
+
+    public void setUserFriendRequest(Set<User> userFriendRequest) {
+        this.userFriendRequest = userFriendRequest;
     }
 
     @Override

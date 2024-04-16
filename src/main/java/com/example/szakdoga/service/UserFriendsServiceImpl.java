@@ -1,8 +1,8 @@
 package com.example.szakdoga.service;
 
 import com.example.szakdoga.data.model.User;
+import com.example.szakdoga.data.repository.FriendRequestDao;
 import com.example.szakdoga.data.repository.UserFriendDao;
-import com.example.szakdoga.data.repository.UserRepository;
 import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.request.UserFriendsRequestEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +20,21 @@ import java.util.stream.Collectors;
 @Service
 public class UserFriendsServiceImpl implements UserFriendsService {
 
+    private final FriendRequestDao request;
     private final UserFriendDao dao;
 
     @Autowired
-    public UserFriendsServiceImpl(UserFriendDao dao) {
+    public UserFriendsServiceImpl(UserFriendDao dao, FriendRequestDao request) {
+        this.request = request;
         this.dao = dao;
     }
 
     private User saveIfNotExist(String username) {
-        User existingUser = this.dao.findByUsername(username);
+        User existingUser = this.request.findByUsername(username);
         if (existingUser == null) {
             existingUser = new User();
             existingUser.setUsername(username);
-            return this.dao.save(existingUser);
+            return this.request.save(existingUser);
         } else {
             return existingUser;
         }
@@ -69,14 +71,25 @@ public class UserFriendsServiceImpl implements UserFriendsService {
         user1 = this.saveIfNotExist(un1);
         user2 = this.saveIfNotExist(un2);
 
-        if (user1.getUserFriends().contains(user2)) {
+        if (user1.getUserFriendRequest().contains(user2)) {
             result.put("Info : ", "Can't add, they are already friends");
             return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
         }
 
-        user1.addUserFriends(user2);
-        this.dao.save(user1);
+        user1.sendFriendRequest(user2);
+        this.request.save(user1);
         result.put("Success", true);
+
+        if (user1.getUserFriendRequest().contains(user2 ) && user2.getUserFriendRequest().contains(user1)) {
+            System.out.println("Barátok");
+            user1.addFriend(user2);
+            user2.addFriend(user1);
+            this.dao.save(user1);
+            this.dao.save(user2);
+
+            result.put("Success", true);
+        }
+        System.out.println("Nem barátok");
 
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
@@ -91,7 +104,7 @@ public class UserFriendsServiceImpl implements UserFriendsService {
         }
 
         User user = this.dao.findByUsername(userFriendsListRequestEntity.getUsername());
-        List<String> friendList = user.getUserFriends().stream().map(User::getUsername).collect(Collectors.toList());
+        List<String> friendList = user.getUserFriend().stream().map(User::getUsername).collect(Collectors.toList());
 
         result.put("success", true);
         result.put("friends", friendList);
@@ -120,13 +133,21 @@ public class UserFriendsServiceImpl implements UserFriendsService {
         }
 
         Set<User> friends = null;
-        friends = user1.getUserFriends();
-        friends.retainAll(user2.getUserFriends());
+        friends = user1.getUserFriend();
+        friends.retainAll(user2.getUserFriend());
 
         result.put("success", true);
         result.put("friends", friends.stream().map(User::getUsername).collect(Collectors.toList()));
         result.put("count", friends.size());
 
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+    }
+
+    @Override
+    public boolean isFriend(String principal, String username) {
+        User client = this.dao.findByUsername(principal);
+        User user = this.dao.findByUsername(username);
+
+        return user != null && user.getUserFriend().contains(client) || client == user;
     }
 }
