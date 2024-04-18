@@ -16,12 +16,12 @@ public class GameService {
 
     public PvP getGame(String username) {
         for (PvP game : gameList) {
-            if (game.getUser1().equals(username) || game.getUser2().equals(username)) {
+            if (game.getUser1().equals(username) || (game.getUser2() != null && game.getUser2().equals(username))) {
                 return game;
             }
         }
 
-        PvP newGame = new PvP(username, "Invite a friend", username);
+        PvP newGame = new PvP(username, null, username);
         gameList.add(newGame);
         return newGame;
     }
@@ -31,6 +31,15 @@ public class GameService {
             if (game.getUser1().equals(inviter)) {
                 gameList.removeIf(i -> i.getUser1().equals(invited));
                 game.setUser2(invited);
+
+                for (Map.Entry<String, String> entry : invites.entrySet()) {
+                    String invitedUser = entry.getKey();
+                    String inviterUser = entry.getValue();
+                    if (invited.equals(invitedUser)  && inviter.equals(inviterUser)) {
+                        invites.remove(invitedUser);
+                    }
+                }
+
                 return game;
             }
         }

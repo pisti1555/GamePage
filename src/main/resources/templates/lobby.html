@@ -71,10 +71,13 @@
             <h1 th:text="${player1}"></h1>
         </div>
 
-        <a class="player_container" id="player2" onclick="showInvite()">
-            <img th:if="${player2 != 'Invite a friend'}" th:src="@{/img/LoginLogoBig.svg}" alt="Player 2">
-            <img th:if="${player2 == 'Invite a friend'}" th:src="@{/img/inviteLogo.svg}" alt="Invite a friend">
+        <a th:if="${player2 != null}" class="player_container" id="player2" onclick="showInvite()">
+            <img th:src="@{/img/LoginLogoBig.svg}" alt="Player 2">
             <h1 id="player2" th:text="${player2}"></h1>
+        </a>
+        <a th:if="${player2 == null}" class="player_container" id="player2" onclick="showInvite()">
+            <img th:src="@{/img/inviteLogo.svg}" alt="Invite a friend">
+            <h1 id="player2">Invite a friend</h1>
         </a>
         
     </div>
@@ -92,8 +95,11 @@
         </ul>
     </div>
 
-    <form action="/lobby/start" method="post">
+    <form th:if="${player2 != null}" action="/lobby/start" method="post">
         <button class="button" type="submit">Start Game</button>
+    </form>
+    <form th:if="${player2 == null}" action="/lobby/start-against-computer" method="post">
+        <button class="button" type="submit">Start Game against computer</button>
     </form>
 
     <script th:src="@{/js/popup.js}"></script>
