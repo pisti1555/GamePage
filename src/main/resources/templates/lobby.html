@@ -12,6 +12,11 @@
     <link rel="stylesheet" th:href="@{/css/lobby.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
     <style th:inline="text">
         body {
             position: relative;
@@ -90,23 +95,6 @@
     <form action="/lobby/start" method="post">
         <button class="button" type="submit">Start Game</button>
     </form>
-    
-  
-
-    <h1>Welcome to the Lobby <span th:text="${username}"></span>!</h1>
-    <h2 id="gameCode">Your game code is <span th:text="${string}"></span></h2>
-
-    <form action="/lobby/updateGameCode" method="post">
-        <label for="newGameCode">New Game Code:</label>
-        <input type="text" id="newGameCode" name="newGameCode" required>
-        <button type="submit">Update Game Code</button>
-    </form>
-    
-    <form action="/lobby/invite" method="post">
-        <label for="friendUsername">Friend's Username:</label>
-        <input type="text" id="friendUsername" name="friendUsername" required>
-        <button type="submit">Invite</button>
-    </form>
 
     <script th:src="@{/js/popup.js}"></script>
     <script>
@@ -118,6 +106,10 @@
             }
         }
     </script>
+
+    <script th:src="@{/js/lobby.js}"></script>
+
+    
    
 </body>
 </html>

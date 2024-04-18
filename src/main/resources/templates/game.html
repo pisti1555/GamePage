@@ -48,7 +48,7 @@
     <h1>Welcome to the Lobby <span th:text="${username}"></span>!</h1>
     <h2 id="gameCode">Your game code is <span th:text="${string}"></span></h2>
 
-    <form action="/play/updateGameCode" method="post">
+    <form action="/game/updateGameCode" method="post">
         <label for="newGameCode">New Game Code:</label>
         <input type="text" id="newGameCode" name="newGameCode" required>
         <button type="submit">Update Game Code</button>

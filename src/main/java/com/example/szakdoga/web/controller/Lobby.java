@@ -7,10 +7,12 @@ import com.example.szakdoga.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.Map;
@@ -19,10 +21,12 @@ import java.util.Map;
 @RequestMapping("/lobby")
 public class Lobby {
     GameService service;
+    SimpMessagingTemplate template;
     UserFriendsService friendsService;
     @Autowired
-    public Lobby(GameService service, UserFriendsService friendsService) {
+    public Lobby(GameService service, SimpMessagingTemplate template, UserFriendsService friendsService) {
         this.service = service;
+        this.template = template;
         this.friendsService = friendsService;
     }
 
@@ -45,27 +49,41 @@ public class Lobby {
         return "lobby";
     }
 
+    @MessageMapping("/lobby/invite")
+    @SendTo("/topic/lobby")
     @PostMapping("/invite")
     public String inviteFriend(@RequestParam("friendUsername") String friendUsername, Principal principal) {
         service.inviteFriend(principal.getName(), friendUsername);
+        template.convertAndSend("/topic/lobby", service.getInvites(friendUsername));
         return "redirect:/lobby";
     }
 
+    @MessageMapping("/lobby/join")
+    @SendTo("/topic/lobby")
     @PostMapping("/join")
     public String joinLobby(@RequestParam("inviterName") String inviterName, Principal principal, Model model) {
         PvP game = service.joinLobby(inviterName, principal.getName());
         if (game != null) {
             model.addAttribute("string", game.getGame());
+            template.convertAndSend("/topic/lobby", game);
             return "redirect:/lobby";
         } else {
             return "redirect:/lobby?error=joinFailed";
         }
     }
 
-    @PostMapping("/updateGameCode")
-    public String updateGameCode(@RequestParam("newGameCode") String newGameCode, Model model, Principal principal) {;
-        service.changeString(principal.getName(), newGameCode);
+    @MessageMapping("/lobby/start")
+    @SendTo("/topic/lobby")
+    @PostMapping("/start")
+    public String startGame(Model model, Principal principal) {
+        String username = principal.getName();
+        PvP game = service.getGame(username);
 
-        return "redirect:/lobby";
+        if (game.isReady()) {
+            template.convertAndSend("/topic/lobby/start", game);
+            return "redirect:/game";
+        } else {
+            return "redirect:/lobby?error=gameNotReady";
+        }
     }
 }
