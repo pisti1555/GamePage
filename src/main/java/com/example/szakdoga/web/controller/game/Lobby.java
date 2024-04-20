@@ -60,7 +60,6 @@ public class Lobby {
     public String joinLobby(@RequestParam("inviterName") String inviterName, Principal principal, Model model) {
         Game game = service.joinLobby(inviterName, principal.getName());
         if (game != null) {
-            model.addAttribute("string", game.getGame());
             template.convertAndSendToUser(inviterName, "/topic/lobby/update", "update");
             template.convertAndSendToUser(principal.getName(), "/topic/lobby/update", "update");
             return "redirect:/lobby";

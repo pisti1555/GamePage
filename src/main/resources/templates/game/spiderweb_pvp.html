@@ -11,6 +11,11 @@
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/gameBoard.css}"/>
     <link rel="stylesheet" th:href="@{/css/gamePage.css}"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     
     <style th:inline="text">
         body {
@@ -31,27 +36,32 @@
     </style>
 
 </head>
-<body onload="newGame('pvp')">
-    <header class="header">
-        <div class="navLeftSide">
-            <a th:href="@{'/'}" class="homeContainer" id="homeButton">
-                <img class="logo" id="homeLogo" th:src="@{/img/HomeLogo.svg}" alt="">
-                <h2 id="title">Spiderweb game</h2>
-            </a>
+<body>
+
+    <div th:if="${whoWon != 0}" class="gameOverContainer">
+        <h2 th:if="${whoWon == 1}">Fly won</h2>
+        <h2 th:if="${whoWon == 2}">Spiders won</h2>
+
+        <h3>Fly made <span th:text="${flySteps}"></span> steps</h3>
+        <h3>Spiders made <span th:text="${spiderSteps}"></span> steps</h3>
+        <h3>Total steps made: <span th:text="${totalSteps}"></span> steps</h3>
+
+        <div class="buttonContainer">
+            <a th:href="@{/game/new-game}" class="button">New game</a>
+            <a th:href="@{/game/quit}" class="button">Quit</a>
         </div>
-        <div class="navRightSide">
-            <a id="login" th:href="@{/profile}">
-                <h3 class="username" th:text="${username}"></h3>
-                <img class="logo" id="playerLogo" th:src="@{/img/LoginLogo.svg}" alt="">
-            </a>
-        </div>
-    </header>
+    </div>
+
+
 
     <div class="gameboard" id="gameboard">
         <canvas id="canvas" width="700" height="700"></canvas>
     </div>
 
-   <script th:src="@{/js/gameBoard.js}"></script>
-   
+
+
+    <script th:src="@{/js/gamePage.js}"></script>
+    <script th:src="@{/js/board.js}"></script>
+    <script th:src="@{/js/popup.js}"></script>
 </body>
 </html>

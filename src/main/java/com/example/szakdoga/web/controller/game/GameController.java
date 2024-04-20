@@ -34,26 +34,28 @@ public class GameController {
         return "game/gameMenu";
     }
 
-    @PostMapping("/updateGameCode")
-    public String updateGameCode(@RequestParam("newGameCode") String newGameCode, Model model, Principal principal) {;
-        service.changeString(principal.getName(), newGameCode);
-
-        return "redirect:/game/pvp";
-    }
-
     @GetMapping("/pvp")
     public String getGamePage(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("username", username);
         Game game = service.getGame(username);
         if (game != null) {
-            model.addAttribute("string", game.getString());
-            System.out.println("User: " + principal.getName());
-            System.out.println("Board: " + game.getBoard());
-            return "game/spiderweb_pvp";
-        } else {
-            return "redirect:/lobby?error=noGameFound";
+            if (game.isReady()) {
+                boolean gameOver = service.getIsGameRunning(game.getBoard());
+                int whoWon = service.whoWon(game.getBoard());
+                int flyStepsDone = service.getFlyStepsDone(game.getBoard());
+                int spiderStepsDone = service.getSpiderStepsDone(game.getBoard());
+                int totalStepsDone = flyStepsDone + spiderStepsDone;
+                model.addAttribute("gameOver", gameOver);
+                model.addAttribute("whoWon", whoWon);
+                model.addAttribute("flySteps", flyStepsDone);
+                model.addAttribute("spiderSteps", spiderStepsDone);
+                model.addAttribute("totalSteps", totalStepsDone);
+                return "game/spiderweb_pvp";
+            }
         }
+
+        return "redirect:/lobby?error=noGameFound";
     }
 
     @GetMapping("/pvs")
@@ -68,5 +70,15 @@ public class GameController {
         return "game/spiderweb_pvf";
     }
 
+    @PostMapping("/new-game")
+    public String newGame() {
+        return null;
+        //TODO
+    }
 
+    @PostMapping("/quit")
+    public String quit() {
+        return null;
+        //TODO
+    }
 }

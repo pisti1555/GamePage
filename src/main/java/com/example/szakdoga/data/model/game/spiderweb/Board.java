@@ -3,22 +3,22 @@ package com.example.szakdoga.data.model.game.spiderweb;
 import java.util.Random;
 
 public class Board {
-    private Integer id;
-    private final Field[] field;
-    private final Piece fly;
-    private final Piece[] spider;
+    public Integer id;
+    public final Field[] field;
+    public final Piece fly;
+    public final Piece[] spider;
 
 
-    private short gameMode;
-    private final short PVP = 1;
-    private final short PVS = 2;
-    private final short PVF = 3;
-    private final Random random;
-    private boolean isGameRunning = false;
-    private boolean isFlysTurn = true;
-    private int pieceWon = 0;
-    private int flyStepsDone = 0;
-    private int spiderStepsDone = 0;
+    public short gameMode;
+    public final short PVP = 1;
+    public final short PVS = 2;
+    public final short PVF = 3;
+    public final Random random;
+    public boolean isGameRunning;
+    public boolean isFlysTurn;
+    public int pieceWon;
+    public int flyStepsDone;
+    public int spiderStepsDone;
 
 
 
@@ -28,6 +28,11 @@ public class Board {
         field = cb.giveField();
         fly = cb.giveFly();
         spider = cb.giveSpiders();
+        isGameRunning = true;
+        isFlysTurn = true;
+        pieceWon = 0;
+        flyStepsDone = 0;
+        spiderStepsDone = 0;
     }
 
     public Field[] getField() {

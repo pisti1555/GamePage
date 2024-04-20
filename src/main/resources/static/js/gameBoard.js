@@ -1,3 +1,17 @@
+var stompClient = null;
+
+function connectToWebSocket() {
+    var socket = new SockJS('/app');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/user/topic/game/update', function (message) {
+            console.log('Received message: ' + message.body);
+            window.location.reload();
+        });
+    });
+}
+connectToWebSocket();
 
 var lastSelectedField;
 var lastSelectedFieldIndex;
@@ -57,7 +71,7 @@ function createBoard(gameMode) {
 
     for (var i = 0; i < 28; i++) {
         var className = "subfield";
-        if (i == 5 || i == 10 || i == 14 || i == 18 || i == 22 || i == 27) {
+        if (i == 0 || i == 5 || i == 10 || i == 14 || i == 18 || i == 22 || i == 27) {
             className = "field";
         }
         var id = "field" + i;
@@ -116,7 +130,7 @@ function moveToField(from, to, gameMode) {
           body: moveParams.toString()
      }).then(response => response.text())
          .then(data => {
-            gameWon(data);
+            //gameWon(data);
             getBoardDataFromServer();
           }).catch(error => console.error("Error:", error));
     }
@@ -161,6 +175,7 @@ function getBoardDataFromServer() {
      }).then(response => response.json())
          .then(data => {
              locations = data;
+             console.log("locations: " + locations);
              placePieces(locations);
           }).catch(error => console.error("Error: ", error));
 }
@@ -223,45 +238,4 @@ function drawConnections(from ,to) {
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
-}
-
-
-
-function gameWon(piece) {
-    let window = document.getElementById("gameOver");
-
-    if (piece == 1) {
-        fetch('http://localhost:8080/api/game/getFlyStepsDone')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            window.innerHTML = "<h1>Fly won</h1> <div id='stats'><h3>Steps made: " + data + "</h3></div> <a class='button' id='quit' onclick=\"openPopUp('gameModeMain'); closePopUp('gameOver');\">Quit game</a>";
-            openPopUp("gameOver");
-            closePopUp("gameboard");
-            clearBoard();
-        }).catch(error => {
-            console.error("Error:", error)
-            window.innerHTML = "<h1>Fly won</h1> <a class='button' id='quit' onclick=\"openPopUp('gameModeMain'); closePopUp('gameOver');\">Quit game</a>";
-            openPopUp("gameOver");
-            closePopUp("gameboard");
-            clearBoard();
-        });
-    } 
-    else if (piece == 2) {
-        fetch('http://localhost:8080/api/game/getSpiderStepsDone')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            window.innerHTML = "<h1>Spiders won</h1> <div id='stats'><h3>Steps made: " + data + "</h3></div> <a class='button' id='quit' onclick=\"openPopUp('gameModeMain'); closePopUp('gameOver');\">Quit game</a>";
-            openPopUp("gameOver");
-            closePopUp("gameboard");
-            clearBoard();
-        }).catch(error => {
-            console.error("Error:", error)
-            window.innerHTML = "<h1>Spiders won</h1> <a class='button' id='quit' onclick=\"openPopUp('gameModeMain'); closePopUp('gameOver');\">Quit game</a>";
-            openPopUp("gameOver");
-            closePopUp("gameboard");
-            clearBoard();
-        });
-    }
 }

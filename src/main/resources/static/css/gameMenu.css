@@ -42,18 +42,18 @@ a {
 }
 
 .button {
-    display: inline;
-    font-family: Franklin Gothic;
-    font-weight: 400;
     backdrop-filter: blur(10px);
     background: transparent;
-    padding: 10px;
-    margin: 10px;
-    width: 30%;
-    height: 30px;
+    width: 80%;
+    padding: 2%;
+    margin: 2%;
     text-align: center;
+    text-transform: uppercase;
     text-decoration: none;
-    border-radius: 10px;
+    letter-spacing: 2px;
+    border-radius: 30px;
+    font-size: 30px;
+    font-weight: 600;
     text-shadow: none;
     cursor: pointer;
     box-shadow: transparent;
@@ -104,28 +104,4 @@ a {
 
 #gameFoundPopUp h2 {
     text-shadow: 0 0 5px #55555580;
-}
-
-.gameOverContainer {
-    position: absolute;
-    z-index: 4;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-family: Franklin Gothic;
-    font-weight: 400;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid aliceblue;
-    border-radius: 20px;
-    background: transparent;
-    backdrop-filter: blur(30px);
-}
-
-.gameOverContainer .buttonContainer {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
 }

@@ -1,11 +1,11 @@
 package com.example.szakdoga.web.controller.game;
 
+import com.example.szakdoga.data.model.game.Game;
 import com.example.szakdoga.data.model.game.spiderweb.Board;
 import com.example.szakdoga.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -25,9 +25,13 @@ public class GameAPIController {
 
     @PostMapping("/playVsPlayer")
     public int playVsPlayer(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
+        Game game = service.getGame(principal.getName());
         Board board = findBoard(principal.getName());
-        if (service.isMoveValid(board, from, to)) {
-            service.move(board, from, to);
+        service.isMoveValid(from, to, board);
+        if (service.isMoveValid(from, to, board)) {
+            service.moveVsPlayer(from, to, board, principal.getName());
+            template.convertAndSendToUser(game.getUser1(), "/topic/game/update", "update");
+            template.convertAndSendToUser(game.getUser2(), "/topic/game/update", "update");
         } else {
             System.out.println("Invalid move");
         }
@@ -38,8 +42,8 @@ public class GameAPIController {
     @PostMapping("/playVsSpider")
     public int playVsSpider(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
         Board board = service.getGame(principal.getName()).getBoard();
-        if (service.isMoveValid(board, from, to)) {
-            service.move(board, from, to);
+        if (service.isMoveValid(from, to, board)) {
+            service.moveVsComputer(from, to, board);
 
             service.randomMoveSpider(board);
         } else {
@@ -58,8 +62,8 @@ public class GameAPIController {
     @PostMapping("/playVsFly")
     public int playVsFly(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
         Board board = service.getGame(principal.getName()).getBoard();
-        if (service.isMoveValid(board, from, to)) {
-            service.move(board, from, to);
+        if (service.isMoveValid(from, to, board)) {
+            service.moveVsComputer(from, to, board);
             service.randomMoveFly(board);
         } else {
             System.out.println("Invalid move");
@@ -100,7 +104,7 @@ public class GameAPIController {
     @PostMapping("/newGame")
     public void newGame(@RequestParam("mode") String mode, Principal principal) {
         Board board = findBoard(principal.getName());
-        service.newGame(board, mode);
+        service.newGame(mode, board, principal.getName());
     }
 
 

@@ -33,7 +33,7 @@ public class GameService {
             }
         }
 
-        Game newGame = new Game(username, null, username, new Board());
+        Game newGame = new Game(username, null, new Board());
         gameList.add(newGame);
         return newGame;
     }
@@ -80,28 +80,38 @@ public class GameService {
         return getInvites(username).size();
     }
 
-    public void changeString(String username, String string) {
-        for (Game i : gameList) {
-            if (i.getUser1().equals(username) || i.getUser2().equals(username)) {
-                i.setGame(string);
-                System.out.println("megváltozott");
-            }
-        }
-    }
-
 
 
     //------------------------Game--------------------------
-
-    public int move(Board board, int from, int to) {
-        if (whichPiece(board, from) == board.getFly()) {
-            moveFly(board, from, to);
-            board.setFlyStepsDone(board.getFlyStepsDone()+1);
+    public int moveVsComputer(int from, int to, Board board) {
+        if (whichPiece(from, board) == board.getFly()) {
+            moveFly(from, to, board);
+            board.flyStepsDone++;
         }
         for (Piece p : board.getSpider()) {
-            if (whichPiece(board, from) == p) {
-                moveSpider(board, from, to, p);
-                board.setSpiderStepsDone(board.getSpiderStepsDone()+1);
+            if (whichPiece(from, board) == p) {
+                moveSpider(from, to, p, board);
+                board.spiderStepsDone++;
+            }
+        }
+
+        return whoWon(board);
+    }
+
+    public int moveVsPlayer(int from, int to, Board board, String username) {
+        Game game = getGame(username);
+        if (whichPiece(from, board) == board.getFly()) {
+            if (game.getUser1().equals(username)) {
+                moveFly(from, to, board);
+                board.flyStepsDone++;
+            }
+        }
+        for (Piece p : board.getSpider()) {
+            if (whichPiece(from, board) == p) {
+                if (game.getUser2().equals(username)) {
+                    moveSpider(from, to, p, board);
+                    board.spiderStepsDone++;
+                }
             }
         }
 
@@ -115,13 +125,13 @@ public class GameService {
                     .getConnection()[i] == null) availableFields--;
         }
 
-        if (board.isGameRunning()) {
+        if (board.isGameRunning) {
             int randomConnection = random.nextInt(availableFields);
             int randomField = board.getField()[board.getFly().location]
                     .getConnection()[randomConnection].getNumber();
 
-            if(isMoveValid(board, board.getFly().location, randomField)) {
-                moveFly(board, board.getFly().location, randomField);
+            if(isMoveValid(board.getFly().location, randomField, board)) {
+                moveFly(board.getFly().location, randomField, board);
                 return true;
             } else {
                 randomMoveFly(board);
@@ -143,9 +153,9 @@ public class GameService {
         int randomField = board.getField()[randomSpider.location]
                 .getConnection()[randomConnection].getNumber();
 
-        if (board.isGameRunning()) {
-            if(isMoveValid(board, randomSpider.location, randomField)) {
-                moveSpider(board, randomSpider.location, randomField, randomSpider);
+        if (board.isGameRunning) {
+            if(isMoveValid(randomSpider.location, randomField, board)) {
+                moveSpider(randomSpider.location, randomField, randomSpider, board);
                 return true;
             } else {
                 randomMoveSpider(board);
@@ -154,9 +164,9 @@ public class GameService {
         return false;
     }
 
-    public boolean isMoveValid(Board board, int from, int to) {
+    public boolean isMoveValid(int from, int to, Board board) {
         boolean correctPiece = false;
-        if(board.isFlysTurn()) {
+        if(board.isFlysTurn) {
             if (from == board.getFly().location) {
                 correctPiece = true;
             } else return false;
@@ -190,7 +200,7 @@ public class GameService {
     }
 
     public short getGameMode(Board board) {
-        return board.getGameMode();
+        return board.gameMode;
     }
 
     public HashMap<Integer, ArrayList<Integer>> getConnections(Board board) {
@@ -219,33 +229,31 @@ public class GameService {
 
 
     //---------------- Child methods of Main methods listed above ----------------
-    public void moveFly(Board board, int from, int to) {
-        if (isMoveValid(board, from, to)) {
+    public void moveFly(int from, int to, Board board) {
+        if (isMoveValid(from, to, board)) {
             board.getField()[to].setPiece(board.getField()[from].getPiece());
             board.getField()[from].setPiece(Pieces.EMPTY);
-
             board.getFly().location = to;
-            board.setFlysTurn(!board.isFlysTurn());
+            board.isFlysTurn = false;
         } else {
             System.out.println("Invalid");
         }
         display(board);
     }
 
-    public void moveSpider(Board board, int from, int to, Piece p) {
-        if (isMoveValid(board, from, to)) {
+    public void moveSpider(int from, int to, Piece p, Board board) {
+        if (isMoveValid(from, to, board)) {
             board.getField()[to].setPiece(board.getField()[from].getPiece());
             board.getField()[from].setPiece(Pieces.EMPTY);
-
             p.location = to;
-            board.setFlysTurn(!board.isFlysTurn());
+            board.isFlysTurn = true;
         } else {
             System.out.println("Invalid");
         }
         display(board);
     }
 
-    public Piece whichPiece(Board board, int location) {
+    public Piece whichPiece(int location, Board board) {
         Piece pieceToReturn = null;
         for (Piece p: board.getSpider()) {
             if (p.location == location) pieceToReturn = p;
@@ -264,8 +272,8 @@ public class GameService {
                         board.getFly().location == 18 ||
                         board.getFly().location == 22
         ) {
-            board.setGameRunning(false);
-            board.setPieceWon(1);
+            board.isGameRunning = false;
+            board.pieceWon = 1;
         }
 
         int unavailableFields = 0;
@@ -277,14 +285,14 @@ public class GameService {
         }
 
         if (unavailableFields >= board.getField()[board.getFly().location].getConnection().length) {
-            board.setGameRunning(false);
-            board.setPieceWon(2);
+            board.isGameRunning = false;
+            board.pieceWon = 2;
         }
-        return board.isGameRunning();
+        return board.isGameRunning;
     }
 
     public boolean isFlysTurn(Board board) {
-        return board.isFlysTurn();
+        return board.isFlysTurn;
     }
 
     public void display(Board board) {
@@ -315,39 +323,39 @@ public class GameService {
         for (int j : spiderLoc) {
             System.out.println("Spider found on field number " + j);
         }
-        System.out.println("\n isFlysTurn: " + board.isFlysTurn() + "\n");
+        System.out.println("\n isFlysTurn: " + board.isFlysTurn + "\n");
     }
 
-    public boolean newGame(Board board, String gameMode) {
+    public boolean newGame(String gameMode, Board board, String username) {
         switch (gameMode) {
             case "pvp": {
-                board.setGameMode(PVP);
-                //this.board = new Board();
-                board.setGameRunning(true);
-                board.setPieceWon(0);
-                board.setFlysTurn(true);
-                board.setFlyStepsDone(0);
-                board.setSpiderStepsDone(0);
+                board.gameMode = PVP;
+                getGame(username).setBoard(new Board());
+                board.isGameRunning = true;
+                board.pieceWon = 0;
+                board.isFlysTurn = true;
+                board.flyStepsDone = 0;
+                board.spiderStepsDone = 0;
                 return true;
             }
             case "pvs": {
-                board.setGameMode(PVS);
+                board.gameMode = PVS;
                 //this.board = new Board();
-                board.setGameRunning(true);
-                board.setPieceWon(0);
-                board.setFlysTurn(true);
-                board.setFlyStepsDone(0);
-                board.setSpiderStepsDone(0);
+                board.isGameRunning = true;
+                board.pieceWon = 0;
+                board.isFlysTurn = true;
+                board.flyStepsDone = 0;
+                board.spiderStepsDone = 0;
                 return true;
             }
             case "pvf": {
-                board.setGameMode(PVF);
+                board.gameMode = PVF;
                 //this.board = new Board();
-                board.setGameRunning(true);
-                board.setPieceWon(0);
-                board.setFlysTurn(false);
-                board.setFlyStepsDone(0);
-                board.setSpiderStepsDone(0);
+                board.isGameRunning = true;
+                board.pieceWon = 0;
+                board.isFlysTurn = false;
+                board.flyStepsDone = 0;
+                board.spiderStepsDone = 0;
                 return true;
             }
             default: return false;
@@ -355,7 +363,7 @@ public class GameService {
     }
 
     public boolean getIsGameRunning(Board board) {
-        return board.isGameRunning();
+        return board.isGameRunning;
     }
 
 
@@ -365,21 +373,18 @@ public class GameService {
      *                      2 if spiders won
      * @return value of pieceWon
      */
-
     public int whoWon(Board board) {
         isGameRunning(board);
-        return board.getPieceWon();
+        return board.pieceWon;
     }
 
     public int getFlyStepsDone(Board board) {
-        return board.getFlyStepsDone();
+        return board.flyStepsDone;
     }
 
     public int getSpiderStepsDone(Board board) {
-        return board.getSpiderStepsDone();
+        return board.spiderStepsDone;
     }
-
-
 
 
 
