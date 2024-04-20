@@ -21,7 +21,7 @@ public class AuthenticationController {
     @GetMapping("/register")
     public String getRegisterPage(Model model) {
         model.addAttribute("registrationDto", new RegistrationDto());
-        return "register";
+        return "authenticate/register";
     }
 
     @PostMapping("/register")
@@ -35,10 +35,10 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public String getLoginPage() {
-        return "login";
+        return "authenticate/login";
     }
     @PostMapping("/login")
     public String login(@RequestParam("username")String username, @RequestParam("password")String password) {
-        return "login";
+        return "redirect:/";
     }
 }

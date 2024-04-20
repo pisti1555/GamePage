@@ -27,7 +27,7 @@ public class HomeController {
     public String getScoreboard(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
         model.addAttribute("users", userService.findAll());
-        return "scoreboard";
+        return "player/scoreboard";
     }
 
 }

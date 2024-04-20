@@ -6,9 +6,10 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Scoreboard</title>
+    <title>Lobby</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/invites.css}"/>
     <link rel="stylesheet" th:href="@{/css/lobby.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
 
@@ -44,6 +45,11 @@
                 <h2 id="title">Spiderweb game</h2>
             </a>
         </div>
+
+        <div class="nav-invitations" onclick="openPopUp('invContainer')">
+            <h3>Invitations</h3>
+        </div>
+        
         <div class="navRightSide">
             <a id="login" th:href="@{/profile}">
                 <h3 class="username" th:text="${username}"></h3>
@@ -52,15 +58,18 @@
         </div>
     </header>
 
-    <div class="inv_container">
-        <h2>Invitations:</h2>
+    <div id="invContainer" class="invites closed">
+        <button id="closeInvContainerButton" class="button" onclick="closePopUp('invContainer')">Close</button>
         <ul>
             <li th:each="inviter : ${invites}">
-                <span th:text="${inviter}"></span> invited you to play.
-                <form action="/lobby/join" method="post" style="display: inline;">
-                    <input type="hidden" name="inviterName" th:value="${inviter}" />
-                    <button type="submit">Join</button>
-                </form>
+                <div class="row">
+                    <h3 class="invMessage" th:text="${inviter} + '  '"></h3>
+                    <h3 class="invMessage">invited you to play</h3>
+                    <form action="/lobby/join" method="post">
+                        <input type="hidden" name="inviterName" th:value="${inviter}" />
+                        <button class="button" type="submit">Join</button>
+                    </form> 
+                </div>                     
             </li>
         </ul>
     </div>
@@ -89,20 +98,19 @@
                 <form th:action="@{/lobby/invite}" method="post">
                     <input type="hidden" name="friendUsername" th:value="${friend}" />
                     <button class="button" type="submit">Invite</button>
-                </form>          
+                </form>   
             </li>
             <button class="button" onclick="closePopUp('friendlist'); openPopUp('lobby');">Close</button>
         </ul>
     </div>
 
-    <form th:if="${player2 != null}" action="/lobby/start" method="post">
+    <form th:if="${player2 != null}" th:action="@{/lobby/start}" method="post">
         <button class="button" type="submit">Start Game</button>
     </form>
-    <form th:if="${player2 == null}" action="/lobby/start-against-computer" method="post">
-        <button class="button" type="submit">Start Game against computer</button>
-    </form>
+    
 
     <script th:src="@{/js/popup.js}"></script>
+    <script th:src="@{/js/lobby.js}"></script>
     <script>
         function showInvite() {
             var name = document.getElementById('player2').innerText;
@@ -112,8 +120,6 @@
             }
         }
     </script>
-
-    <script th:src="@{/js/lobby.js}"></script>
 
     
    

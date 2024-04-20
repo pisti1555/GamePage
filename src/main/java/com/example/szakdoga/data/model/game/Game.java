@@ -1,19 +1,25 @@
 package com.example.szakdoga.data.model.game;
 
-public class PvP {
+import com.example.szakdoga.data.model.game.spiderweb.Board;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class Game {
     String id;
     String user1;
     String user2;
     String string;
+    @JsonIgnore
+    Board board;
 
-    public PvP(String user1, String user2, String game) {
+    public Game(String user1, String user2, String game, Board board) {
         this.id = user1;
         this.user1 = user1;
         this.user2 = user2;
         this.string = game;
+        this.board = board;
     }
 
-    public PvP() {
+    public Game() {
     }
 
     public boolean isReady() {
@@ -58,5 +64,13 @@ public class PvP {
 
     public void setString(String string) {
         this.string = string;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 }

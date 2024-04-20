@@ -9,6 +9,8 @@
     <title>Scoreboard</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gameBoard.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gamePage.css}"/>
     
     <style th:inline="text">
         body {
@@ -29,7 +31,7 @@
     </style>
 
 </head>
-<body>
+<body onload="newGame('pvp')">
     <header class="header">
         <div class="navLeftSide">
             <a th:href="@{'/'}" class="homeContainer" id="homeButton">
@@ -45,14 +47,11 @@
         </div>
     </header>
 
-    <h1>Welcome to the Lobby <span th:text="${username}"></span>!</h1>
-    <h2 id="gameCode">Your game code is <span th:text="${string}"></span></h2>
+    <div class="gameboard" id="gameboard">
+        <canvas id="canvas" width="700" height="700"></canvas>
+    </div>
 
-    <form action="/game/updateGameCode" method="post">
-        <label for="newGameCode">New Game Code:</label>
-        <input type="text" id="newGameCode" name="newGameCode" required>
-        <button type="submit">Update Game Code</button>
-    </form>
+   <script th:src="@{/js/gameBoard.js}"></script>
    
 </body>
 </html>

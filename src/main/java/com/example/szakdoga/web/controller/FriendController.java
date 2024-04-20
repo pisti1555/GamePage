@@ -38,13 +38,13 @@ public class FriendController {
             model.addAttribute("friends", responseBody.get("friends"));
             model.addAttribute("count", responseBody.get("count"));
         }
-        return "friendList";
+        return "player/friendList";
     }
 
     @GetMapping("/add")
     public String getAddFriend(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-        return "addFriend";
+        return "player/addFriend";
     }
 
     @PostMapping("/add")

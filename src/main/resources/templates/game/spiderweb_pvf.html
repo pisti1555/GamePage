@@ -6,19 +6,32 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Home</title>
-    
-    <link rel="stylesheet" th:href="@{/css/home.css}"/>
+    <title>Spiderweb</title>
+
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gameBoard.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gamePage.css}"/>
+    
     <style th:inline="text">
         body {
-            background: url([[@{/img/HomePageBackground4k.jpg}]]) no-repeat center center fixed;
-            background-size: cover;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/GamePageBackground.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
         }
     </style>
-</head>
 
-<body>
+</head>
+<body onload="newGame('pvf')">
     <header class="header">
         <div class="navLeftSide">
             <a th:href="@{'/'}" class="homeContainer" id="homeButton">
@@ -34,16 +47,11 @@
         </div>
     </header>
     
-    <div class="container">
-        <div class="row">
-            <a th:href="@{'/game'}" type="button" class="button">Play</a>
-        </div>
-        <div class="row">
-            <a th:href="@{'/friends'}" type="button" class="button">Friends</a>
-        </div>
-        <div class="row">
-            <a th:href="@{'/scoreboard'}" type="button" class="button">Scoreboard</a>
-        </div>
+    <div class="gameboard" id="gameboard">
+        <canvas id="canvas" width="700" height="700"></canvas>
     </div>
+
+   <script th:src="@{/js/gameBoard.js}"></script>
+
 </body>
 </html>

@@ -11,7 +11,6 @@ function connectToWebSocket() {
         });
         stompClient.subscribe('/topic/lobby/start', function (message) {
             console.log('Received message: ' + message.body);
-            window.location.href = '/game';
         });
     });
 }

@@ -41,6 +41,6 @@ public class ProfileController {
         model.addAttribute("gamesWon", user.getGamesWon());
         model.addAttribute("movesDone", user.getMovesDone());
         model.addAttribute("selfProfile", selfProfile);
-        return "profile";
+        return "player/profile";
     }
 }

@@ -44,7 +44,6 @@
         justify-content: space-between;
 
         a {
-
             color: #ffffff80;
             font-family: Franklin Gothic;
             display: flex;
@@ -59,6 +58,27 @@
             }
         }
     }
+}
+
+
+
+.header.nav-invitations {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;  
+}
+
+.header.nav-invitations h3 {
+    color: #ffffff80;
+    font-family: Franklin Gothic;
+    display: flex;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none;
+    text-shadow: none;
 }
 
 .navLeftSide:hover {
@@ -83,4 +103,12 @@
 
 .navRightSide:hover h3 {
     color: #ffffff;
+}
+
+.nav-invitations:hover {
+    cursor: pointer;
+    background: #008cff;
+    border: 1px solid #008cff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
 }
