@@ -36,14 +36,47 @@
     }
 
     .navRightSide {
-        padding-left: 10px;
-        padding-right: 10px;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
 
-        a {
+        .inv-button {
+            margin-top: 5px;
+            margin-left: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.082);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #4f0073;
+            cursor: pointer;
+            transition: all 0.3s;
+
+            .inv-count {
+                position: absolute;
+                bottom: -5px;
+                right: -5px;
+                background-color: rgb(255, 255, 255);
+                border-radius: 50%;
+                font-size: 0.7em;
+                color: rgb(0, 0, 0);
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .profile {
+            margin-left: 15px;
+            padding-right: 10px;
+            padding-left: 10px;
             color: #ffffff80;
             font-family: Franklin Gothic;
             display: flex;
@@ -62,29 +95,14 @@
 
 
 
-.header.nav-invitations {
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    padding-left: 10px;
-    padding-right: 10px;  
-}
+  
 
-.header.nav-invitations h3 {
-    color: #ffffff80;
-    font-family: Franklin Gothic;
-    display: flex;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 400;
-    text-decoration: none;
-    text-shadow: none;
-}
+
+
 
 .navLeftSide:hover {
     cursor: pointer;
     background: #008cff;
-    border: 1px solid #008cff;
     box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
         0 0 100px #008cff;
 }
@@ -93,22 +111,20 @@
     color: #ffffff;
 }
 
-.navRightSide:hover {
+.navRightSide .profile:hover {
     cursor: pointer;
     background: #008cff;
-    border: 1px solid #008cff;
     box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
         0 0 100px #008cff;
 }
 
-.navRightSide:hover h3 {
+.navRightSide .profile:hover h3 {
     color: #ffffff;
 }
 
-.nav-invitations:hover {
-    cursor: pointer;
+.navRightSide .inv-button:hover {
+    transform: scale(1.1);
     background: #008cff;
-    border: 1px solid #008cff;
     box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
-        0 0 100px #008cff;
+    0 0 100px #008cff;
 }

@@ -76,6 +76,10 @@ public class GameService {
         return invitations;
     }
 
+    public int invCount(String username) {
+        return getInvites(username).size();
+    }
+
     public void changeString(String username, String string) {
         for (Game i : gameList) {
             if (i.getUser1().equals(username) || i.getUser2().equals(username)) {

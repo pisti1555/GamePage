@@ -9,6 +9,8 @@
     <title>Scoreboard</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/invites.css}"/>
+    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
     <link rel="stylesheet" th:href="@{/css/scoreboard.css}"/>
 
     <style th:inline="text">
@@ -38,13 +40,35 @@
                 <h2 id="title">Spiderweb game</h2>
             </a>
         </div>
+
         <div class="navRightSide">
-            <a id="login" th:href="@{/profile}">
+            <button class="inv-button" onclick="openPopUp('invContainer')">
+                <img th:src="@{/img/navbarInviteLogo.svg}">
+                <span th:if="${invCount != 0}" th:text="${invCount}" class="inv-count"></span>
+            </button>
+            <a id="login" class="profile" th:href="@{/profile}">
                 <h3 class="username" th:text="${username}"></h3>
                 <img class="logo" id="playerLogo" th:src="@{/img/LoginLogo.svg}" alt="">
             </a>
         </div>
     </header>
+
+    <div id="invContainer" class="invites closed">
+        <button id="closeInvContainerButton" class="button" onclick="closePopUp('invContainer')">Close</button>
+        <h3 th:if="${invCount == 0}" class="invMessage">You do not have any invites</h3>
+        <ul>
+            <li th:each="inviter : ${invites}">
+                <div class="row">
+                    <h3 class="invMessage" th:text="${inviter} + '  '"></h3>
+                    <h3 class="invMessage">invited you to play</h3>
+                    <form action="/lobby/join" method="post">
+                        <input type="hidden" name="inviterName" th:value="${inviter}" />
+                        <button class="button" type="submit">Join</button>
+                    </form> 
+                </div>                     
+            </li>
+        </ul>
+    </div>
 
     <div class="container">
         <h2 class="title">Scoreboard</h2>
@@ -71,5 +95,7 @@
         </table>
         
     </div>
+
+    <script th:src="@{/js/popup.js}"></script>
 </body>
 </html>

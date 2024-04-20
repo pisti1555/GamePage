@@ -5,12 +5,13 @@ function connectToWebSocket() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/lobby', function (message) {
+        stompClient.subscribe('/user/topic/lobby/update', function (message) {
             console.log('Received message: ' + message.body);
             window.location.reload();
         });
-        stompClient.subscribe('/topic/lobby/start', function (message) {
+        stompClient.subscribe('/user/topic/lobby/start', function (message) {
             console.log('Received message: ' + message.body);
+            window.location.href = '/game/pvp';
         });
     });
 }

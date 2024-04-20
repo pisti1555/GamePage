@@ -1,8 +1,9 @@
 .invites {
     display: block;
     position: absolute;
-    top: 5%;
+    top: 40%;
     left: 50%;
+    transform: translate(-50%, -50%);
     animation: fadein 0.5s;
     background-color: transparent;
     backdrop-filter: blur(30px);
@@ -10,6 +11,7 @@
     height: fit-content;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 3;
+    padding: 10px;
     border: 1px solid aliceblue;
     border-radius: 10px;
     font-family: Franklin Gothic;
@@ -44,6 +46,32 @@
 }
 
 .invites ul li .row .button {
-    margin-left: auto;
-    margin-right: 10px;
+    color: #ffffff80;
+    backdrop-filter: blur(10px);
+    background: transparent;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 400;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid #ffffff80;
+    transition: 0.3s ease;
+    user-select: none;
+    margin: 10px;
+}
+
+.invites ul li .row .button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
 }

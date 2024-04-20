@@ -36,8 +36,8 @@ public class Lobby {
         Game game = service.getGame(username);
         model.addAttribute("username", username);
         //model.addAttribute("game", game);
-        model.addAttribute("string", game.getGame());
         model.addAttribute("invites", service.getInvites(username));
+        model.addAttribute("invCount", service.invCount(username));
         model.addAttribute("player1", game.getUser1());
         model.addAttribute("player2", game.getUser2());
 
@@ -49,38 +49,34 @@ public class Lobby {
         return "game/lobby";
     }
 
-    @MessageMapping("/lobby/invite")
-    @SendTo("/topic/lobby")
     @PostMapping("/invite")
     public String inviteFriend(@RequestParam("friendUsername") String friendUsername, Principal principal) {
         service.inviteFriend(principal.getName(), friendUsername);
-        template.convertAndSend("/topic/lobby", service.getInvites(friendUsername));
+        template.convertAndSendToUser(friendUsername, "/topic/lobby/update", "update");
         return "redirect:/lobby";
     }
 
-    @MessageMapping("/lobby/join")
-    @SendTo("/topic/lobby")
     @PostMapping("/join")
     public String joinLobby(@RequestParam("inviterName") String inviterName, Principal principal, Model model) {
         Game game = service.joinLobby(inviterName, principal.getName());
         if (game != null) {
             model.addAttribute("string", game.getGame());
-            template.convertAndSend("/topic/lobby", game);
+            template.convertAndSendToUser(inviterName, "/topic/lobby/update", "update");
+            template.convertAndSendToUser(principal.getName(), "/topic/lobby/update", "update");
             return "redirect:/lobby";
         } else {
             return "redirect:/lobby?error=joinFailed";
         }
     }
 
-    @MessageMapping("/lobby/start")
-    @SendTo("/topic/lobby/start")
     @PostMapping("/start")
     public String startGame(Model model, Principal principal) {
         String username = principal.getName();
         Game game = service.getGame(username);
+        template.convertAndSendToUser(principal.getName(), "/topic/lobby/start", "update");
+        template.convertAndSendToUser(game.getUser2(), "/topic/lobby/start", "update");
 
         if (game.isReady()) {
-            template.convertAndSend("/topic/lobby/start", game);
             return "redirect:/game/pvp";
         } else {
             return "redirect:/lobby?error=gameNotReady";

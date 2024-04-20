@@ -46,12 +46,12 @@
             </a>
         </div>
 
-        <div class="nav-invitations" onclick="openPopUp('invContainer')">
-            <h3>Invitations</h3>
-        </div>
-        
         <div class="navRightSide">
-            <a id="login" th:href="@{/profile}">
+            <button class="inv-button" onclick="openPopUp('invContainer')">
+                <img th:src="@{/img/navbarInviteLogo.svg}">
+                <span th:if="${invCount != 0}" th:text="${invCount}" class="inv-count"></span>
+            </button>
+            <a id="login" class="profile" th:href="@{/profile}">
                 <h3 class="username" th:text="${username}"></h3>
                 <img class="logo" id="playerLogo" th:src="@{/img/LoginLogo.svg}" alt="">
             </a>
@@ -60,6 +60,7 @@
 
     <div id="invContainer" class="invites closed">
         <button id="closeInvContainerButton" class="button" onclick="closePopUp('invContainer')">Close</button>
+        <h3 th:if="${invCount == 0}" class="invMessage">You do not have any invites</h3>
         <ul>
             <li th:each="inviter : ${invites}">
                 <div class="row">
