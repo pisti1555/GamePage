@@ -47,20 +47,15 @@
         <h3>Total steps made: <span th:text="${totalSteps}"></span> steps</h3>
 
         <div class="buttonContainer">
-            <a th:href="@{/game/new-game}" class="button">New game</a>
-            <a th:href="@{/game/quit}" class="button">Quit</a>
+            <a th:href="@{/game/return-to-lobby}" class="button">Return to Lobby</a>
         </div>
     </div>
-
 
 
     <div class="gameboard" id="gameboard">
         <canvas id="canvas" width="700" height="700"></canvas>
     </div>
 
-
-
-    <script th:src="@{/js/gamePage.js}"></script>
     <script th:src="@{/js/board.js}"></script>
     <script th:src="@{/js/popup.js}"></script>
 </body>

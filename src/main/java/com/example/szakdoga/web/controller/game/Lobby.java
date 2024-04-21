@@ -1,14 +1,13 @@
 package com.example.szakdoga.web.controller.game;
 
-import com.example.szakdoga.data.model.game.Game;
+import com.example.szakdoga.data.model.game.PvP;
+import com.example.szakdoga.data.model.game.spiderweb.Board;
 import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.service.GameService;
 import com.example.szakdoga.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,13 +32,15 @@ public class Lobby {
     @GetMapping
     public String getLobby(Model model, Principal principal) {
         String username = principal.getName();
-        Game game = service.getGame(username);
+        PvP pvP = service.getPvP(username);
         model.addAttribute("username", username);
-        //model.addAttribute("game", game);
         model.addAttribute("invites", service.getInvites(username));
         model.addAttribute("invCount", service.invCount(username));
-        model.addAttribute("player1", game.getUser1());
-        model.addAttribute("player2", game.getUser2());
+        model.addAttribute("user1InGame", pvP.isUser1InGame());
+        model.addAttribute("user2InGame", pvP.isUser2InGame());
+        model.addAttribute("isReady", pvP.isReadyToStart());
+        model.addAttribute("player1", pvP.getUser1());
+        model.addAttribute("player2", pvP.getUser2());
 
         ResponseEntity<Map<String, Object>> responseEntity = friendsService.getUserFriendsList(new UserFriendsListRequestEntity(principal.getName()));
         Map<String, Object> responseBody = responseEntity.getBody();
@@ -58,8 +59,8 @@ public class Lobby {
 
     @PostMapping("/join")
     public String joinLobby(@RequestParam("inviterName") String inviterName, Principal principal, Model model) {
-        Game game = service.joinLobby(inviterName, principal.getName());
-        if (game != null) {
+        PvP pvP = service.joinLobby(inviterName, principal.getName());
+        if (pvP != null) {
             template.convertAndSendToUser(inviterName, "/topic/lobby/update", "update");
             template.convertAndSendToUser(principal.getName(), "/topic/lobby/update", "update");
             return "redirect:/lobby";
@@ -71,15 +72,24 @@ public class Lobby {
     @PostMapping("/start")
     public String startGame(Model model, Principal principal) {
         String username = principal.getName();
-        Game game = service.getGame(username);
-        template.convertAndSendToUser(principal.getName(), "/topic/lobby/start", "update");
-        template.convertAndSendToUser(game.getUser2(), "/topic/lobby/start", "update");
+        PvP pvP = service.getPvP(username);
 
-        if (game.isReady()) {
+        if (pvP.isReadyToStart()) {
+            pvP.setBoard(new Board());
+            template.convertAndSendToUser(principal.getName(), "/topic/lobby/start", "update");
+            template.convertAndSendToUser(pvP.getUser2(), "/topic/lobby/start", "update");
             return "redirect:/game/pvp";
         } else {
             return "redirect:/lobby?error=gameNotReady";
         }
+    }
+
+    @PostMapping("/leave")
+    public String quit(Principal principal) {
+        PvP pvP = service.quitLobby(principal.getName());
+        template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "quit");
+        template.convertAndSendToUser(pvP.getUser2(), "/topic/lobby/update", "quit");
+        return "redirect:/lobby";
     }
 
 }

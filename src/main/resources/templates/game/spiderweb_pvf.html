@@ -31,12 +31,12 @@
     </style>
 
 </head>
-<body onload="newGame('pvf')">
+<body>
     <header class="header">
         <div class="navLeftSide">
             <a th:href="@{'/'}" class="homeContainer" id="homeButton">
                 <img class="logo" id="homeLogo" th:src="@{/img/HomeLogo.svg}" alt="">
-                <h2 id="title">Spiderweb game</h2>
+                <h2 id="title">Spiderweb</h2>
             </a>
         </div>
         <div class="navRightSide">
@@ -51,7 +51,13 @@
         <canvas id="canvas" width="700" height="700"></canvas>
     </div>
 
-   <script th:src="@{/js/gameBoard.js}"></script>
+    <div class="popup closed" id="gameOver">
+        <h1 id="won"></h1>
+        <a class='button' th:href="@{/pvP}">Quit pvP</a>
+    </div>
+
+   <script th:src="@{/js/pvf.js}"></script>
+   <script th:src="@{/js/popup.js}"></script>
 
 </body>
 </html>

@@ -1,7 +1,8 @@
 package com.example.szakdoga.service;
 
 import com.example.szakdoga.data.model.User;
-import com.example.szakdoga.data.model.game.Game;
+import com.example.szakdoga.data.model.game.PvC;
+import com.example.szakdoga.data.model.game.PvP;
 import com.example.szakdoga.data.model.game.spiderweb.Board;
 import com.example.szakdoga.data.model.game.spiderweb.Piece;
 import com.example.szakdoga.data.model.game.spiderweb.Pieces;
@@ -13,7 +14,8 @@ import java.util.*;
 @Service
 public class GameService {
 
-    List<Game> gameList;
+    List<PvP> pvpList;
+    List<PvC> pvcList;
     Map<String, String> invites;
     Random random;
     private final short PVP = 1;
@@ -22,28 +24,45 @@ public class GameService {
 
     @Autowired
     public GameService() {
-        this.gameList = new ArrayList<>();
+        this.pvpList = new ArrayList<>();
+        this.pvcList = new ArrayList<>();
         this.invites =  new HashMap<>();
         this.random = new Random();
     }
 
-    public Game getGame(String username) {
-        for (Game game : gameList) {
-            if (game.getUser1().equals(username) || (game.getUser2() != null && game.getUser2().equals(username))) {
-                return game;
+    public PvP getPvP(String username) {
+        for (PvP pvP : pvpList) {
+            if (pvP.getUser1().equals(username) || (pvP.getUser2() != null && pvP.getUser2().equals(username))) {
+                return pvP;
             }
         }
 
-        Game newGame = new Game(username, null, new Board());
-        gameList.add(newGame);
-        return newGame;
+        PvP newPvP = new PvP(username, null, new Board());
+        pvpList.add(newPvP);
+        return newPvP;
     }
 
-    public Game joinLobby(String inviter, String invited) {
-        for (Game game : gameList) {
-            if (game.getUser1().equals(inviter)) {
-                gameList.removeIf(i -> i.getUser1().equals(invited));
-                game.setUser2(invited);
+    public PvC getPvC(String username) {
+        for (PvC pvc : pvcList) {
+            if (pvc.getUser().equals(username)) {
+                return pvc;
+            }
+        }
+
+        return createPvC(username);
+    }
+
+    public PvC createPvC(String username) {
+        PvC newPvC = new PvC(username, new Board());
+        pvcList.add(newPvC);
+        return newPvC;
+    }
+
+    public PvP joinLobby(String inviter, String invited) {
+        for (PvP pvP : pvpList) {
+            if (pvP.getUser1().equals(inviter)) {
+                pvpList.removeIf(i -> i.getUser1().equals(invited));
+                pvP.setUser2(invited);
 
                 for (Map.Entry<String, String> entry : invites.entrySet()) {
                     String invitedUser = entry.getKey();
@@ -53,10 +72,17 @@ public class GameService {
                     }
                 }
 
-                return game;
+                return pvP;
             }
         }
         return null;
+    }
+
+    public PvP quitLobby(String name) {
+        PvP pvp = getPvP(name);
+        pvpList.remove(pvp);
+
+        return pvp;
     }
 
     public void inviteFriend(String inviter, String invited) {
@@ -83,7 +109,7 @@ public class GameService {
 
 
 
-    //------------------------Game--------------------------
+    //------------------------PvP--------------------------
     public int moveVsComputer(int from, int to, Board board) {
         if (whichPiece(from, board) == board.getFly()) {
             moveFly(from, to, board);
@@ -100,16 +126,16 @@ public class GameService {
     }
 
     public int moveVsPlayer(int from, int to, Board board, String username) {
-        Game game = getGame(username);
+        PvP pvP = getPvP(username);
         if (whichPiece(from, board) == board.getFly()) {
-            if (game.getUser1().equals(username)) {
+            if (pvP.getUser1().equals(username)) {
                 moveFly(from, to, board);
                 board.flyStepsDone++;
             }
         }
         for (Piece p : board.getSpider()) {
             if (whichPiece(from, board) == p) {
-                if (game.getUser2().equals(username)) {
+                if (pvP.getUser2().equals(username)) {
                     moveSpider(from, to, p, board);
                     board.spiderStepsDone++;
                 }
@@ -294,36 +320,40 @@ public class GameService {
         return board.isFlysTurn;
     }
 
-    public boolean newGame(String gameMode, Board board, String username) {
+
+    public boolean newGamePvP(String username) {
+        PvP pvp = getPvP(username);
+
+        pvp.getBoard().gameMode = PVP;
+        pvp.getBoard().isGameRunning = true;
+        pvp.getBoard().pieceWon = 0;
+        pvp.getBoard().isFlysTurn = true;
+        pvp.getBoard().flyStepsDone = 0;
+        pvp.getBoard().spiderStepsDone = 0;
+        return true;
+    }
+
+    public boolean newGamePvC(String gameMode, String username) {
+        PvC pvc = getPvC(username);
         switch (gameMode) {
-            case "pvp": {
-                board.gameMode = PVP;
-                getGame(username).setBoard(new Board());
-                board.isGameRunning = true;
-                board.pieceWon = 0;
-                board.isFlysTurn = true;
-                board.flyStepsDone = 0;
-                board.spiderStepsDone = 0;
-                return true;
-            }
             case "pvs": {
-                board.gameMode = PVS;
-                //this.board = new Board();
-                board.isGameRunning = true;
-                board.pieceWon = 0;
-                board.isFlysTurn = true;
-                board.flyStepsDone = 0;
-                board.spiderStepsDone = 0;
+                pvc.setBoard(new Board());
+                pvc.getBoard().gameMode = PVS;
+                pvc.getBoard().isGameRunning = true;
+                pvc.getBoard().pieceWon = 0;
+                pvc.getBoard().isFlysTurn = true;
+                pvc.getBoard().flyStepsDone = 0;
+                pvc.getBoard().spiderStepsDone = 0;
                 return true;
             }
             case "pvf": {
-                board.gameMode = PVF;
-                //this.board = new Board();
-                board.isGameRunning = true;
-                board.pieceWon = 0;
-                board.isFlysTurn = false;
-                board.flyStepsDone = 0;
-                board.spiderStepsDone = 0;
+                pvc.setBoard(new Board());
+                pvc.getBoard().gameMode = PVF;
+                pvc.getBoard().isGameRunning = true;
+                pvc.getBoard().pieceWon = 0;
+                pvc.getBoard().isFlysTurn = false;
+                pvc.getBoard().flyStepsDone = 0;
+                pvc.getBoard().spiderStepsDone = 0;
                 return true;
             }
             default: return false;
@@ -354,36 +384,25 @@ public class GameService {
         return board.spiderStepsDone;
     }
 
-
-    public void gameOverr(User user, boolean won) {
-
-        if (won) {
-            user.setGamesPlayed(user.getGamesPlayed() + 1);
-            user.setGamesWon(user.getGamesWon() + 1);
-        } else {
-            user.setGamesPlayed(user.getGamesPlayed() + 1);
-        }
-    }
-
-    public void gameOver(Game game, User user) {
-        if (game.getUser1().equals(user.getUsername())) {
-            if (whoWon(game.getBoard()) == 1) {
-                user.setMovesDone(user.getMovesDone() + game.getBoard().flyStepsDone);
+    public void gameOver(PvP pvP, User user) {
+        if (pvP.getUser1().equals(user.getUsername())) {
+            if (whoWon(pvP.getBoard()) == 1) {
+                user.setMovesDone(user.getMovesDone() + pvP.getBoard().flyStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
                 user.setGamesWon(user.getGamesWon() + 1);
             }
-            if (whoWon(game.getBoard()) == 2) {
-                user.setMovesDone(user.getMovesDone() + game.getBoard().flyStepsDone);
+            if (whoWon(pvP.getBoard()) == 2) {
+                user.setMovesDone(user.getMovesDone() + pvP.getBoard().flyStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
             }
         }
-        if (game.getUser2().equals(user.getUsername())) {
-            if (whoWon(game.getBoard()) == 1) {
-                user.setMovesDone(user.getMovesDone() + game.getBoard().spiderStepsDone);
+        if (pvP.getUser2().equals(user.getUsername())) {
+            if (whoWon(pvP.getBoard()) == 1) {
+                user.setMovesDone(user.getMovesDone() + pvP.getBoard().spiderStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
             }
-            if (whoWon(game.getBoard()) == 2) {
-                user.setMovesDone(user.getMovesDone() + game.getBoard().spiderStepsDone);
+            if (whoWon(pvP.getBoard()) == 2) {
+                user.setMovesDone(user.getMovesDone() + pvP.getBoard().spiderStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
                 user.setGamesWon(user.getGamesWon() + 1);
             }

@@ -4,6 +4,7 @@ body {
 }
 
 .gameboard {
+    top: 10%;
     background: transparent;
     backdrop-filter: blur(20px);
     border-radius: 20px;
@@ -227,4 +228,34 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
+}
+
+.field:hover {
+    cursor: pointer;
+    background: #008cff;
+    border: 1px solid #008cff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
+}
+
+.field:hover .piece,
+.field:active .piece {
+    scale: 1.2;
+}
+
+.subfield:hover {
+    cursor: pointer;
+    background: #008cff;
+    border: 1px solid #008cff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
+}
+
+.subfield:hover .piece,
+.subfield:active .piece {
+    scale: 1.2;
+}
+
+.piece:hover {
+    cursor: pointer;
 }

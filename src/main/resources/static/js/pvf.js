@@ -1,24 +1,3 @@
-//-------------- WebSocket --------------
-
-var stompClient = null;
-
-function connectToWebSocket() {
-    var socket = new SockJS('/app');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/user/topic/game/update', function (message) {
-            console.log('Received message: ' + message.body);
-            window.location.reload();
-        });
-        stompClient.subscribe('/user/topic/game/return-to-lobby', function (message) {
-            console.log('Received message: ' + message.body);
-            window.location.reload();
-        });
-    });
-}
-connectToWebSocket();
-
 var lastSelectedField;
 var lastSelectedFieldIndex;
 var fieldSelected = false;
@@ -26,25 +5,32 @@ var fieldSelected = false;
 var locations;
 var connectionMap;
 
-/*
+
 function newGame() {
-    fetch("http://localhost:8080/api/game/newGame")
-    createBoard();
-       
+  fetch("http://localhost:8080/api/game/pvc/newGame", {
+     method: "POST",
+     credentials: 'include',
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+         },
+        body: "mode=" + encodeURIComponent("pvf")
+   }).then(response => response.text())
+       .then(data => {
+           createBoard();
+        }).catch(error => console.error("Error:", error));
 }
-*/
 
 
 //-------------- Load board data --------------
 function loadGame() {
     var gameMode;
-    fetch('http://localhost:8080/api/game/pvp/getGameMode')
+    fetch('http://localhost:8080/api/game/pvc/getGameMode')
         .catch(error => console.error('Error:', error));
     createBoard(); 
 }
 
 function getBoardDataFromServer() {
-    fetch("http://localhost:8080/api/game/pvp/getPositions", {
+    fetch("http://localhost:8080/api/game/pvc/getPositions", {
        method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -57,7 +43,7 @@ function getBoardDataFromServer() {
 }
 
 function fetchConnections() {
-    fetch('http://localhost:8080/api/game/pvp/getConnections')
+    fetch('http://localhost:8080/api/game/pvc/getConnections')
         .then(response => response.json())
         .then(data => {
             console.log('Connections data:', data);
@@ -184,7 +170,7 @@ function moveToField(from, to) {
         moveParams.append('from', from);
         moveParams.append('to', to);
 
-        fetch("http://localhost:8080/api/game/pvp/move", {
+        fetch("http://localhost:8080/api/game/pvc/pvf", {
        method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -192,9 +178,30 @@ function moveToField(from, to) {
           body: moveParams.toString()
      }).then(response => response.text())
          .then(data => {
+          if(data == 1 || data == 2) {
+            gameWon(data);
+          } else {
             getBoardDataFromServer();
+          }
           }).catch(error => console.error("Error:", error));
     
 }
 
-createBoard();
+function gameWon(piece) {
+  let text = document.getElementById("won");
+
+  if (piece == 1) {
+    text.innerText = "Fly won!"
+    openPopUp("gameOver");
+    closePopUp("gameboard");
+    clearBoard();
+  } 
+  else if (piece == 2) {
+    text.innerText = "Spiders won!"
+    openPopUp("gameOver");
+    closePopUp("gameboard");
+    clearBoard();
+  }
+}
+
+newGame();

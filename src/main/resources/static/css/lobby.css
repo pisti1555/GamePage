@@ -16,6 +16,7 @@ body::-webkit-scrollbar {
 a {
 	color: #ffffff80;
     font-family: Franklin Gothic;
+    text-decoration: none;
 }
 
 h1 {
@@ -60,7 +61,39 @@ h1 {
     height: 80%;
     align-items: center;
     justify-content: center;
+}
+
+.notReady {
+    position: relative;
+    font-family: Franklin Gothic;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #ffffff;
+    margin: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 20px;
+    background: transparent;
+    backdrop-filter: blur(30px);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ready h1 {
+    color: #ffffff;
+}
+
+.null {
     cursor: pointer;
+}
+
+.null h1 {
+    #ffffff80;
+}
+
+.inGame h1 {
+    color: #ffffff50;
 }
 
 .popup_container {
@@ -109,7 +142,42 @@ h1 {
     margin: 10px;
 }
 
+.startOrLeaveButton {
+    position: relative;
+    font-family: Franklin Gothic;
+    backdrop-filter: blur(20px);
+    background: transparent;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 20px;
+    margin: 10px;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid aliceblue;
+    transition: 0.3s ease;
+    user-select: none;
+    color: #ffffff;
+    width: 50%;
+    height: fit-content;
+    font-size: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}
+
+.startOrLeaveButton:hover,
 :focus {
   color: #ffffff;
   background: #008cff;
@@ -123,12 +191,11 @@ h1 {
 	display: none;
 }
 
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	color: #ffffff;
-	text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+.null:hover {
+    background: #008cff;
+    border: 1px solid #008cff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
 }
 
