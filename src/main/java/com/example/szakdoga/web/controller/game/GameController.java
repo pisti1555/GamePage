@@ -3,6 +3,7 @@ package com.example.szakdoga.web.controller.game;
 import com.example.szakdoga.data.model.User;
 import com.example.szakdoga.data.model.game.PvP;
 import com.example.szakdoga.service.GameService;
+import com.example.szakdoga.service.InvitationService;
 import com.example.szakdoga.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,17 +20,23 @@ public class GameController {
     GameService service;
     UserService userService;
     SimpMessagingTemplate template;
+    InvitationService invitationService;
 
     @Autowired
-    public GameController(GameService service, UserService userService, SimpMessagingTemplate template) {
+    public GameController(GameService service, UserService userService, SimpMessagingTemplate template, InvitationService invitationService) {
         this.service = service;
         this.userService = userService;
         this.template = template;
+        this.invitationService = invitationService;
     }
 
     @GetMapping
     public String getGamePage(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
+
+        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
+        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+
         return "game/gameMenu";
     }
 
@@ -72,6 +79,10 @@ public class GameController {
     @GetMapping("/pvs")
     public String pvs(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
+
+        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
+        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+
         service.newGamePvC("pvs", principal.getName());
         return "game/spiderweb_pvs";
     }
@@ -79,7 +90,10 @@ public class GameController {
     @GetMapping("/pvf")
     public String pvf(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
-        service.createPvC(principal.getName());
+
+        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
+        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+
         service.newGamePvC("pvf", principal.getName());
         return "game/spiderweb_pvf";
     }

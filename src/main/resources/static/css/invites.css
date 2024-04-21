@@ -1,21 +1,53 @@
 .invites {
+    position: fixed;
     display: block;
-    position: absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     animation: fadein 0.5s;
-    background-color: transparent;
+    background-color: #0025767c;
     backdrop-filter: blur(30px);
     width: fit-content;
     height: fit-content;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 3;
+    z-index: 9;
     padding: 10px;
-    border: 1px solid aliceblue;
+    border: 1px solid #ffffff;
     border-radius: 10px;
     font-family: Franklin Gothic;
     font-weight: 400;
+}
+
+.invites .invMessage {
+    color: #ffffff;
+    font-family: Franklin Gothic;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-decoration: none;
+    padding: 10px; 
+}
+
+.invites .button {
+    width: fit-content;
+    height: fit-content;
+    color: #ffffff;
+    backdrop-filter: blur(10px);
+    background: #0021695f;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 400;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid #ffffff;
+    transition: 0.3s ease;
+    user-select: none;
+    margin: 10px;
 }
 
 .invites ul {
@@ -39,16 +71,20 @@
 }
 
 .invites ul li .row .invMessage {
+    color: #ffffff;
     font-family: Franklin Gothic;
-    font-weight: 400;
+    letter-spacing: 1px;
+    font-weight: 500;
     text-decoration: none;
     padding: 10px; 
 }
 
 .invites ul li .row .button {
-    color: #ffffff80;
+    width: fit-content;
+    height: fit-content;
+    color: #ffffff;
     backdrop-filter: blur(10px);
-    background: transparent;
+    background: #0021695f;
     padding: 10px;
     text-align: center;
     text-transform: uppercase;
@@ -60,10 +96,20 @@
     text-shadow: none;
     cursor: pointer;
     box-shadow: transparent;
-    border: 1px solid #ffffff80;
+    border: 1px solid #ffffff;
     transition: 0.3s ease;
     user-select: none;
     margin: 10px;
+}
+
+.invites .button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
 }
 
 .invites ul li .row .button:hover,

@@ -12,6 +12,11 @@
     <link rel="stylesheet" th:href="@{/css/invites.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
     <link rel="stylesheet" th:href="@{/css/home.css}"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     
     <style th:inline="text">
         body {
@@ -26,7 +31,7 @@
         <div class="navLeftSide">
             <a th:href="@{'/'}" class="homeContainer" id="homeButton">
                 <img class="logo" id="homeLogo" th:src="@{/img/HomeLogo.svg}" alt="">
-                <h2 id="title">Spiderweb</h2>
+                <h2 id="title">Spiderweb Home</h2>
             </a>
         </div>
 
@@ -72,5 +77,6 @@
     </div>
 
     <script th:src="@{/js/popup.js}"></script>
+    <script th:src="@{/js/navbar.js}"></script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.example.szakdoga.web.controller;
 
 import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.request.UserFriendsRequestEntity;
+import com.example.szakdoga.service.InvitationService;
 import com.example.szakdoga.service.UserFriendsService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,11 @@ import java.util.Map;
 @RequestMapping("/friends")
 public class FriendController {
     UserFriendsService service;
+    InvitationService invitationService;
     @Autowired
-    public FriendController(UserFriendsService service) {
+    public FriendController(UserFriendsService service, InvitationService invitationService) {
         this.service = service;
+        this.invitationService = invitationService;
     }
 
 
@@ -38,12 +41,20 @@ public class FriendController {
             model.addAttribute("friends", responseBody.get("friends"));
             model.addAttribute("count", responseBody.get("count"));
         }
+
+        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
+        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+
         return "player/friendList";
     }
 
     @GetMapping("/add")
     public String getAddFriend(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
+
+        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
+        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+
         return "player/addFriend";
     }
 

@@ -12,12 +12,6 @@ body {
     height: fit-content;
 }
 
-label, h2 {
-    font-size: 15px;
-    color: #ffffff80;
-    font-family: Franklin Gothic;
-}
-
 .container {
     position: absolute;
     left: 50%;
@@ -29,12 +23,19 @@ label, h2 {
     height: fit-content;
     margin: 20px;
     padding: 20px;
-    background: transparent;
+    background: #001d5b7f;
     backdrop-filter: blur(30px);
 }
 
-.button {
-    color: #ffffff80;
+.container label, 
+.container h2 {
+    font-size: 15px;
+    color: #ffffff;
+    font-family: Franklin Gothic;
+}
+
+.container .button {
+    color: #ffffff;
     backdrop-filter: blur(10px);
     background: transparent;
     padding: 10px;
@@ -48,13 +49,13 @@ label, h2 {
     text-shadow: none;
     cursor: pointer;
     box-shadow: transparent;
-    border: 1px solid #ffffff80;
+    border: 1px solid #ffffff;
     transition: 0.3s ease;
     user-select: none;
     margin: 10px;
 }
 
-.button:hover,
+.container .button:hover,
 :focus {
     color: #ffffff;
     background: #008cff;
@@ -64,7 +65,8 @@ label, h2 {
         0 0 100px #008cff;
 }
 
-.input {
+.container .input {
+    background-color: #31005b54;
     border-radius: 20px;
     padding: 5px;
     background: aliceblue;

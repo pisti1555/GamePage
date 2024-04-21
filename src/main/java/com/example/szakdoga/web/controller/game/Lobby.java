@@ -4,6 +4,7 @@ import com.example.szakdoga.data.model.game.PvP;
 import com.example.szakdoga.data.model.game.spiderweb.Board;
 import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.service.GameService;
+import com.example.szakdoga.service.InvitationService;
 import com.example.szakdoga.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,13 @@ import java.util.Map;
 @RequestMapping("/lobby")
 public class Lobby {
     GameService service;
+    InvitationService invitationService;
     SimpMessagingTemplate template;
     UserFriendsService friendsService;
     @Autowired
-    public Lobby(GameService service, SimpMessagingTemplate template, UserFriendsService friendsService) {
+    public Lobby(GameService service, InvitationService invitationService, SimpMessagingTemplate template, UserFriendsService friendsService) {
         this.service = service;
+        this.invitationService = invitationService;
         this.template = template;
         this.friendsService = friendsService;
     }
@@ -34,8 +37,8 @@ public class Lobby {
         String username = principal.getName();
         PvP pvP = service.getPvP(username);
         model.addAttribute("username", username);
-        model.addAttribute("invites", service.getInvites(username));
-        model.addAttribute("invCount", service.invCount(username));
+        model.addAttribute("invites", invitationService.getInvites(username));
+        model.addAttribute("invCount", invitationService.invCount(username));
         model.addAttribute("user1InGame", pvP.isUser1InGame());
         model.addAttribute("user2InGame", pvP.isUser2InGame());
         model.addAttribute("isReady", pvP.isReadyToStart());
@@ -52,8 +55,8 @@ public class Lobby {
 
     @PostMapping("/invite")
     public String inviteFriend(@RequestParam("friendUsername") String friendUsername, Principal principal) {
-        service.inviteFriend(principal.getName(), friendUsername);
-        template.convertAndSendToUser(friendUsername, "/topic/lobby/update", "update");
+        invitationService.inviteFriend(principal.getName(), friendUsername);
+        template.convertAndSendToUser(friendUsername, "/topic/invites", "update");
         return "redirect:/lobby";
     }
 

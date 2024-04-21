@@ -16,17 +16,17 @@ public class GameService {
 
     List<PvP> pvpList;
     List<PvC> pvcList;
-    Map<String, String> invites;
+    InvitationService invitationService;
     Random random;
     private final short PVP = 1;
     private final short PVS = 2;
     private final short PVF = 3;
 
     @Autowired
-    public GameService() {
+    public GameService(InvitationService invitationService) {
+        this.invitationService = invitationService;
         this.pvpList = new ArrayList<>();
         this.pvcList = new ArrayList<>();
-        this.invites =  new HashMap<>();
         this.random = new Random();
     }
 
@@ -64,11 +64,11 @@ public class GameService {
                 pvpList.removeIf(i -> i.getUser1().equals(invited));
                 pvP.setUser2(invited);
 
-                for (Map.Entry<String, String> entry : invites.entrySet()) {
+                for (Map.Entry<String, String> entry : invitationService.invites.entrySet()) {
                     String invitedUser = entry.getKey();
                     String inviterUser = entry.getValue();
                     if (invited.equals(invitedUser)  && inviter.equals(inviterUser)) {
-                        invites.remove(invitedUser);
+                        invitationService.invites.remove(invitedUser);
                     }
                 }
 
@@ -85,27 +85,7 @@ public class GameService {
         return pvp;
     }
 
-    public void inviteFriend(String inviter, String invited) {
-        invites.put(invited, inviter);
-    }
 
-    public List<String> getInvites(String username) {
-        List<String> invitations = new ArrayList<>();
-
-        for (Map.Entry<String, String> entry : invites.entrySet()) {
-            String invited = entry.getKey();
-            String inviter = entry.getValue();
-            if (invited.equals(username)) {
-                invitations.add(inviter);
-            }
-        }
-
-        return invitations;
-    }
-
-    public int invCount(String username) {
-        return getInvites(username).size();
-    }
 
 
 
