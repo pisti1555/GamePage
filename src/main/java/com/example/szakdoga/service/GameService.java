@@ -1,5 +1,6 @@
 package com.example.szakdoga.service;
 
+import com.example.szakdoga.data.model.User;
 import com.example.szakdoga.data.model.game.Game;
 import com.example.szakdoga.data.model.game.spiderweb.Board;
 import com.example.szakdoga.data.model.game.spiderweb.Piece;
@@ -238,7 +239,6 @@ public class GameService {
         } else {
             System.out.println("Invalid");
         }
-        display(board);
     }
 
     public void moveSpider(int from, int to, Piece p, Board board) {
@@ -250,7 +250,6 @@ public class GameService {
         } else {
             System.out.println("Invalid");
         }
-        display(board);
     }
 
     public Piece whichPiece(int location, Board board) {
@@ -293,37 +292,6 @@ public class GameService {
 
     public boolean isFlysTurn(Board board) {
         return board.isFlysTurn;
-    }
-
-    public void display(Board board) {
-        int flyLoc = -1;
-        int spiderArrayIndex = 0;
-        int[] spiderLoc = new int[board.getSpider().length];
-
-        for (int i = 0; i < board.getField().length; i++) {
-            if(board.getField()[i].getPiece() == Pieces.FLY) {
-                System.out.print("F ");
-                flyLoc = i;
-            } else if(board.getField()[i].getPiece() == Pieces.SPIDER) {
-                System.out.print("S ");
-                spiderLoc[spiderArrayIndex] = i;
-                spiderArrayIndex++;
-            } else {
-                System.out.print("- ");
-            }
-        }
-        System.out.println("\nPiece objects' locations: ");
-        System.out.println("Fly location: " + board.getFly().location);
-        for (int i = 0; i < board.getSpider().length; i++) {
-            System.out.println("Spider[" + i + "] location: " + board.getSpider()[i].location);
-        }
-
-        System.out.println("\nBoard's locations: ");
-        System.out.println("Fly found on field number " + flyLoc);
-        for (int j : spiderLoc) {
-            System.out.println("Spider found on field number " + j);
-        }
-        System.out.println("\n isFlysTurn: " + board.isFlysTurn + "\n");
     }
 
     public boolean newGame(String gameMode, Board board, String username) {
@@ -387,5 +355,39 @@ public class GameService {
     }
 
 
+    public void gameOverr(User user, boolean won) {
+
+        if (won) {
+            user.setGamesPlayed(user.getGamesPlayed() + 1);
+            user.setGamesWon(user.getGamesWon() + 1);
+        } else {
+            user.setGamesPlayed(user.getGamesPlayed() + 1);
+        }
+    }
+
+    public void gameOver(Game game, User user) {
+        if (game.getUser1().equals(user.getUsername())) {
+            if (whoWon(game.getBoard()) == 1) {
+                user.setMovesDone(user.getMovesDone() + game.getBoard().flyStepsDone);
+                user.setGamesPlayed(user.getGamesPlayed() + 1);
+                user.setGamesWon(user.getGamesWon() + 1);
+            }
+            if (whoWon(game.getBoard()) == 2) {
+                user.setMovesDone(user.getMovesDone() + game.getBoard().flyStepsDone);
+                user.setGamesPlayed(user.getGamesPlayed() + 1);
+            }
+        }
+        if (game.getUser2().equals(user.getUsername())) {
+            if (whoWon(game.getBoard()) == 1) {
+                user.setMovesDone(user.getMovesDone() + game.getBoard().spiderStepsDone);
+                user.setGamesPlayed(user.getGamesPlayed() + 1);
+            }
+            if (whoWon(game.getBoard()) == 2) {
+                user.setMovesDone(user.getMovesDone() + game.getBoard().spiderStepsDone);
+                user.setGamesPlayed(user.getGamesPlayed() + 1);
+                user.setGamesWon(user.getGamesWon() + 1);
+            }
+        }
+    }
 
 }

@@ -1,8 +1,10 @@
 package com.example.szakdoga.web.controller.game;
 
+import com.example.szakdoga.data.model.User;
 import com.example.szakdoga.data.model.game.Game;
 import com.example.szakdoga.data.model.game.spiderweb.Board;
 import com.example.szakdoga.service.GameService;
+import com.example.szakdoga.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +17,13 @@ import java.util.HashMap;
 @RequestMapping("/api/game")
 public class GameAPIController {
     GameService service;
+    UserService userService;
     SimpMessagingTemplate template;
 
     @Autowired
-    public GameAPIController(GameService service, SimpMessagingTemplate template) {
+    public GameAPIController(GameService service, UserService userService, SimpMessagingTemplate template) {
         this.service = service;
+        this.userService = userService;
         this.template = template;
     }
 
@@ -27,6 +31,7 @@ public class GameAPIController {
     public int playVsPlayer(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
         Game game = service.getGame(principal.getName());
         Board board = findBoard(principal.getName());
+
         service.isMoveValid(from, to, board);
         if (service.isMoveValid(from, to, board)) {
             service.moveVsPlayer(from, to, board, principal.getName());

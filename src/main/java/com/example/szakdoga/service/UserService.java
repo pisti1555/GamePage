@@ -10,4 +10,5 @@ public interface UserService extends UserDetailsService {
     User register(RegistrationDto dto);
     List<User> findAll();
     User findByUsername(String username);
+    void update(User user);
 }

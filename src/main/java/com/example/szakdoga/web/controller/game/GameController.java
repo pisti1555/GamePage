@@ -1,8 +1,10 @@
 package com.example.szakdoga.web.controller.game;
 
+import com.example.szakdoga.data.model.User;
 import com.example.szakdoga.data.model.game.Game;
 import com.example.szakdoga.data.model.game.spiderweb.Board;
 import com.example.szakdoga.service.GameService;
+import com.example.szakdoga.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -20,11 +22,13 @@ import java.util.HashMap;
 @RequestMapping("/game")
 public class GameController {
     GameService service;
+    UserService userService;
     SimpMessagingTemplate template;
 
     @Autowired
-    public GameController(GameService service, SimpMessagingTemplate template) {
+    public GameController(GameService service, UserService userService, SimpMessagingTemplate template) {
         this.service = service;
+        this.userService = userService;
         this.template = template;
     }
 
@@ -46,6 +50,9 @@ public class GameController {
                 int flyStepsDone = service.getFlyStepsDone(game.getBoard());
                 int spiderStepsDone = service.getSpiderStepsDone(game.getBoard());
                 int totalStepsDone = flyStepsDone + spiderStepsDone;
+
+                gameOver(username);
+
                 model.addAttribute("gameOver", gameOver);
                 model.addAttribute("whoWon", whoWon);
                 model.addAttribute("flySteps", flyStepsDone);
@@ -80,5 +87,14 @@ public class GameController {
     public String quit() {
         return null;
         //TODO
+    }
+
+    public void gameOver(String name) {
+        User user = userService.findByUsername(name);
+        Game game = service.getGame(user.getUsername());
+        if (!game.getBoard().isGameRunning()) {
+            service.gameOver(game, user);
+            userService.update(user);
+        }
     }
 }
