@@ -13,6 +13,10 @@ function connectToWebSocket() {
             console.log('Received message: ' + message.body);
             window.location.href = '/game/pvp';
         });
+        stompClient.subscribe('/user/topic/invites', function (message) {
+            console.log('Received message: ' + message.body);
+            window.location.reload();
+        });
     });
 }
 
