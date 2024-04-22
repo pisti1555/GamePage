@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +25,12 @@ import java.util.Map;
 public class FriendController {
     UserFriendsService service;
     InvitationService invitationService;
+    SimpMessagingTemplate template;
     @Autowired
-    public FriendController(UserFriendsService service, InvitationService invitationService) {
+    public FriendController(UserFriendsService service, InvitationService invitationService, SimpMessagingTemplate template) {
         this.service = service;
         this.invitationService = invitationService;
+        this.template = template;
     }
 
 
@@ -45,6 +48,9 @@ public class FriendController {
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));
 
+        model.addAttribute("friendRequests", service.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", service.getFriendRequestCount(principal.getName()));
+
         return "player/friendList";
     }
 
@@ -54,6 +60,9 @@ public class FriendController {
 
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+
+        model.addAttribute("friendRequests", service.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", service.getFriendRequestCount(principal.getName()));
 
         return "player/addFriend";
     }
@@ -69,6 +78,23 @@ public class FriendController {
         request.setFriends(friends);
 
         service.addUserFriends(request);
+        template.convertAndSendToUser(invited, "/topic/invites", "friend-request");
+        return "redirect:" + http.getHeader("Referer");
+    }
+
+
+    @PostMapping("/decline-friend-request")
+    public String declineFriendRequest(Model model, Principal principal, UserFriendsRequestEntity request, HttpServletRequest http) {
+        List<String> friends = new ArrayList<>();
+        String inviter = principal.getName();
+        String invited = request.getFriends().get(1);
+
+        friends.add(inviter);
+        friends.add(invited);
+        request.setFriends(friends);
+
+        //TODO
+        //service.declineFriendRequest(invited);
         return "redirect:" + http.getHeader("Referer");
     }
 }

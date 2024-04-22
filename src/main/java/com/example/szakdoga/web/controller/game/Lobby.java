@@ -39,6 +39,8 @@ public class Lobby {
         model.addAttribute("username", username);
         model.addAttribute("invites", invitationService.getInvites(username));
         model.addAttribute("invCount", invitationService.invCount(username));
+        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
         model.addAttribute("user1InGame", pvP.isUser1InGame());
         model.addAttribute("user2InGame", pvP.isUser2InGame());
         model.addAttribute("isReady", pvP.isReadyToStart());

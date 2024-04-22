@@ -1,4 +1,5 @@
-.invites {
+.invites,
+.friendRequests {
     position: fixed;
     display: block;
     top: 40%;
@@ -18,7 +19,8 @@
     font-weight: 400;
 }
 
-.invites .invMessage {
+.invites .invMessage,
+.friendRequests .requestMessage {
     color: #ffffff;
     font-family: Franklin Gothic;
     font-weight: 500;
@@ -27,7 +29,8 @@
     padding: 10px; 
 }
 
-.invites .button {
+.invites .button,
+.friendRequests .button {
     width: fit-content;
     height: fit-content;
     color: #ffffff;
@@ -50,7 +53,8 @@
     margin: 10px;
 }
 
-.invites ul {
+.invites ul,
+.friendRequests ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -58,19 +62,22 @@
     flex-direction: column;
 }
 
-.invites ul li {
+.invites ul li,
+.friendRequests ul li {
     display: block;
     width: 100%;
     text-align: center;
 }
 
-.invites ul li .row {
+.invites ul li .row,
+.friendRequests ul li .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.invites ul li .row .invMessage {
+.invites ul li .row .invMessage,
+.friendRequests ul li .row .requestMessage {
     color: #ffffff;
     font-family: Franklin Gothic;
     letter-spacing: 1px;
@@ -79,7 +86,8 @@
     padding: 10px; 
 }
 
-.invites ul li .row .button {
+.invites ul li .row .button,
+.friendRequests ul li .row .button {
     width: fit-content;
     height: fit-content;
     color: #ffffff;
@@ -113,6 +121,27 @@
 }
 
 .invites ul li .row .button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}
+
+
+.friendRequests .button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}
+
+.friendRequests ul li .row .button:hover,
 :focus {
   color: #ffffff;
   background: #008cff;

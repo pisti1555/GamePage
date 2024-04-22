@@ -3,6 +3,7 @@ package com.example.szakdoga.service;
 import com.example.szakdoga.data.model.User;
 import com.example.szakdoga.data.repository.FriendRequestDao;
 import com.example.szakdoga.data.repository.UserFriendDao;
+import com.example.szakdoga.data.repository.UserRepository;
 import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.request.UserFriendsRequestEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,11 +20,13 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 
     private final FriendRequestDao request;
     private final UserFriendDao dao;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserFriendsServiceImpl(UserFriendDao dao, FriendRequestDao request) {
+    public UserFriendsServiceImpl(UserFriendDao dao, FriendRequestDao request, UserRepository userRepository) {
         this.request = request;
         this.dao = dao;
+        this.userRepository = userRepository;
     }
 
     private User saveIfNotExist(String username) {
@@ -142,6 +142,38 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
+
+    @Override
+    public List<String> getFriendRequests(String username) {
+        List<String> invites = new ArrayList<>();
+
+        User client = userRepository.findByUsername(username);
+        List<User> requests = userRepository.findAll();
+
+        for (User user : requests) {
+            if (user.getUserFriendRequest().contains(client)) {
+                if (!isFriend(username, user.getUsername())) {
+                    invites.add(user.getUsername());
+                }
+            }
+        }
+
+        return invites;
+    }
+
+    @Override
+    public int getFriendRequestCount(String principal) {
+        return getFriendRequests(principal).size();
+    }
+
+    @Override
+    public boolean declineFriendRequest(String username) {
+        //TODO
+        User user = request.findByUsername(username);
+        request.delete(user);
+        return false;
+    }
+
 
     @Override
     public boolean isFriend(String principal, String username) {

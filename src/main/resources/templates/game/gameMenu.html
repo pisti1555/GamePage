@@ -49,8 +49,12 @@
         </div>
 
         <div class="navRightSide">
+            <button class="friend-requests-button" onclick="openPopUp('friendRequestContainer')">
+                <img th:src="@{/img/navbarFriendRequestLogo.svg}">
+                <span th:if="${friendRequestCount != 0}" th:text="${friendRequestCount}" class="friend-requests-count"></span>
+            </button>
             <button class="inv-button" onclick="openPopUp('invContainer')">
-                <img th:src="@{/img/navbarInviteLogo.svg}">
+                <img th:src="@{/img/navbarLobbyInviteLogo.svg}">
                 <span th:if="${invCount != 0}" th:text="${invCount}" class="inv-count"></span>
             </button>
             <a id="login" class="profile" th:href="@{/profile}">
@@ -71,6 +75,27 @@
                     <form action="/lobby/join" method="post">
                         <input type="hidden" name="inviterName" th:value="${inviter}" />
                         <button class="button" type="submit">Join</button>
+                    </form> 
+                </div>                     
+            </li>
+        </ul>
+    </div>
+
+    <div id="friendRequestContainer" class="friendRequests closed">
+        <button id="closeFriendRequestContainerButton" class="button" onclick="closePopUp('friendRequestContainer')">Close</button>
+        <h3 th:if="${friendRequestCount == 0}" class="requestMessage">You do not have any invites</h3>
+        <ul>
+            <li th:each="request : ${friendRequests}">
+                <div class="row">
+                    <h3 class="requestMessage" th:text="${request} + '  '"></h3>
+                    <h3 class="requestMessage"> has sent a friend request</h3>
+                    <form th:action="@{/friends/add}" method="post">
+                        <input type="hidden" name="friends[1]" th:value="${request}" />
+                        <button class="button" type="submit">Accept</button>
+                    </form>
+                    <form th:action="@{/friends/decline-friend-request}" method="post">
+                        <input type="hidden" name="friends[1]" th:value="${request}" />
+                        <button class="button" type="submit">Decline</button>
                     </form> 
                 </div>                     
             </li>

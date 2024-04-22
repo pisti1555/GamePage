@@ -1,6 +1,7 @@
 package com.example.szakdoga.web.controller;
 
 import com.example.szakdoga.service.InvitationService;
+import com.example.szakdoga.service.UserFriendsService;
 import com.example.szakdoga.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,13 @@ import java.security.Principal;
 @Controller
 public class HomeController {
     UserService userService;
+    UserFriendsService friendsService;
     InvitationService invitationService;
 
     @Autowired
-    public HomeController(UserService userService, InvitationService invitationService) {
+    public HomeController(UserService userService, UserFriendsService friendsService, InvitationService invitationService) {
         this.userService = userService;
+        this.friendsService = friendsService;
         this.invitationService = invitationService;
     }
 
@@ -25,6 +28,8 @@ public class HomeController {
         model.addAttribute("username", principal.getName());
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
         return "index";
     }
 
@@ -34,6 +39,8 @@ public class HomeController {
         model.addAttribute("users", userService.findAll());
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
         return "player/scoreboard";
     }
 

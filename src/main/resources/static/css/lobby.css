@@ -42,7 +42,8 @@ h1 {
     justify-content: center;
 }
 
-.inv_container {
+.inv_container,
+.friendRequestContainer {
     position: relative;
     width: fit-content;
     height: fit-content;

@@ -4,6 +4,7 @@ import com.example.szakdoga.data.model.User;
 import com.example.szakdoga.data.model.game.PvP;
 import com.example.szakdoga.service.GameService;
 import com.example.szakdoga.service.InvitationService;
+import com.example.szakdoga.service.UserFriendsService;
 import com.example.szakdoga.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,13 +20,15 @@ import java.security.Principal;
 public class GameController {
     GameService service;
     UserService userService;
+    UserFriendsService friendsService;
     SimpMessagingTemplate template;
     InvitationService invitationService;
 
     @Autowired
-    public GameController(GameService service, UserService userService, SimpMessagingTemplate template, InvitationService invitationService) {
+    public GameController(GameService service, UserService userService, UserFriendsService friendsService, SimpMessagingTemplate template, InvitationService invitationService) {
         this.service = service;
         this.userService = userService;
+        this.friendsService = friendsService;
         this.template = template;
         this.invitationService = invitationService;
     }
@@ -36,6 +39,8 @@ public class GameController {
 
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
 
         return "game/gameMenu";
     }
@@ -82,6 +87,8 @@ public class GameController {
 
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
 
         service.newGamePvC("pvs", principal.getName());
         return "game/spiderweb_pvs";
@@ -93,6 +100,8 @@ public class GameController {
 
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));
+        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
+        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
 
         service.newGamePvC("pvf", principal.getName());
         return "game/spiderweb_pvf";

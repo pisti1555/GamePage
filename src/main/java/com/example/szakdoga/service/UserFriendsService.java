@@ -4,6 +4,7 @@ import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.request.UserFriendsRequestEntity;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface UserFriendsService {
@@ -12,5 +13,10 @@ public interface UserFriendsService {
     ResponseEntity<Map<String, Object>> getUserFriendsList(UserFriendsListRequestEntity userFriendsListRequestEntity);
 
     ResponseEntity<Map<String, Object>> getCommonUserFriends(UserFriendsRequestEntity userFriendsRequestEntity);
+
+    List<String> getFriendRequests(String principal);
+    int getFriendRequestCount(String principal);
+    boolean declineFriendRequest(String username);
+
     boolean isFriend(String principal, String user);
 }
