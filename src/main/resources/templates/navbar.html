@@ -6,29 +6,18 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Add new friend</title>
     
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/invites.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
-    <link rel="stylesheet" th:href="@{/css/addFriend.css}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <!--    end libs for stomp and sockjs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    
-    <style th:inline="text">
-        body {
-            background: url([[@{/img/HomePageBackground4k.jpg}]]) no-repeat center center fixed;
-            background-size: cover;
-        }
-    </style>
 </head>
 
 <body>
-    <header class="header">
+    <header id="navigation-bar" class="header">
         <div class="navLeftSide">
             <a th:href="@{'/'}" class="homeContainer" id="homeButton">
                 <img class="logo" id="homeLogo" th:src="@{/img/HomeLogo.svg}" alt="">
@@ -90,25 +79,7 @@
         </ul>
     </div>
 
-    <div class="container">
-        <h2>Add Friend</h2>
-        <form action="#" th:action="@{/friends/add}" th:object="${userFriendsRequestEntity}" method="post">
-
-            <label for="friend">Send a friend invitation:</label>
-            <input class="input" type="text" id="friend" name="friends[1]" required><br><br>
-            
-            <button class="button" type="submit">Add Friend</button>
-        </form>
-    </div>
-
-    <div th:if="${param.userNotFound}" class="response">
-        <h2>Couldn't find any user by this username</h2>
-    </div>
-
     <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/navbar.js}"></script>
-    
-    
 </body>
-
 </html>

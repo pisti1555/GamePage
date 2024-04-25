@@ -73,3 +73,20 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.response {
+    position: relative;
+    font-family: Franklin Gothic;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #ffffff;
+    margin: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 20px;
+    background: transparent;
+    backdrop-filter: blur(30px);
+    left: 50%;
+    transform: translateX(-50%);
+}

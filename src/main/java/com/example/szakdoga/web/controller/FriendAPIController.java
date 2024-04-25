@@ -5,10 +5,7 @@ import com.example.szakdoga.request.UserFriendsRequestEntity;
 import com.example.szakdoga.service.UserFriendsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -21,18 +18,13 @@ public class FriendAPIController {
         this.userFriendsService = userFriendsService;
     }
 
-    @RequestMapping(value = "/userFriendRequest", method = RequestMethod.POST)
+    @PostMapping("/userFriendRequest")
     public ResponseEntity<Map<String, Object>> userFriendRequest(@RequestBody UserFriendsRequestEntity userFriendsRequestEntity) {
         return this.userFriendsService.addUserFriends(userFriendsRequestEntity);
     }
 
-    @RequestMapping(value = "/getUserFriendList", method = RequestMethod.POST)
+    @PostMapping("/getUserFriendList")
     public ResponseEntity<Map<String, Object>> getUserFriendList(@RequestBody UserFriendsListRequestEntity userFriendsListRequestEntity) {
         return this.userFriendsService.getUserFriendsList(userFriendsListRequestEntity);
-    }
-
-    @RequestMapping(value = "/getCommonUserFriends", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> getCommonUserFriends(@RequestBody UserFriendsRequestEntity userFriendsRequestEntity) {
-        return this.userFriendsService.getCommonUserFriends(userFriendsRequestEntity);
     }
 }

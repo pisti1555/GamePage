@@ -1,6 +1,6 @@
 package com.example.szakdoga.service;
 
-import com.example.szakdoga.data.model.User;
+import com.example.szakdoga.data.model.user.User;
 import com.example.szakdoga.data.repository.FriendRequestDao;
 import com.example.szakdoga.data.repository.UserFriendDao;
 import com.example.szakdoga.data.repository.UserRepository;
@@ -80,8 +80,7 @@ public class UserFriendsServiceImpl implements UserFriendsService {
         this.request.save(user1);
         result.put("Success", true);
 
-        if (user1.getUserFriendRequest().contains(user2 ) && user2.getUserFriendRequest().contains(user1)) {
-            System.out.println("Barátok");
+        if (user1.getUserFriendRequest().contains(user2) && user2.getUserFriendRequest().contains(user1)) {
             user1.addFriend(user2);
             user2.addFriend(user1);
             this.dao.save(user1);
@@ -89,7 +88,6 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 
             result.put("Success", true);
         }
-        System.out.println("Nem barátok");
 
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
@@ -167,10 +165,14 @@ public class UserFriendsServiceImpl implements UserFriendsService {
     }
 
     @Override
-    public boolean declineFriendRequest(String username) {
-        //TODO
-        User user = request.findByUsername(username);
-        request.delete(user);
+    public boolean declineFriendRequest(String inviter, String invited) {
+        User inviterUser = request.findByUsername(inviter);
+        User invitedUser = request.findByUsername(invited);
+        if (inviterUser != null && invitedUser != null) {
+            //TODO
+            //request.delete(invitedUser);
+            return true;
+        }
         return false;
     }
 

@@ -1,7 +1,6 @@
 package com.example.szakdoga.web.controller;
 
-import com.example.szakdoga.data.model.User;
-import com.example.szakdoga.data.repository.UserFriendDao;
+import com.example.szakdoga.data.model.user.User;
 import com.example.szakdoga.service.InvitationService;
 import com.example.szakdoga.service.UserFriendsService;
 import com.example.szakdoga.service.UserService;

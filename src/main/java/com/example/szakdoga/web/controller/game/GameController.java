@@ -1,6 +1,6 @@
 package com.example.szakdoga.web.controller.game;
 
-import com.example.szakdoga.data.model.User;
+import com.example.szakdoga.data.model.user.User;
 import com.example.szakdoga.data.model.game.PvP;
 import com.example.szakdoga.service.GameService;
 import com.example.szakdoga.service.InvitationService;

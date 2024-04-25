@@ -16,7 +16,7 @@ public interface UserFriendsService {
 
     List<String> getFriendRequests(String principal);
     int getFriendRequestCount(String principal);
-    boolean declineFriendRequest(String username);
+    boolean declineFriendRequest(String inviter, String invited);
 
     boolean isFriend(String principal, String user);
 }

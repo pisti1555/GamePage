@@ -1,7 +1,7 @@
 package com.example.szakdoga.service;
 
-import com.example.szakdoga.data.model.Role;
-import com.example.szakdoga.data.model.User;
+import com.example.szakdoga.data.model.user.Role;
+import com.example.szakdoga.data.model.user.User;
 import com.example.szakdoga.data.repository.UserRepository;
 import com.example.szakdoga.web.dto.RegistrationDto;
 import jakarta.transaction.Transactional;

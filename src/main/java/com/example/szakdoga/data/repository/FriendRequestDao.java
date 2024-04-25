@@ -1,6 +1,6 @@
 package com.example.szakdoga.data.repository;
 
-import com.example.szakdoga.data.model.User;
+import com.example.szakdoga.data.model.user.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

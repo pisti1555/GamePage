@@ -1,9 +1,11 @@
 package com.example.szakdoga.web.controller;
 
+import com.example.szakdoga.data.model.user.User;
 import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.request.UserFriendsRequestEntity;
 import com.example.szakdoga.service.InvitationService;
 import com.example.szakdoga.service.UserFriendsService;
+import com.example.szakdoga.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +26,13 @@ import java.util.Map;
 @RequestMapping("/friends")
 public class FriendController {
     UserFriendsService service;
+    UserService userService;
     InvitationService invitationService;
     SimpMessagingTemplate template;
     @Autowired
-    public FriendController(UserFriendsService service, InvitationService invitationService, SimpMessagingTemplate template) {
+    public FriendController(UserFriendsService service, UserService userService, InvitationService invitationService, SimpMessagingTemplate template) {
         this.service = service;
+        this.userService = userService;
         this.invitationService = invitationService;
         this.template = template;
     }
@@ -73,6 +77,11 @@ public class FriendController {
         String inviter = principal.getName();
         String invited = request.getFriends().get(1);
 
+        User invitedUser = userService.findByUsername(invited);
+        if (invitedUser == null) {
+            return "redirect:/friends/add?userNotFound";
+        }
+
         friends.add(inviter);
         friends.add(invited);
         request.setFriends(friends);
@@ -93,8 +102,7 @@ public class FriendController {
         friends.add(invited);
         request.setFriends(friends);
 
-        //TODO
-        //service.declineFriendRequest(invited);
+        service.declineFriendRequest(inviter, invited);
         return "redirect:" + http.getHeader("Referer");
     }
 }

@@ -1,4 +1,4 @@
-package com.example.szakdoga.data.model;
+package com.example.szakdoga.data.model.user;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;

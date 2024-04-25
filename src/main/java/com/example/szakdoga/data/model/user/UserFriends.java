@@ -1,10 +1,10 @@
-package com.example.szakdoga.data.model;
+package com.example.szakdoga.data.model.user;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user_friend_requests")
-public class UserFriendRequest {
+@Table(name = "user_friends")
+public class UserFriends {
     @Id
     @Column(name = "friend_id")
     private Long friendId;
