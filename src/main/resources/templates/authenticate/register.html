@@ -3,68 +3,58 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Registration</title>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+
+    <style th:inline="text">
+        body {
+            background: url([[@{/img/HomePageBackground4k.jpg}]]) no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+
 </head>
+
 <body>
-
-<!-- create navigation bar ( header) -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-                    aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span> <span
-                    class="icon-bar"></span> <span class="icon-bar"></span> <span
-                    class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#" th:href="@{/}">Registration and
-                Login Module</a>
+
+        <div th:if="${param.success}">
+            <div class="alert alert-info">You've successfully registered</div>
         </div>
-    </div>
-</nav>
 
-<br>
-<br>
-<!-- Create HTML registration form -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <h1>Registration</h1>
 
-            <!-- success message -->
-            <div th:if="${param.success}">
-                <div class="alert alert-info">You've successfully registered!</div>
+        <form th:action="@{/register}" method="post" th:object="${user}">
+            <div class="data">
+                <label for="username">Username:</label>
+                <input class="input" type="text" id="username" th:name="username" required>
+            </div>
+            
+            <div class="data">
+                <label for="email">Email:</label>
+                <input class="input" type="email" id="email" th:name="email" required>
             </div>
 
-            <h1>Registration</h1>
-
-            <form th:action="@{/register}" method="post" th:object="${user}">
-                <label for="username">Username:</label>
-                <input type="text" id="username" th:name="username" required><br><br>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" th:name="email" required><br><br>
-
+            <div class="data">
                 <label for="password">Password:</label>
-                <input type="password" id="password" th:name="password" required><br><br>
-
+                <input class="input" type="password" id="password" th:name="password" required>
+            </div>
+            
+            <div class="data">
                 <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" th:name="firstName" required><br><br>
+                <input class="input" type="text" id="firstName" th:name="firstName" required>
+            </div>
 
+            <div class="data">
                 <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" th:name="lastName" required><br><br>
+                <input class="input" type="text" id="lastName" th:name="lastName" required>
+            </div>                
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success">Register</button>
-                    <span>Already registered? <a href="/" th:href="@{/login}">Login
-								here</a></span>
-                </div>
-            </form>
-        </div>
+            <div class="loginBox">
+                <button type="submit" class="button">Register</button>
+                <span> Already registered? <a href="/" th:href="@{/login}">Login here</a> </span>
+            </div>
+
+        </form>
     </div>
-</div>
 </body>
 </html>

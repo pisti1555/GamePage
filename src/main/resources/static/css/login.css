@@ -26,21 +26,14 @@ body {
     backdrop-filter: blur(30px);
 }
 
-h1 {
+.container h1 {
+    letter-spacing: 1px;
+}
+
+.title {
     font-size: 20px;
     color: #ffffff;
     font-family: Franklin Gothic;
-    margin-bottom: 20px;
-}
-
-a {
-    font-family: Franklin Gothic;
-    color: #ffffff;
-    cursor: pointer;
-}
-
-a:hover {
-    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
 }
 
 .alert {
@@ -52,19 +45,22 @@ a:hover {
     margin-bottom: 10px;
 }
 
-.alert-info {
+.error {
+    background-color: #ff6347;
+}
+
+.logout {
     background-color: #6495ed;
 }
 
 .data {
-    margin-bottom: 10px;
+    margin: 10px;
 }
 
-label {
+.data label {
     font-size: 15px;
     color: #ffffff;
     font-family: Franklin Gothic;
-    margin-right: 10px;
 }
 
 .input {
@@ -72,14 +68,31 @@ label {
     border-radius: 20px;
     padding: 10px;
     background: aliceblue;
-    width: 200px;
+    width: 90%;
 }
 
-.loginBox {
-    margin-top: 20px;
+.login {
+    margin: 10px;
+}
+
+.registerBox {
+    margin: 10px;
+    color: #ffffff;
+    font-family: Franklin Gothic;
+    text-decoration: none;
+}
+
+.registerBox a {
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.registerBox a:hover {
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
 }
 
 .button {
+    margin: 10px;
     color: #ffffff;
     backdrop-filter: blur(10px);
     background: transparent;
@@ -95,7 +108,7 @@ label {
     border: 1px solid #ffffff;
     transition: 0.3s ease;
     user-select: none;
-    margin-right: 10px;
+    display: inline-block;
 }
 
 .button:hover,
@@ -105,10 +118,4 @@ label {
     border: 1px solid #008cff;
     text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
     box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff, 0 0 100px #008cff;
-}
-
-.loginBox span {
-    font-size: 15px;
-    color: #ffffff;
-    font-family: Franklin Gothic;
 }
