@@ -7,7 +7,7 @@ var connectionMap;
 
 
 function newGame() {
-  fetch("http://localhost:8080/api/game/pvc/newGame", {
+  fetch("/api/game/pvc/newGame", {
      method: "POST",
      credentials: 'include',
         headers: {
@@ -24,13 +24,13 @@ function newGame() {
 //-------------- Load board data --------------
 function loadGame() {
     var gameMode;
-    fetch('http://localhost:8080/api/game/pvc/getGameMode')
+    fetch('/api/game/pvc/getGameMode')
         .catch(error => console.error('Error:', error));
     createBoard(); 
 }
 
 function getBoardDataFromServer() {
-    fetch("http://localhost:8080/api/game/pvc/getPositions", {
+    fetch("/api/game/pvc/getPositions", {
        method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -43,7 +43,7 @@ function getBoardDataFromServer() {
 }
 
 function fetchConnections() {
-    fetch('http://localhost:8080/api/game/pvc/getConnections')
+    fetch('/api/game/pvc/getConnections')
         .then(response => response.json())
         .then(data => {
             console.log('Connections data:', data);
@@ -170,7 +170,7 @@ function moveToField(from, to) {
         moveParams.append('from', from);
         moveParams.append('to', to);
 
-        fetch("http://localhost:8080/api/game/pvc/pvf", {
+        fetch("/api/game/pvc/pvf", {
        method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"

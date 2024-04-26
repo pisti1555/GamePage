@@ -38,13 +38,13 @@ function newGame() {
 //-------------- Load board data --------------
 function loadGame() {
     var gameMode;
-    fetch('http://localhost:8080/api/game/pvp/getGameMode')
+    fetch('/api/game/pvp/getGameMode')
         .catch(error => console.error('Error:', error));
     createBoard(); 
 }
 
 function getBoardDataFromServer() {
-    fetch("http://localhost:8080/api/game/pvp/getPositions", {
+    fetch("/api/game/pvp/getPositions", {
        method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -57,7 +57,7 @@ function getBoardDataFromServer() {
 }
 
 function fetchConnections() {
-    fetch('http://localhost:8080/api/game/pvp/getConnections')
+    fetch('/api/game/pvp/getConnections')
         .then(response => response.json())
         .then(data => {
             console.log('Connections data:', data);
@@ -184,7 +184,7 @@ function moveToField(from, to) {
         moveParams.append('from', from);
         moveParams.append('to', to);
 
-        fetch("http://localhost:8080/api/game/pvp/move", {
+        fetch("/api/game/pvp/move", {
        method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
