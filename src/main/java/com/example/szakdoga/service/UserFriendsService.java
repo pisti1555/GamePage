@@ -1,19 +1,10 @@
 package com.example.szakdoga.service;
 
-import com.example.szakdoga.request.UserFriendsListRequestEntity;
-import com.example.szakdoga.request.UserFriendsRequestEntity;
-import org.springframework.http.ResponseEntity;
-
 import java.util.List;
-import java.util.Map;
 
 public interface UserFriendsService {
-    ResponseEntity<Map<String, Object>> addUserFriends(UserFriendsRequestEntity userFriendsRequestEntity);
-
-    ResponseEntity<Map<String, Object>> getUserFriendsList(UserFriendsListRequestEntity userFriendsListRequestEntity);
-
-    ResponseEntity<Map<String, Object>> getCommonUserFriends(UserFriendsRequestEntity userFriendsRequestEntity);
-
+    boolean addUserFriends(String un1, String un2);
+    List<String> getUserFriendsList(String username);
     List<String> getFriendRequests(String principal);
     int getFriendRequestCount(String principal);
     void declineFriendRequest(String inviter, String invited);

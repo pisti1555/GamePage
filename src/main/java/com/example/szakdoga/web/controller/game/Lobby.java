@@ -2,21 +2,18 @@ package com.example.szakdoga.web.controller.game;
 
 import com.example.szakdoga.data.model.game.PvP;
 import com.example.szakdoga.data.model.game.spiderweb.Board;
-import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.service.GameService;
 import com.example.szakdoga.service.InvitationService;
 import com.example.szakdoga.service.UserFriendsService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Map;
+import java.util.List;
 
 @Controller
 @RequestMapping("/lobby")
@@ -48,11 +45,10 @@ public class Lobby {
         model.addAttribute("player1", pvP.getUser1());
         model.addAttribute("player2", pvP.getUser2());
 
-        ResponseEntity<Map<String, Object>> responseEntity = friendsService.getUserFriendsList(new UserFriendsListRequestEntity(principal.getName()));
-        Map<String, Object> responseBody = responseEntity.getBody();
-        if (responseEntity.getStatusCode() == HttpStatus.OK && responseBody != null) {
-            model.addAttribute("friends", responseBody.get("friends"));
-        }
+        List<String> friendList;
+        friendList = friendsService.getUserFriendsList(principal.getName());
+        model.addAttribute("friends", friendList);
+
         return "game/lobby";
     }
 

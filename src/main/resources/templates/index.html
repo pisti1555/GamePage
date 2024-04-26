@@ -81,11 +81,11 @@
                     <h3 class="requestMessage" th:text="${request} + '  '"></h3>
                     <h3 class="requestMessage"> has sent a friend request</h3>
                     <form th:action="@{/friends/add}" method="post">
-                        <input type="hidden" name="friends[1]" th:value="${request}" />
+                        <input type="hidden" name="invited" th:value="${request}" />
                         <button class="button" type="submit">Accept</button>
                     </form>
                     <form th:action="@{/friends/decline-friend-request}" method="post">
-                        <input type="hidden" name="friends[1]" th:value="${request}" />
+                        <input type="hidden" name="inviter" th:value="${request}" />
                         <button class="button" type="submit">Decline</button>
                     </form> 
                 </div>                     
