@@ -105,4 +105,18 @@ public class FriendController {
         service.declineFriendRequest(inviter, invited);
         return "redirect:" + http.getHeader("Referer");
     }
+
+    @PostMapping("/delete-friend")
+    public String deleteFriend(Model model, Principal principal, UserFriendsRequestEntity request, HttpServletRequest http) {
+        List<String> friends = new ArrayList<>();
+        String user1 = principal.getName();
+        String user2 = request.getFriends().get(1);
+
+        friends.add(user1);
+        friends.add(user2);
+        request.setFriends(friends);
+
+        service.deleteFriends(user1, user2);
+        return "redirect:" + http.getHeader("Referer");
+    }
 }

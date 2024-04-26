@@ -86,6 +86,9 @@ public class UserFriendsServiceImpl implements UserFriendsService {
             this.dao.save(user1);
             this.dao.save(user2);
 
+            this.request.deleteFriendRequest(user1.getId(), user2.getId());
+            this.request.deleteFriendRequest(user2.getId(), user1.getId());
+
             result.put("Success", true);
         }
 
@@ -165,15 +168,29 @@ public class UserFriendsServiceImpl implements UserFriendsService {
     }
 
     @Override
-    public boolean declineFriendRequest(String inviter, String invited) {
+    public void declineFriendRequest(String inviter, String invited) {
         User inviterUser = request.findByUsername(inviter);
         User invitedUser = request.findByUsername(invited);
         if (inviterUser != null && invitedUser != null) {
-            //TODO
-            //request.delete(invitedUser);
-            return true;
+            Long inviterId = inviterUser.getId();
+            Long invitedId = invitedUser.getId();
+
+            request.deleteFriendRequest(inviterId, invitedId);
+            request.deleteFriendRequest(invitedId, inviterId);
         }
-        return false;
+    }
+
+    @Override
+    public void deleteFriends(String username1, String username2) {
+        User user1 = request.findByUsername(username1);
+        User user2 = request.findByUsername(username2);
+        if (user1 != null && user2 != null) {
+            Long user1Id = user1.getId();
+            Long user2Id = user2.getId();
+
+            dao.deleteFriend(user1Id, user2Id);
+            dao.deleteFriend(user2Id,  user1Id);
+        }
     }
 
 

@@ -36,4 +36,14 @@ public class InvitationService {
     public int invCount(String username) {
         return getInvites(username).size();
     }
+    public void declineInvite(String username, String inv) {
+        for (Map.Entry<String, String> entry : invites.entrySet()) {
+            String invited = entry.getKey();
+            String inviter = entry.getValue();
+            if (invited.equals(username) && inviter.equals(inv)) {
+                invites.remove(entry.getKey());
+            }
+        }
+    }
+
 }

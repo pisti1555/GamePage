@@ -6,6 +6,7 @@ import com.example.szakdoga.request.UserFriendsListRequestEntity;
 import com.example.szakdoga.service.GameService;
 import com.example.szakdoga.service.InvitationService;
 import com.example.szakdoga.service.UserFriendsService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,6 +96,12 @@ public class Lobby {
         template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "quit");
         template.convertAndSendToUser(pvP.getUser2(), "/topic/lobby/update", "quit");
         return "redirect:/lobby";
+    }
+
+    @PostMapping("/decline-lobby-invitation")
+    public String declineLobbyInvitation(HttpServletRequest http, Principal principal, @RequestParam("inviter") String inviter) {
+        invitationService.declineInvite(principal.getName(), inviter);
+        return "redirect:" + http.getHeader("Referer");
     }
 
 }
