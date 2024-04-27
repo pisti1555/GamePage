@@ -25,26 +25,16 @@ public class GamePvCAPIController {
     @PostMapping("/pvs")
     public int playVsSpider(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
         Board board = service.getPvC(principal.getName()).getBoard();
-        if (service.isMoveValid(from, to, board)) {
-            service.moveVsComputer(from, to, board);
-            service.randomMoveSpider(board);
-        } else {
-            System.out.println("Invalid move");
-        }
-
+        service.moveVsComputer(from, to, board);
+        service.randomMoveSpider(board);
         return service.whoWon(board);
     }
 
     @PostMapping("/pvf")
     public int playVsFly(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
         Board board = service.getPvC(principal.getName()).getBoard();
-        if (service.isMoveValid(from, to, board)) {
-            service.moveVsComputer(from, to, board);
-            service.randomMoveFly(board);
-        } else {
-            System.out.println("Invalid move");
-        }
-
+        service.moveVsComputer(from, to, board);
+        service.randomMoveFly(board);
         return service.whoWon(board);
     }
 
@@ -74,7 +64,6 @@ public class GamePvCAPIController {
 
     @PostMapping("/newGame")
     public void newGame(@RequestParam("mode") String mode, Principal principal) {
-        Board board = findBoardPvC(principal.getName());
         service.newGamePvC(mode, principal.getName());
     }
 

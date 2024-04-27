@@ -46,7 +46,7 @@ public class GameController {
     }
 
     @GetMapping("/pvp")
-    public String getGamePage(Model model, Principal principal) {
+    public String pvp(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("username", username);
         PvP pvP = service.getPvP(username);

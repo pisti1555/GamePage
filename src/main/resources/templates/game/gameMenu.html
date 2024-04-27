@@ -75,7 +75,11 @@
                     <form action="/lobby/join" method="post">
                         <input type="hidden" name="inviterName" th:value="${inviter}" />
                         <button class="button" type="submit">Join</button>
-                    </form> 
+                    </form>
+                    <form action="/lobby/decline-lobby-invitation" method="post">
+                        <input type="hidden" name="inviter" th:value="${inviter}" />
+                        <button class="button" type="submit">Decline</button>
+                    </form>
                 </div>                     
             </li>
         </ul>

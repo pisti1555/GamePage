@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
+@RequestMapping("/")
 public class HomeController {
     UserService userService;
     UserFriendsService friendsService;
@@ -23,8 +24,8 @@ public class HomeController {
         this.invitationService = invitationService;
     }
 
-    @GetMapping("/")
-    public String getHomePage(Model model, Principal principal, HttpSession session) {
+    @GetMapping
+    public String getHomePage(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
         model.addAttribute("invites", invitationService.getInvites(principal.getName()));
         model.addAttribute("invCount", invitationService.invCount(principal.getName()));

@@ -1,7 +1,7 @@
 package com.example.szakdoga.web.controller;
 
 import com.example.szakdoga.data.model.user.User;
-import com.example.szakdoga.service.AuthenticationService;
+import com.example.szakdoga.service.UserServiceImpl;
 import com.example.szakdoga.web.dto.RegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthenticationController {
-    private final AuthenticationService authenticationService;
+    private final UserServiceImpl userServiceImpl;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public AuthenticationController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
 
@@ -26,7 +26,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute("registrationDto") RegistrationDto dto) {
-        User user = authenticationService.register(dto);
+        User user = userServiceImpl.register(dto);
         if (user == null) {
             return "redirect:/register?error";
         }

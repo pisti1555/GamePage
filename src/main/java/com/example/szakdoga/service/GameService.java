@@ -37,9 +37,7 @@ public class GameService {
             }
         }
 
-        PvP newPvP = new PvP(username, null, new Board());
-        pvpList.add(newPvP);
-        return newPvP;
+        return createPvP(username);
     }
 
     public PvC getPvC(String username) {
@@ -50,6 +48,12 @@ public class GameService {
         }
 
         return createPvC(username);
+    }
+
+    public PvP createPvP(String username) {
+        PvP newPvP = new PvP(username, null, new Board());
+        pvpList.add(newPvP);
+        return newPvP;
     }
 
     public PvC createPvC(String username) {
@@ -89,16 +93,14 @@ public class GameService {
 
 
 
-    //------------------------PvP--------------------------
+    //------------------------Board--------------------------
     public int moveVsComputer(int from, int to, Board board) {
         if (whichPiece(from, board) == board.getFly()) {
             moveFly(from, to, board);
-            board.flyStepsDone++;
         }
         for (Piece p : board.getSpider()) {
             if (whichPiece(from, board) == p) {
                 moveSpider(from, to, p, board);
-                board.spiderStepsDone++;
             }
         }
 
@@ -110,14 +112,12 @@ public class GameService {
         if (whichPiece(from, board) == board.getFly()) {
             if (pvP.getUser1().equals(username)) {
                 moveFly(from, to, board);
-                board.flyStepsDone++;
             }
         }
         for (Piece p : board.getSpider()) {
             if (whichPiece(from, board) == p) {
                 if (pvP.getUser2().equals(username)) {
                     moveSpider(from, to, p, board);
-                    board.spiderStepsDone++;
                 }
             }
         }
@@ -126,17 +126,19 @@ public class GameService {
     }
 
     public boolean randomMoveFly(Board board) {
-        int availableFields = board.getField()[board.getFly().location].getConnection().length;
-        for (int i = 0; i < availableFields; i++) {
-            if(board.getField()[board.getFly().location]
-                    .getConnection()[i] == null) availableFields--;
+        Piece fly = board.getFly();
+        int unavailableFields = 0;
+        for (int i = 0; i < board.getField()[fly.location].getConnection().length; i++) {
+            if(board.getField()[fly.location]
+                    .getConnection()[i] == null) unavailableFields++;
         }
+        int availableFields = 6 - unavailableFields;
+        int randomConnection = random.nextInt(availableFields);
+        int randomField = board.getField()[fly.location]
+                .getConnection()[randomConnection].getNumber();
+
 
         if (board.isGameRunning) {
-            int randomConnection = random.nextInt(availableFields);
-            int randomField = board.getField()[board.getFly().location]
-                    .getConnection()[randomConnection].getNumber();
-
             if(isMoveValid(board.getFly().location, randomField, board)) {
                 moveFly(board.getFly().location, randomField, board);
                 return true;
@@ -226,11 +228,6 @@ public class GameService {
             }
         }
 
-        for (Map.Entry<Integer, ArrayList<Integer>> entry : connections.entrySet()) {
-            Integer key = entry.getKey();
-            ArrayList<Integer> values = entry.getValue();
-        }
-
         return connections;
     }
 
@@ -242,8 +239,7 @@ public class GameService {
             board.getField()[from].setPiece(Pieces.EMPTY);
             board.getFly().location = to;
             board.isFlysTurn = false;
-        } else {
-            System.out.println("Invalid");
+            board.flyStepsDone++;
         }
     }
 
@@ -253,8 +249,7 @@ public class GameService {
             board.getField()[from].setPiece(Pieces.EMPTY);
             p.location = to;
             board.isFlysTurn = true;
-        } else {
-            System.out.println("Invalid");
+            board.spiderStepsDone++;
         }
     }
 
@@ -303,7 +298,6 @@ public class GameService {
 
     public boolean newGamePvP(String username) {
         PvP pvp = getPvP(username);
-
         pvp.getBoard().gameMode = PVP;
         pvp.getBoard().isGameRunning = true;
         pvp.getBoard().pieceWon = 0;
@@ -370,18 +364,15 @@ public class GameService {
                 user.setMovesDone(user.getMovesDone() + pvP.getBoard().flyStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
                 user.setGamesWon(user.getGamesWon() + 1);
-            }
-            if (whoWon(pvP.getBoard()) == 2) {
+            } else if (whoWon(pvP.getBoard()) == 2) {
                 user.setMovesDone(user.getMovesDone() + pvP.getBoard().flyStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
             }
-        }
-        if (pvP.getUser2().equals(user.getUsername())) {
+        } else if (pvP.getUser2().equals(user.getUsername())) {
             if (whoWon(pvP.getBoard()) == 1) {
                 user.setMovesDone(user.getMovesDone() + pvP.getBoard().spiderStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
-            }
-            if (whoWon(pvP.getBoard()) == 2) {
+            } else if (whoWon(pvP.getBoard()) == 2) {
                 user.setMovesDone(user.getMovesDone() + pvP.getBoard().spiderStepsDone);
                 user.setGamesPlayed(user.getGamesPlayed() + 1);
                 user.setGamesWon(user.getGamesWon() + 1);

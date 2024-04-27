@@ -31,40 +31,9 @@ public class GamePvPAPIController {
         PvP pvP = service.getPvP(principal.getName());
         Board board = findBoardPvP(principal.getName());
 
-        service.isMoveValid(from, to, board);
-        if (service.isMoveValid(from, to, board)) {
-            service.moveVsPlayer(from, to, board, principal.getName());
-            template.convertAndSendToUser(pvP.getUser1(), "/topic/game/update", "update");
-            template.convertAndSendToUser(pvP.getUser2(), "/topic/game/update", "update");
-        } else {
-            System.out.println("Invalid move");
-        }
-
-        return service.whoWon(board);
-    }
-
-    @PostMapping("/playVsSpider")
-    public int playVsSpider(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
-        Board board = service.getPvP(principal.getName()).getBoard();
-        if (service.isMoveValid(from, to, board)) {
-            service.moveVsComputer(from, to, board);
-            service.randomMoveSpider(board);
-        } else {
-            System.out.println("Invalid move");
-        }
-
-        return service.whoWon(board);
-    }
-
-    @PostMapping("/playVsFly")
-    public int playVsFly(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
-        Board board = service.getPvP(principal.getName()).getBoard();
-        if (service.isMoveValid(from, to, board)) {
-            service.moveVsComputer(from, to, board);
-            service.randomMoveFly(board);
-        } else {
-            System.out.println("Invalid move");
-        }
+        service.moveVsPlayer(from, to, board, principal.getName());
+        template.convertAndSendToUser(pvP.getUser1(), "/topic/game/update", "update");
+        template.convertAndSendToUser(pvP.getUser2(), "/topic/game/update", "update");
 
         return service.whoWon(board);
     }
@@ -95,7 +64,6 @@ public class GamePvPAPIController {
 
     @PostMapping("/newGame")
     public void newGame(@RequestParam("mode") String mode, Principal principal) {
-        Board board = findBoardPvP(principal.getName());
         service.newGamePvP(principal.getName());
     }
 
@@ -120,9 +88,5 @@ public class GamePvPAPIController {
 
     private Board findBoardPvP(String name) {
         return service.getPvP(name).getBoard();
-    }
-
-    private Board findBoardPvC(String name) {
-        return service.getPvC(name).getBoard();
     }
 }
