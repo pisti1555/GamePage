@@ -19,6 +19,7 @@ function connectToWebSocket() {
 }
 connectToWebSocket();
 
+
 var lastSelectedField;
 var lastSelectedFieldIndex;
 var fieldSelected = false;
@@ -26,20 +27,10 @@ var fieldSelected = false;
 var locations;
 var connectionMap;
 
-/*
-function newGame() {
-    fetch("http://localhost:8080/api/game/newGame")
-    createBoard();
-       
-}
-*/
-
 
 //-------------- Load board data --------------
 function loadGame() {
-    var gameMode;
-    fetch('/api/game/pvp/getGameMode')
-        .catch(error => console.error('Error:', error));
+    fetch('/api/game/pvp/getGameMode');
     createBoard(); 
 }
 
@@ -53,31 +44,25 @@ function getBoardDataFromServer() {
      }).then(response => response.json())
          .then(data => {
              placePieces(data);
-          }).catch(error => console.error("Error: ", error));
+          });
 }
 
 function fetchConnections() {
     fetch('/api/game/pvp/getConnections')
         .then(response => response.json())
         .then(data => {
-            console.log('Connections data:', data);
-
             connectionMap = data;
             processConnections();
-        })
-        .catch(error => console.error('Error:', error));
+        });
 }
 
 function processConnections() {
     for (const [key, value] of Object.entries(connectionMap)) {
-
         for (var i in value) {
             drawConnections(key, value[i]);
         }
     }
 }
-
-
 
 
 //-------------- Draw board --------------
@@ -193,7 +178,7 @@ function moveToField(from, to) {
      }).then(response => response.text())
          .then(data => {
             getBoardDataFromServer();
-          }).catch(error => console.error("Error:", error));
+          });
     
 }
 

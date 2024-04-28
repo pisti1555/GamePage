@@ -44,13 +44,8 @@ public class SecurityConfiguration {
                     auth
                             .requestMatchers("/js/**", "/img/**", "/css/**").permitAll()
                             .requestMatchers(HttpMethod.POST).permitAll()
-                            .requestMatchers("/").permitAll()
-                            .requestMatchers("/user/**").authenticated()
-                            .requestMatchers("/{id}").permitAll()
-                            .requestMatchers("/register").permitAll()
-                            .requestMatchers("/lobby/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/lobby/invite").permitAll()
-                            .anyRequest().permitAll();
+                            .requestMatchers("/register/**").permitAll()
+                            .anyRequest().authenticated();
                         })
                 .formLogin(login -> {
                     login

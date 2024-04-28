@@ -22,34 +22,4 @@ public class WebConfiguration implements WebMvcConfigurer {
                         "classpath:/static/css/",
                         "classpath:/static/js/");
     }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowCredentials(false)
-                .maxAge(3600)
-                .allowedHeaders("Accept", "Content-Type", "Origin",
-                        "Authorization", "X-Auth-Token")
-                .exposedHeaders("X-Auth-Token", "Authorization")
-                .allowedMethods("POST", "GET", "DELETE", "PUT", "OPTIONS");
-
-        registry.addMapping("/ws/**")
-                .allowedOrigins("*")
-                .allowCredentials(false)
-                .maxAge(3600)
-                .allowedHeaders("Accept", "Content-Type", "Origin",
-                        "Authorization", "X-Auth-Token")
-                .exposedHeaders("X-Auth-Token", "Authorization")
-                .allowedMethods("POST", "GET", "DELETE", "PUT", "OPTIONS");
-
-        registry.addMapping("/app/**")
-                .allowedOrigins("*")
-                .allowCredentials(false)
-                .maxAge(3600)
-                .allowedHeaders("Accept", "Content-Type", "Origin",
-                        "Authorization", "X-Auth-Token")
-                .exposedHeaders("X-Auth-Token", "Authorization")
-                .allowedMethods("POST", "GET", "DELETE", "PUT", "OPTIONS");
-    }
 }

@@ -14,20 +14,12 @@ function newGame() {
           "Content-Type": "application/x-www-form-urlencoded"
          },
         body: "mode=" + encodeURIComponent("pvs")
-   }).then(response => response.text())
-       .then(data => {
-           createBoard();
-        }).catch(error => console.error("Error:", error));
+   });
+    createBoard();
 }
 
 
 //-------------- Load board data --------------
-function loadGame() {
-    var gameMode;
-    fetch('/api/game/pvc/getGameMode')
-        .catch(error => console.error('Error:', error));
-    createBoard(); 
-}
 
 function getBoardDataFromServer() {
     fetch("/api/game/pvc/getPositions", {
@@ -39,24 +31,20 @@ function getBoardDataFromServer() {
      }).then(response => response.json())
          .then(data => {
              placePieces(data);
-          }).catch(error => console.error("Error: ", error));
+          });
 }
 
 function fetchConnections() {
     fetch('/api/game/pvc/getConnections')
         .then(response => response.json())
         .then(data => {
-            console.log('Connections data:', data);
-
             connectionMap = data;
             processConnections();
-        })
-        .catch(error => console.error('Error:', error));
+        });
 }
 
 function processConnections() {
     for (const [key, value] of Object.entries(connectionMap)) {
-
         for (var i in value) {
             drawConnections(key, value[i]);
         }
@@ -178,13 +166,12 @@ function moveToField(from, to) {
           body: moveParams.toString()
      }).then(response => response.text())
          .then(data => {
-          if(data == 1 || data == 2) {
-            gameWon(data);
-          } else {
-            getBoardDataFromServer();
-          }
-          }).catch(error => console.error("Error:", error));
-    
+            if(data == 1 || data == 2) {
+                gameWon(data);
+            } else {
+                getBoardDataFromServer();
+            }
+        });
 }
 
 function gameWon(piece) {
