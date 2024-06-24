@@ -56,19 +56,25 @@ public class Lobby {
     public String inviteFriend(@RequestParam("friendUsername") String friendUsername, Principal principal) {
         invitationService.inviteFriend(principal.getName(), friendUsername);
         template.convertAndSendToUser(friendUsername, "/topic/invites", "update");
-        return "redirect:/lobby";
+        return "redirect:/fly-in-the-web/lobby";
     }
 
     @PostMapping("/join")
-    public String joinLobby(@RequestParam("inviterName") String inviterName, Principal principal, Model model) {
-        PvP pvP = service.joinLobby(inviterName, principal.getName());
+    public String joinLobby(@RequestParam("inviter") String inviter, Principal principal, Model model) {
+        PvP pvP = service.joinLobby(inviter, principal.getName());
         if (pvP != null) {
-            template.convertAndSendToUser(inviterName, "/topic/lobby/update", "update");
+            template.convertAndSendToUser(inviter, "/topic/lobby/update", "update");
             template.convertAndSendToUser(principal.getName(), "/topic/lobby/update", "update");
-            return "redirect:/lobby";
+            return "redirect:/fly-in-the-web/lobby";
         } else {
-            return "redirect:/lobby?error=joinFailed";
+            return "redirect:/fly-in-the-web/lobby?error=joinFailed";
         }
+    }
+
+    @PostMapping("/decline-lobby-invitation")
+    public String declineLobbyInvitation(HttpServletRequest http, Principal principal, @RequestParam("inviter") String inviter) {
+        invitationService.declineInvite(principal.getName(), inviter);
+        return "redirect:" + http.getHeader("Referer");
     }
 
     @PostMapping("/start")
@@ -80,9 +86,9 @@ public class Lobby {
             pvP.setBoard(new Board());
             template.convertAndSendToUser(principal.getName(), "/topic/lobby/start", "update");
             template.convertAndSendToUser(pvP.getUser2(), "/topic/lobby/start", "update");
-            return "redirect:/game/pvp";
+            return "redirect:/fly-in-the-web/game/pvp";
         } else {
-            return "redirect:/lobby?error=gameNotReady";
+            return "redirect:/fly-in-the-web/lobby?error=gameNotReady";
         }
     }
 
@@ -91,13 +97,7 @@ public class Lobby {
         PvP pvP = service.quitLobby(principal.getName());
         template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "quit");
         template.convertAndSendToUser(pvP.getUser2(), "/topic/lobby/update", "quit");
-        return "redirect:/lobby";
-    }
-
-    @PostMapping("/decline-lobby-invitation")
-    public String declineLobbyInvitation(HttpServletRequest http, Principal principal, @RequestParam("inviter") String inviter) {
-        invitationService.declineInvite(principal.getName(), inviter);
-        return "redirect:" + http.getHeader("Referer");
+        return "redirect:/fly-in-the-web/lobby";
     }
 
 }

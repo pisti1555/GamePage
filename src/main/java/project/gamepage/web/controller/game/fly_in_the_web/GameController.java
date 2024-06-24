@@ -78,7 +78,7 @@ public class GameController {
             return "game/fly_in_the_web/spiderweb_pvp";
         }
 
-        return "redirect:/lobby?error=noGameFound";
+        return "redirect:/fly-in-the-web/lobby?error=noGameFound";
     }
 
     @GetMapping("/pvs")
@@ -120,7 +120,7 @@ public class GameController {
             template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "return");
         }
 
-        return "redirect:/lobby";
+        return "redirect:/fly-in-the-web/lobby";
     }
 
     public void gameOver(String name) {
