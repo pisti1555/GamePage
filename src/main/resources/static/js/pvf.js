@@ -7,7 +7,7 @@ var connectionMap;
 
 
 function newGame() {
-  fetch("/api/game/pvc/newGame", {
+  fetch("/fly-in-the-web/api/game/pvc/newGame", {
      method: "POST",
      credentials: 'include',
         headers: {
@@ -22,7 +22,7 @@ function newGame() {
 //-------------- Load board data --------------
 
 function getBoardDataFromServer() {
-    fetch("/api/game/pvc/getPositions", {
+    fetch("/fly-in-the-web/api/game/pvc/getPositions", {
        method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -35,7 +35,7 @@ function getBoardDataFromServer() {
 }
 
 function fetchConnections() {
-    fetch('/api/game/pvc/getConnections')
+    fetch('/fly-in-the-web/api/game/pvc/getConnections')
         .then(response => response.json())
         .then(data => {
             connectionMap = data;
@@ -86,8 +86,8 @@ function createField(className, id, onclick) {
 }
 
 function placePieces(pieceLocations) {
-    var flyHTML = '<img src="/img/fly.png" alt="fly" class="piece"/>';
-    var spiderHTML = '<img src="/img/spider.png" alt="spider" class="piece"/>';
+    var flyHTML = '<img src="/img/fly_in_the_web/fly.png" alt="fly" class="piece"/>';
+    var spiderHTML = '<img src="/img/fly_in_the_web/spider.png" alt="spider" class="piece"/>';
 
     for (var i = 0; i <= 27; i++) {
         document.getElementById("field" + i).innerHTML = "";
@@ -158,7 +158,7 @@ function moveToField(from, to) {
         moveParams.append('from', from);
         moveParams.append('to', to);
 
-        fetch("/api/game/pvc/pvf", {
+        fetch("/fly-in-the-web/api/game/pvc/pvf", {
        method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"

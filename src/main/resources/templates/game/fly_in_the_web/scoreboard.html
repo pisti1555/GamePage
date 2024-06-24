@@ -6,8 +6,8 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Friend list</title>
-    
+    <title>Scoreboard</title>
+
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/invites.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
@@ -18,36 +18,48 @@
     <!--    end libs for stomp and sockjs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-
     <style th:inline="text">
         body {
-            background: url([[@{/img/main/background.png}]]) no-repeat center center fixed;
-            background-size: cover;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/fly_in_the_web/game_background.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
         }
     </style>
-</head>
 
+</head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
 
-    <div th:if="${success}" class="container">
-        <h2 class="title">Friend list</h2>
+    <div class="container">
+        <h2 class="title">Scoreboard</h2>
 
         <table>
-            <p class="friendCount">Total Friends: <span th:text="${count}"></span></p>
-            <a class="button" th:href="@{'/friends/add'}">
-                Add new friend
-            </a>
             <thead>
                 <tr>
-                    <th>Username</th>               
+                    <th>Username</th>
+                    <th>Games played</th>
+                    <th>Steps made</th>
+                    <th>Games won</th>                
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="friend : ${friends}">
+                <tr th:each="user : ${users}">
                     <td>
-                        <a th:href="@{'/profile/' + ${friend}}" th:text="${friend}"></a>
+                        <a th:href="@{'/profile/' + ${user.username}}" th:text="${user.username}"></a>
                     </td>
+                    <td th:text="${user.gamesPlayed}"></td>
+                    <td th:text="${user.movesDone}"></td>
+                    <td th:text="${user.gamesWon}"></td>
                 </tr>
             </tbody>
         </table>
@@ -56,6 +68,5 @@
 
     <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/navbar.js}"></script>
-    
 </body>
 </html>
