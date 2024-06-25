@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Scoreboard</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/fly_in_the_web/gameBoard.css}"/>
+    <link rel="stylesheet" th:href="@{/css/fly_in_the_web/gamePage.css}"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    <style th:inline="text">
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/fly_in_the_web/game_background.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div th:if="${whoWon != 0}" class="gameOverContainer">
+        <h2 th:if="${whoWon == 1}">Fly won</h2>
+        <h2 th:if="${whoWon == 2}">Spiders won</h2>
+
+        <h3>Fly made <span th:text="${flySteps}"></span> steps</h3>
+        <h3>Spiders made <span th:text="${spiderSteps}"></span> steps</h3>
+        <h3>Total steps made: <span th:text="${totalSteps}"></span> steps</h3>
+
+        <div class="buttonContainer">
+            <a th:href="@{/game/return-to-lobby}" class="button">Return to Lobby</a>
+        </div>
+    </div>
+
+
+    <div class="gameboard" id="gameboard">
+        <canvas id="canvas" width="700" height="700"></canvas>
+    </div>
+
+    <script th:src="@{/js/board.js}"></script>
+    <script th:src="@{/js/popup.js}"></script>
+</body>
+</html>

@@ -1,13 +1,14 @@
 .header {
-    width: 100%;
+    display: inline-flex;
+    width: 100vw;
     height: fit-content;
     background: transparent;
     backdrop-filter: blur(10px);
-    display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #ffffff80;
     transition: 0.5s ease;
     user-select: none;
+    margin-bottom: 20px;
 
     .navLeftSide {
         padding-left: 10px;

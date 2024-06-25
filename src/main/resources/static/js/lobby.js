@@ -11,7 +11,7 @@ function connectToWebSocket() {
         });
         stompClient.subscribe('/user/topic/lobby/start', function (message) {
             console.log('Received message: ' + message.body);
-            window.location.href = '/game/pvp';
+            window.location.href = '/fly-in-the-web/game/pvp';
         });
         stompClient.subscribe('/user/topic/invites', function (message) {
             console.log('Received message: ' + message.body);
