@@ -9,6 +9,7 @@ public class PvP {
     String user2;
     boolean user1InGame;
     boolean user2InGame;
+    boolean dbUpdated;
     @JsonIgnore
     Board board;
 
@@ -18,6 +19,7 @@ public class PvP {
         this.user2 = user2;
         this.user1InGame = false;
         this.user2InGame = false;
+        this.dbUpdated = false;
         this.board = board;
     }
 
@@ -25,6 +27,8 @@ public class PvP {
     }
 
     public boolean isReadyToStart() {
+        System.out.println("user1 ingame: " + user1InGame);
+        System.out.println("user2 ingame: " + user2InGame);
         return user1 != null && user2 != null && board != null && !user1InGame && !user2InGame;
     }
 
@@ -78,5 +82,13 @@ public class PvP {
 
     public void setUser2InGame(boolean user2InGame) {
         this.user2InGame = user2InGame;
+    }
+
+    public boolean isDbUpdated() {
+        return dbUpdated;
+    }
+
+    public void setDbUpdated(boolean dbUpdated) {
+        this.dbUpdated = dbUpdated;
     }
 }

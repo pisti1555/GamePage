@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Scoreboard</title>
+    <title>Play - Fly in the web</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/fly_in_the_web/gameBoard.css}"/>
@@ -38,17 +38,11 @@
 </head>
 <body>
 
-    <div th:if="${whoWon != 0}" class="gameOverContainer">
-        <h2 th:if="${whoWon == 1}">Fly won</h2>
-        <h2 th:if="${whoWon == 2}">Spiders won</h2>
-
-        <h3>Fly made <span th:text="${flySteps}"></span> steps</h3>
-        <h3>Spiders made <span th:text="${spiderSteps}"></span> steps</h3>
-        <h3>Total steps made: <span th:text="${totalSteps}"></span> steps</h3>
-
-        <div class="buttonContainer">
-            <a th:href="@{/game/return-to-lobby}" class="button">Return to Lobby</a>
-        </div>
+    <div class="gameOverContainer closed" id="gameOverContainer">
+        <h2 id="pieceWon"></h2>
+        <h3 id="flyStepsMade"></h3>
+        <h3 id="spiderStepsMade"></h3>
+        <a th:href="@{/fly-in-the-web/game/return-to-lobby}" class="button">Return to Lobby</a>
     </div>
 
 

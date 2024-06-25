@@ -19,15 +19,13 @@ import java.security.Principal;
 @RequestMapping("/fly-in-the-web/game")
 public class GameController {
     GameService service;
-    UserService userService;
     UserFriendsService friendsService;
     SimpMessagingTemplate template;
     InvitationService invitationService;
 
     @Autowired
-    public GameController(GameService service, UserService userService, UserFriendsService friendsService, SimpMessagingTemplate template, InvitationService invitationService) {
+    public GameController(GameService service, UserFriendsService friendsService, SimpMessagingTemplate template, InvitationService invitationService) {
         this.service = service;
-        this.userService = userService;
         this.friendsService = friendsService;
         this.template = template;
         this.invitationService = invitationService;
@@ -52,29 +50,11 @@ public class GameController {
         PvP pvP = service.getPvP(username);
         if (pvP.getUser2() != null) {
             if (pvP.isReadyToStart()) {
-                if (pvP.getUser1().equals(principal.getName())) {
-                    pvP.setUser1InGame(true);
-                }
-                if (pvP.getUser2().equals(principal.getName())) {
-                    pvP.setUser2InGame(true);
-                }
+                pvP.setUser1InGame(true);
+                pvP.setUser2InGame(true);
+                pvP.setDbUpdated(false);
             }
 
-            boolean gameOver = service.getIsGameRunning(pvP.getBoard());
-            int whoWon = service.whoWon(pvP.getBoard());
-            int flyStepsDone = service.getFlyStepsDone(pvP.getBoard());
-            int spiderStepsDone = service.getSpiderStepsDone(pvP.getBoard());
-            int totalStepsDone = flyStepsDone + spiderStepsDone;
-
-            gameOver(username);
-
-            model.addAttribute("user1InGame", pvP.isUser1InGame());
-            model.addAttribute("user2InGame", pvP.isUser2InGame());
-            model.addAttribute("gameOver", gameOver);
-            model.addAttribute("whoWon", whoWon);
-            model.addAttribute("flySteps", flyStepsDone);
-            model.addAttribute("spiderSteps", spiderStepsDone);
-            model.addAttribute("totalSteps", totalStepsDone);
             return "game/fly_in_the_web/spiderweb_pvp";
         }
 
@@ -120,15 +100,10 @@ public class GameController {
             template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "return");
         }
 
-        return "redirect:/fly-in-the-web/lobby";
-    }
-
-    public void gameOver(String name) {
-        User user = userService.findByUsername(name);
-        PvP pvP = service.getPvP(user.getUsername());
-        if (!pvP.getBoard().isGameRunning()) {
-            service.gameOver(pvP, user);
-            userService.update(user);
+        if (!pvP.isUser1InGame() && !pvP.isUser2InGame()) {
+            //TODO
         }
+
+        return "redirect:/fly-in-the-web/lobby";
     }
 }

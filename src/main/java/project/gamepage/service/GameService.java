@@ -16,6 +16,7 @@ public class GameService {
 
     List<PvP> pvpList;
     List<PvC> pvcList;
+    UserService userService;
     InvitationService invitationService;
     Random random;
     private final short PVP = 1;
@@ -23,8 +24,9 @@ public class GameService {
     private final short PVF = 3;
 
     @Autowired
-    public GameService(InvitationService invitationService) {
+    public GameService(InvitationService invitationService, UserService userService) {
         this.invitationService = invitationService;
+        this.userService = userService;
         this.pvpList = new ArrayList<>();
         this.pvcList = new ArrayList<>();
         this.random = new Random();
@@ -358,26 +360,32 @@ public class GameService {
         return board.spiderStepsDone;
     }
 
-    public void gameOver(PvP pvP, User user) {
-        if (pvP.getUser1().equals(user.getUsername())) {
-            if (whoWon(pvP.getBoard()) == 1) {
-                user.setMovesDone(user.getMovesDone() + pvP.getBoard().flyStepsDone);
-                user.setGamesPlayed(user.getGamesPlayed() + 1);
-                user.setGamesWon(user.getGamesWon() + 1);
-            } else if (whoWon(pvP.getBoard()) == 2) {
-                user.setMovesDone(user.getMovesDone() + pvP.getBoard().flyStepsDone);
-                user.setGamesPlayed(user.getGamesPlayed() + 1);
-            }
-        } else if (pvP.getUser2().equals(user.getUsername())) {
-            if (whoWon(pvP.getBoard()) == 1) {
-                user.setMovesDone(user.getMovesDone() + pvP.getBoard().spiderStepsDone);
-                user.setGamesPlayed(user.getGamesPlayed() + 1);
-            } else if (whoWon(pvP.getBoard()) == 2) {
-                user.setMovesDone(user.getMovesDone() + pvP.getBoard().spiderStepsDone);
-                user.setGamesPlayed(user.getGamesPlayed() + 1);
-                user.setGamesWon(user.getGamesWon() + 1);
-            }
-        }
-    }
+    public int gameOver(PvP pvp) {
+        if (pvp.isDbUpdated()) return whoWon(pvp.getBoard());
 
+        User user1 = userService.findByUsername(pvp.getUser1());
+        User user2 = userService.findByUsername(pvp.getUser2());
+
+        if (whoWon(pvp.getBoard()) == 1) {
+            user1.setMovesDone(user1.getMovesDone() + pvp.getBoard().flyStepsDone);
+            user1.setGamesPlayed(user1.getGamesPlayed() + 1);
+            user1.setGamesWon(user1.getGamesWon() + 1);
+
+            user2.setMovesDone(user2.getMovesDone() + pvp.getBoard().spiderStepsDone);
+            user2.setGamesPlayed(user2.getGamesPlayed() + 1);
+        } else if (whoWon(pvp.getBoard()) == 2) {
+            user2.setMovesDone(user2.getMovesDone() + pvp.getBoard().spiderStepsDone);
+            user2.setGamesPlayed(user2.getGamesPlayed() + 1);
+            user2.setGamesWon(user2.getGamesWon() + 1);
+
+            user1.setMovesDone(user1.getMovesDone() + pvp.getBoard().flyStepsDone);
+            user1.setGamesPlayed(user1.getGamesPlayed() + 1);
+        }
+
+        userService.update(user1);
+        userService.update(user2);
+        pvp.setDbUpdated(true);
+
+        return whoWon(pvp.getBoard());
+    }
 }
