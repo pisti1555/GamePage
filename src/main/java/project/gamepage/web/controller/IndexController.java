@@ -25,10 +25,6 @@ public class IndexController {
     public String getIndexPage(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("username", username);
-        model.addAttribute("invites", invitationService.getInvites(username));
-        model.addAttribute("invCount", invitationService.invCount(username));
-        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
         return "index";
     }
 }

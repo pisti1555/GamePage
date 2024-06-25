@@ -7,13 +7,13 @@
     </div>
 
     <div class="navRightSide">
-        <button class="friend-requests-button" onclick="openPopUp('friendRequestContainer')">
+        <button class="inv-button" onclick="openPopUp('friendRequestContainer')">
             <img th:src="@{/img/navbar/navbarFriendRequestLogo.svg}">
-            <span th:if="${friendRequestCount != 0}" th:text="${friendRequestCount}" class="friend-requests-count"></span>
+            <span class="inv-count" id="friend-requests-count"></span>
         </button>
         <button class="inv-button" onclick="openPopUp('invContainer')">
             <img th:src="@{/img/navbar/navbarLobbyInviteLogo.svg}">
-            <span th:if="${invCount != 0}" th:text="${invCount}" class="inv-count"></span>
+            <span class="inv-count" id="game-invitation-count"></span>
         </button>
         <a id="login" class="profile" th:href="@{/profile}">
             <h3 class="username" th:text="${username}"></h3>
@@ -24,42 +24,19 @@
 
 <div id="invContainer" class="invites closed" th:fragment="navbar">
     <button id="closeInvContainerButton" class="button" onclick="closePopUp('invContainer')">Close</button>
-    <h3 th:if="${invCount == 0}" class="invMessage">You do not have any invites</h3>
-    <ul>
-        <li th:each="inviter : ${invites}">
-            <div class="row">
-                <h3 class="invMessage" th:text="${inviter} + '  '"></h3>
-                <h3 class="invMessage">invited you to play</h3>
-                <form action="/fly-in-the-web/lobby/join" method="post">
-                    <input type="hidden" name="inviter" th:value="${inviter}" />
-                    <button class="button" type="submit">Join</button>
-                </form> 
-                <form action="/fly-in-the-web/lobby/decline-lobby-invitation" method="post">
-                    <input type="hidden" name="inviter" th:value="${inviter}" />
-                    <button class="button" type="submit">Decline</button>
-                </form> 
-            </div>                     
-        </li>
+    <h3 id="no-game-invitation" class="invMessage"></h3>
+    <ul id="game-invitation-list">
+        
     </ul>
 </div>
 
 <div id="friendRequestContainer" class="friendRequests closed" th:fragment="navbar">
     <button id="closeFriendRequestContainerButton" class="button" onclick="closePopUp('friendRequestContainer')">Close</button>
-    <h3 th:if="${friendRequestCount == 0}" class="requestMessage">You do not have any invites</h3>
-    <ul>
-        <li th:each="request : ${friendRequests}">
-            <div class="row">
-                <h3 class="requestMessage" th:text="${request} + '  '"></h3>
-                <h3 class="requestMessage"> has sent a friend request</h3>
-                <form th:action="@{/friends/add}" method="post">
-                    <input type="hidden" name="invited" th:value="${request}" />
-                    <button class="button" type="submit">Accept</button>
-                </form>
-                <form th:action="@{/friends/decline-friend-request}" method="post">
-                    <input type="hidden" name="inviter" th:value="${request}" />
-                    <button class="button" type="submit">Decline</button>
-                </form> 
-            </div>                     
-        </li>
+    <a th:href="@{/friends}" class="button">See your friendlist</a>
+    <h3 id="no-friend-request" class="requestMessage"></h3>
+    <ul id="friend-request-list">
+        
     </ul>
 </div>
+
+<script th:src="@{/static/navbar.js}" th:fragment="navbar"></script>

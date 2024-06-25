@@ -34,12 +34,6 @@ public class GameController {
     @GetMapping
     public String getGamePage(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
-
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
-
         return "game/fly_in_the_web/gameMenu";
     }
 
@@ -64,12 +58,6 @@ public class GameController {
     @GetMapping("/pvs")
     public String pvs(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
-
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
-
         service.newGamePvC("pvs", principal.getName());
         return "game/fly_in_the_web/spiderweb_pvs";
     }
@@ -77,12 +65,6 @@ public class GameController {
     @GetMapping("/pvf")
     public String pvf(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
-
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
-
         service.newGamePvC("pvf", principal.getName());
         return "game/fly_in_the_web/spiderweb_pvf";
     }

@@ -37,11 +37,6 @@ public class ProfileController {
         boolean selfProfile = userToFind.equals(principal.getName());
         User user = service.findByUsername(userToFind);
 
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
-
         model.addAttribute("friend", friendsService.isFriend(principal.getName(), userToFind));
         model.addAttribute("username", principal.getName());
         model.addAttribute("name", user.getUsername());

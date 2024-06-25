@@ -43,25 +43,12 @@ public class FriendController {
             model.addAttribute("count", friendList.size());
         }
 
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-
-        model.addAttribute("friendRequests", service.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", service.getFriendRequestCount(principal.getName()));
-
         return "player/friendList";
     }
 
     @GetMapping("/add")
     public String getAddFriend(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-
-        model.addAttribute("friendRequests", service.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", service.getFriendRequestCount(principal.getName()));
-
         return "player/addFriend";
     }
 
