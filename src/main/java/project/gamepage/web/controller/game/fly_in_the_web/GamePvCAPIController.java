@@ -50,6 +50,16 @@ public class GamePvCAPIController {
         return service.getConnections(board);
     }
 
+    @GetMapping("/get-available-fields")
+    public ArrayList<Integer> getAvailableFields(@RequestParam("from") int from, Principal principal) {
+        Board board = findBoardPvC(principal.getName());
+        ArrayList<Integer> available = new ArrayList<>();
+        for (int i = 0; i < board.getField()[from].getConnection().length; i++) {
+            available.add(board.getField()[from].getConnection()[i].getNumber());
+        }
+        return available;
+    }
+
     @GetMapping("/getGameMode")
     public short getGameMode(Principal principal) {
         Board board = findBoardPvC(principal.getName());

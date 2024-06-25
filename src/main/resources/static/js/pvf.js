@@ -30,6 +30,7 @@ function getBoardDataFromServer() {
           body: JSON.stringify({})
      }).then(response => response.json())
          .then(data => {
+            locations = data;
              placePieces(data);
           });
 }
@@ -91,16 +92,12 @@ function placePieces(pieceLocations) {
 
     for (var i = 0; i <= 27; i++) {
         document.getElementById("field" + i).innerHTML = "";
-      }
+    }
 
-    var fieldIDs = [];
-    for (var i = 0; i < pieceLocations.length; i++) {
-        fieldIDs.push("field" + pieceLocations[i]);
-      }
+    document.getElementById('field' + pieceLocations[0]).innerHTML = flyHTML;
 
-      document.getElementById(fieldIDs[0]).innerHTML = flyHTML;
-    for (var i = 1; i < fieldIDs.length; i++) {
-        document.getElementById(fieldIDs[i]).innerHTML = spiderHTML;
+    for (var i = 1; i < pieceLocations.length; i++) {
+        document.getElementById('field' + pieceLocations[i]).innerHTML = spiderHTML;
     }
 }
 
@@ -140,19 +137,28 @@ function handleOnClick(selectedField) {
     } else {
         moveToField(lastSelectedFieldIndex, idIndex);
     }
-
-    fieldSelected = !fieldSelected;
 }
 
 function selectField(selectedField, selectedFieldIndex) {
-    lastSelectedFieldIndex = parseInt(selectedFieldIndex);
-    lastSelectedField = selectedField;
+    var correctLocation = false;
 
-    document.getElementById(selectedField).style.background = 'rgb(0, 0, 65)';
+    for (let i = 0; i < locations.length; i++) {
+        if (locations[i] == selectedFieldIndex) {
+            correctLocation = true;
+            fieldSelected = true;
+        }
+    }
+
+    if (correctLocation) {
+        lastSelectedFieldIndex = parseInt(selectedFieldIndex);
+        lastSelectedField = selectedField;
+        document.getElementById(selectedField).classList.add('selected');
+    }
 }
 
 function moveToField(from, to) {
-    document.getElementById(lastSelectedField).style.background = 'rgb(0, 4, 120)';
+    document.getElementById(lastSelectedField).classList.remove('selected');
+    fieldSelected = false;
 
     const moveParams = new URLSearchParams();
         moveParams.append('from', from);

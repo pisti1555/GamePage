@@ -232,30 +232,34 @@ body {
 
 .field:hover {
     cursor: pointer;
-    background: #008cff;
-    border: 1px solid #008cff;
-    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
-        0 0 100px #008cff;
-}
-
-.field:hover .piece,
-.field:active .piece {
-    scale: 1.2;
+    background-color: #0062b2;
+    border: 1px solid #0062b2;
+    box-shadow: 0 0 5px #0062b2, 0 0 20px #0062b2, 0 0 50px #0062b2,
+        0 0 100px #0062b2;
 }
 
 .subfield:hover {
     cursor: pointer;
-    background: #008cff;
+    background-color: #0062b2;
+    border: 1px solid #0062b2;
+    box-shadow: 0 0 5px #0062b2, 0 0 20px #0062b2, 0 0 50px #0062b2,
+        0 0 100px #0062b2;
+}
+
+.piece:hover {
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #008cff;
     border: 1px solid #008cff;
     box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
         0 0 100px #008cff;
 }
 
-.subfield:hover .piece,
-.subfield:active .piece {
-    scale: 1.2;
-}
-
-.piece:hover {
-    cursor: pointer;
+.selected:hover {
+    background-color: #008cff;
+    border: 1px solid #008cff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
 }
