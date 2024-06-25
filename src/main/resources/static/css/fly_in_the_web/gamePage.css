@@ -42,15 +42,15 @@ a {
 }
 
 .button {
-    display: inline;
+    display: block;
     font-family: Franklin Gothic;
     font-weight: 400;
     backdrop-filter: blur(10px);
     background: transparent;
     padding: 10px;
     margin: 10px;
-    width: 30%;
-    height: 30px;
+    width: fit-content;
+    height: fit-content;
     text-align: center;
     text-decoration: none;
     border-radius: 10px;
@@ -121,11 +121,4 @@ a {
     border-radius: 20px;
     background: transparent;
     backdrop-filter: blur(30px);
-}
-
-.gameOverContainer .buttonContainer {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
 }

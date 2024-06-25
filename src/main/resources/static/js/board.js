@@ -9,11 +9,11 @@ function connectToWebSocket() {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/user/topic/game/update', function (message) {
             console.log('Received message: ' + message.body);
-            window.location.reload();
+            fetchPositions();
         });
         stompClient.subscribe('/user/topic/game/return-to-lobby', function (message) {
             console.log('Received message: ' + message.body);
-            window.location.reload();
+            fetchPositions();
         });
     });
 }
@@ -29,31 +29,30 @@ var connectionMap;
 
 
 //-------------- Load board data --------------
-function loadGame() {
-    fetch('/fly-in-the-web/api/game/pvp/getGameMode');
-    createBoard(); 
-}
 
-function getBoardDataFromServer() {
-    fetch("/fly-in-the-web/api/game/pvp/getPositions", {
-       method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-           },
-          body: JSON.stringify({})
-     }).then(response => response.json())
-         .then(data => {
-             placePieces(data);
-          });
+function fetchPositions() {
+    fetch('/fly-in-the-web/api/game/pvp/getPositions')
+        .then(response => response.json())
+            .then(data => {
+                placePieces(data);
+            });
+
+    fetch('/fly-in-the-web/api/game/pvp/is-game-over')
+        .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    gameOver();
+                }
+            });
 }
 
 function fetchConnections() {
     fetch('/fly-in-the-web/api/game/pvp/getConnections')
         .then(response => response.json())
-        .then(data => {
-            connectionMap = data;
-            processConnections();
-        });
+            .then(data => {
+                connectionMap = data;
+                processConnections();
+            });
 }
 
 function processConnections() {
@@ -84,7 +83,7 @@ function createBoard() {
         gameboard.appendChild(field);
     }
 
-    getBoardDataFromServer();
+    fetchPositions();
     fetchConnections();
 }
 
@@ -170,16 +169,46 @@ function moveToField(from, to) {
         moveParams.append('to', to);
 
         fetch("/fly-in-the-web/api/game/pvp/move", {
-       method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-           },
-          body: moveParams.toString()
-     }).then(response => response.text())
-         .then(data => {
-            getBoardDataFromServer();
-          });
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: moveParams.toString()
+        });
     
 }
+
+function gameOver() {
+    const container = document.getElementById('gameOverContainer');
+    const pieceWon = document.getElementById('pieceWon');
+    const flyStepsMade = document.getElementById('flyStepsMade');
+    const spiderStepsMade = document.getElementById('spiderStepsMade');
+
+    fetch('/fly-in-the-web/api/game/pvp/getFlyStepsDone')
+        .then(response => response.json())
+            .then(data => {
+                flyStepsMade.textContent = 'Fly made ' + data + ' steps';
+            });
+
+    fetch('/fly-in-the-web/api/game/pvp/getSpiderStepsDone')
+        .then(response => response.json())
+            .then(data => {
+                spiderStepsMade.textContent = 'Spiders made ' + data + ' steps';
+            });
+
+
+    fetch('/fly-in-the-web/api/game/pvp/game-over')
+    .then(response => response.json())
+        .then(data => {
+            if (data == 1) {
+                pieceWon.textContent = 'Fly won!';
+            } else if (data == 2) {
+                pieceWon.textContent = 'Spiders won!';
+            }
+        });
+
+    container.classList.remove('closed');
+}
+
 
 createBoard();

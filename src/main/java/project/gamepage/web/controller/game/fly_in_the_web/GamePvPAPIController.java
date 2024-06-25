@@ -2,6 +2,7 @@ package project.gamepage.web.controller.game.fly_in_the_web;
 
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.spiderweb.Board;
+import project.gamepage.data.model.user.User;
 import project.gamepage.service.GameService;
 import project.gamepage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class GamePvPAPIController {
         return service.whoWon(board);
     }
 
-    @PostMapping("/getPositions")
+    @GetMapping("/getPositions")
     public int[] sendPositionsToClient(Principal principal) {
         Board board = findBoardPvP(principal.getName());
         return service.getPositions(board);
@@ -68,10 +69,16 @@ public class GamePvPAPIController {
     }
 
 
-    @GetMapping("/isGameRunning")
-    public boolean isGameRunning(Principal principal) {
-        Board board = findBoardPvP(principal.getName());
-        return service.getIsGameRunning(board);
+    @GetMapping("/game-over")
+    public int gameOver(Principal principal) {
+        PvP pvp = service.getPvP(principal.getName());
+        return service.gameOver(pvp);
+    }
+
+    @GetMapping("/is-game-over")
+    public boolean isGameOver(Principal principal) {
+        PvP pvp = service.getPvP(principal.getName());
+        return !pvp.getBoard().isGameRunning();
     }
 
     @GetMapping("/getFlyStepsDone")
