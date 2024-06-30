@@ -137,4 +137,13 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 
         return user != null && user.getUserFriend().contains(client) || client == user;
     }
+
+    @Override
+    public boolean isFriendInvitationSent(String principal, String username) {
+        User client = this.dao.findByUsername(principal);
+        User user = this.dao.findByUsername(username);
+
+        return user != null &&
+                client.getUserFriendRequest().contains(user);
+    }
 }

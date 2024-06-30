@@ -92,6 +92,31 @@ label {
     right: 10px;
 }
 
+.container .button-disabled {
+    color: #ffffff80;
+    backdrop-filter: blur(10px);
+    background: transparent;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    width: fit-content;
+    height: fit-content;
+    padding: 2vh;
+    margin: 2vh;
+    margin-bottom: 1vh;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    text-shadow: 0 0 5px darkblue;
+    box-shadow: transparent;
+    border: 1px solid #ffffff80;
+    transition: 0.3s ease;
+    user-select: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
 .container .button:hover,
 :focus {
 color: #ffffff;

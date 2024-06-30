@@ -1,6 +1,11 @@
 .header {
-    display: inline-flex;
-    width: 100vw;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    width: 100%;
     height: fit-content;
     background: transparent;
     backdrop-filter: blur(10px);
@@ -41,6 +46,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        margin-right: 5px;
 
         .inv-button {
             display: flex;

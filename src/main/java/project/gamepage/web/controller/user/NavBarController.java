@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.gamepage.service.InvitationService;
+import project.gamepage.service.invitations.GameInvitation;
+import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
 
 import java.security.Principal;
@@ -33,7 +34,7 @@ public class NavBarController {
     }
 
     @GetMapping("/game-invites")
-    public List<String> getGameInvites(Principal principal) {
+    public List<GameInvitation> getGameInvites(Principal principal) {
         return invitationService.getInvites(principal.getName());
     }
 

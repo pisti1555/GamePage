@@ -1,37 +1,37 @@
-package project.gamepage.data.model.game.spiderweb;
+package project.gamepage.data.model.game.fly_in_the_web;
 
-public class CreateBoard {
-    private final Field[] field;
-    private final Piece fly;
-    private final Piece[] spider;
+public class CreateBoard_FITW {
+    private final Field_FITW[] field;
+    private final Piece_FITW fly;
+    private final Piece_FITW[] spider;
 
     /**
      * Generating game board, making connections inside it and placing pieces onto it.
      */
-    public CreateBoard() {
-        field = new Field[28];
+    public CreateBoard_FITW() {
+        field = new Field_FITW[28];
 
         for (int i = 0; i < field.length; i++) {
-            field[i] = new Field(Pieces.EMPTY);
-            field[i].setConnection(new Field[6]);
+            field[i] = new Field_FITW(Pieces_FITW.EMPTY);
+            field[i].setConnection(new Field_FITW[6]);
             field[i].setNumber(i);
         }
 
-        spider = new Piece[5];
-        spider[0] = new Piece(Pieces.SPIDER, 0);
-        spider[1] = new Piece(Pieces.SPIDER, 5);
-        spider[2] = new Piece(Pieces.SPIDER, 10);
-        spider[3] = new Piece(Pieces.SPIDER, 14);
-        spider[4] = new Piece(Pieces.SPIDER, 18);
-        fly = new Piece(Pieces.FLY, 27);
+        spider = new Piece_FITW[5];
+        spider[0] = new Piece_FITW(Pieces_FITW.SPIDER, 0);
+        spider[1] = new Piece_FITW(Pieces_FITW.SPIDER, 5);
+        spider[2] = new Piece_FITW(Pieces_FITW.SPIDER, 10);
+        spider[3] = new Piece_FITW(Pieces_FITW.SPIDER, 14);
+        spider[4] = new Piece_FITW(Pieces_FITW.SPIDER, 18);
+        fly = new Piece_FITW(Pieces_FITW.FLY, 27);
 
 
-        field[27].setPiece(Pieces.FLY);
-        field[0].setPiece(Pieces.SPIDER);
-        field[5].setPiece(Pieces.SPIDER);
-        field[10].setPiece(Pieces.SPIDER);
-        field[14].setPiece(Pieces.SPIDER);
-        field[18].setPiece(Pieces.SPIDER);
+        field[27].setPiece(Pieces_FITW.FLY);
+        field[0].setPiece(Pieces_FITW.SPIDER);
+        field[5].setPiece(Pieces_FITW.SPIDER);
+        field[10].setPiece(Pieces_FITW.SPIDER);
+        field[14].setPiece(Pieces_FITW.SPIDER);
+        field[18].setPiece(Pieces_FITW.SPIDER);
 
 
         field[0].getConnection()[0] = field[5];
@@ -181,15 +181,15 @@ public class CreateBoard {
         field[27].getConnection()[5] = field[26];
     }
 
-    protected Field[] giveField() {
+    protected Field_FITW[] giveField() {
         return field;
     }
 
-    protected Piece giveFly() {
+    protected Piece_FITW giveFly() {
         return fly;
     }
 
-    protected Piece[] giveSpiders() {
+    protected Piece_FITW[] giveSpiders() {
         return spider;
     }
 }

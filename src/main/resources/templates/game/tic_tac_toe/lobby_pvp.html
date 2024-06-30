@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/invites.css}"/>
-    <link rel="stylesheet" th:href="@{/css/fly_in_the_web/lobby.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tic_tac_toe/lobby.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
@@ -75,10 +75,10 @@
         <ul th:if="${friends != null && !friends.isEmpty()}">
             <li class="row" th:each="friend : ${friends}">
                 <span th:text="${friend}"></span>
-                <form th:action="@{/fly-in-the-web/lobby/invite}" method="post">
+                <form th:action="@{/tic-tac-toe/invite}" method="post">
                     <input type="hidden" name="friendUsername" th:value="${friend}" />
                     <button class="button" type="submit">Invite</button>
-                </form>   
+                </form>
             </li>
             <button class="button" onclick="closePopUp('friendlist'); openPopUp('lobby');">Close</button>
         </ul>
@@ -97,21 +97,22 @@
         <h2><span th:text="${player2}"></span> is in-game</h2>
     </div>
 
-    <form th:if="${isReady and player1 == username}" th:action="@{/fly-in-the-web/lobby/start}" method="post">
-        <button class="startOrLeaveButton" type="submit">Start Game</button>
-    </form>
-
     <div th:if="${isReady and player2 == username}" class="notReady">
         <h2>Waiting for <span th:text="${player1}"></span> to start the game</h2>
     </div>
 
-    <form th:if="${isReady}" th:action="@{/fly-in-the-web/lobby/leave}" method="post">
-        <button class="startOrLeaveButton" type="submit">Leave Lobby</button>
-    </form>
+    <div class="button_container">
+        <form th:if="${isReady}" th:action="@{/tic-tac-toe/leave}" method="post">
+            <button class="start_leave_button" type="submit">Leave Lobby</button>
+        </form>
+        <form th:if="${isReady and player1 == username}" th:action="@{/tic-tac-toe/pvp/start}" method="post">
+            <button class="start_leave_button" type="submit">Start Game</button>
+        </form>
+    </div>
     
 
     <script th:src="@{/js/popup.js}"></script>
-    <script th:src="@{/js/fly_in_the_web/lobby.js}"></script>
+    <script th:src="@{/js/tic_tac_toe/lobby.js}"></script>
     
     <script>
         function showInvite() {

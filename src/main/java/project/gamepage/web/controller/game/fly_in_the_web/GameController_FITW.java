@@ -1,11 +1,10 @@
 package project.gamepage.web.controller.game.fly_in_the_web;
 
-import project.gamepage.data.model.user.User;
 import project.gamepage.data.model.game.PvP;
-import project.gamepage.service.GameService;
-import project.gamepage.service.InvitationService;
+import project.gamepage.data.model.game.fly_in_the_web.FITW;
+import project.gamepage.service.game.fly_in_the_web.GameService_FITW;
+import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
-import project.gamepage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -17,14 +16,14 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/fly-in-the-web/game")
-public class GameController {
-    GameService service;
+public class GameController_FITW {
+    GameService_FITW service;
     UserFriendsService friendsService;
     SimpMessagingTemplate template;
     InvitationService invitationService;
 
     @Autowired
-    public GameController(GameService service, UserFriendsService friendsService, SimpMessagingTemplate template, InvitationService invitationService) {
+    public GameController_FITW(GameService_FITW service, UserFriendsService friendsService, SimpMessagingTemplate template, InvitationService invitationService) {
         this.service = service;
         this.friendsService = friendsService;
         this.template = template;
@@ -32,16 +31,16 @@ public class GameController {
     }
 
     @GetMapping
-    public String getGamePage(Principal principal, Model model) {
+    public String getGamePage_FITW(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
         return "game/fly_in_the_web/gameMenu";
     }
 
     @GetMapping("/pvp")
-    public String pvp(Model model, Principal principal) {
+    public String pvp_FITW(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("username", username);
-        PvP pvP = service.getPvP(username);
+        PvP<FITW> pvP = service.getPvP(username);
         if (pvP.getUser2() != null) {
             if (pvP.isReadyToStart()) {
                 pvP.setUser1InGame(true);
@@ -56,22 +55,22 @@ public class GameController {
     }
 
     @GetMapping("/pvs")
-    public String pvs(Principal principal, Model model) {
+    public String pvs_FITW(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
         service.newGamePvC("pvs", principal.getName());
         return "game/fly_in_the_web/spiderweb_pvs";
     }
 
     @GetMapping("/pvf")
-    public String pvf(Principal principal, Model model) {
+    public String pvf_FITW(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
         service.newGamePvC("pvf", principal.getName());
         return "game/fly_in_the_web/spiderweb_pvf";
     }
 
     @GetMapping("/return-to-lobby")
-    public String returnToLobby(Principal principal) {
-        PvP pvP = service.getPvP(principal.getName());
+    public String returnToLobby_FITW(Principal principal) {
+        PvP<FITW> pvP = service.getPvP(principal.getName());
         if (principal.getName().equals(pvP.getUser1())) {
             pvP.setUser1InGame(false);
             template.convertAndSendToUser(pvP.getUser2(), "/topic/game/update", "return");
@@ -80,10 +79,6 @@ public class GameController {
             pvP.setUser2InGame(false);
             template.convertAndSendToUser(pvP.getUser1(), "/topic/game/update", "return");
             template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "return");
-        }
-
-        if (!pvP.isUser1InGame() && !pvP.isUser2InGame()) {
-            //TODO
         }
 
         return "redirect:/fly-in-the-web/lobby";

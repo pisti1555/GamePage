@@ -9,5 +9,6 @@ public interface UserFriendsService {
     int getFriendRequestCount(String principal);
     void declineFriendRequest(String inviter, String invited);
     void deleteFriends(String user1Id, String user2Id);
-    boolean isFriend(String principal, String user);
+    boolean isFriend(String principal, String username);
+    boolean isFriendInvitationSent(String principal, String username);
 }

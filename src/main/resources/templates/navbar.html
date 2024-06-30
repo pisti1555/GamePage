@@ -1,18 +1,18 @@
 <nav id="navigation-bar" class="header" th:fragment="navbar">
     <div class="navLeftSide">
         <a th:href="@{'/'}" class="homeContainer" id="homeButton">
-            <img class="logo" id="homeLogo" th:src="@{/img/navbar/HomeLogo.svg}" alt="">
+            <img class="logo" id="homeLogo" th:src="@{/img/navbar/home_logo.svg}" alt="">
             <h2 id="title">Home</h2>
         </a>
     </div>
 
     <div class="navRightSide">
         <button class="inv-button" onclick="openPopUp('friendRequestContainer')">
-            <img th:src="@{/img/navbar/navbarFriendRequestLogo.svg}">
+            <img th:src="@{/img/navbar/friend_invite_logo_small.svg}">
             <span class="inv-count" id="friend-requests-count"></span>
         </button>
         <button class="inv-button" onclick="openPopUp('invContainer')">
-            <img th:src="@{/img/navbar/navbarLobbyInviteLogo.svg}">
+            <img th:src="@{/img/navbar/lobby_logo_small.svg}">
             <span class="inv-count" id="game-invitation-count"></span>
         </button>
         <a id="login" class="profile" th:href="@{/profile}">
@@ -39,4 +39,4 @@
     </ul>
 </div>
 
-<script th:src="@{/static/navbar.js}" th:fragment="navbar"></script>
+<script th:src="@{/js/navbar.js}" th:fragment="navbar"></script>

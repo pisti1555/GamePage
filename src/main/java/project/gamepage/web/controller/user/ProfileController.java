@@ -1,7 +1,7 @@
 package project.gamepage.web.controller.user;
 
 import project.gamepage.data.model.user.User;
-import project.gamepage.service.InvitationService;
+import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
 import project.gamepage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,7 @@ public class ProfileController {
         User user = service.findByUsername(userToFind);
 
         model.addAttribute("friend", friendsService.isFriend(principal.getName(), userToFind));
+        model.addAttribute("invitationSent", friendsService.isFriendInvitationSent(principal.getName(), userToFind));
         model.addAttribute("username", principal.getName());
         model.addAttribute("name", user.getUsername());
         model.addAttribute("gamesPlayed", user.getGamesPlayed());

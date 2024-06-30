@@ -1,0 +1,208 @@
+html, body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+	font-family: Franklin Gothic;
+	font-weight: 200;
+    color: #ffffff80;
+	scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
+
+a {
+	color: #ffffff80;
+    font-family: Franklin Gothic;
+    text-decoration: none;
+}
+
+h1 {
+    color: #ffffff80;
+    font-family: Franklin Gothic;
+	padding-left: 5%;
+	letter-spacing: 1px;
+}
+
+
+.lobby_container {
+    position: relative;
+	margin: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 30px;
+    overflow: auto;
+    scrollbar-width: none;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player_container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border: 1px solid aliceblue;
+    border-radius: 30px;
+    position: relative;
+    width: 40%;
+    height: 80%;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s;
+}
+
+.notReady {
+    position: relative;
+    font-family: Franklin Gothic;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #ffffff;
+    margin: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 20px;
+    background: transparent;
+    backdrop-filter: blur(30px);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ready h1 {
+    color: #ffffff;
+}
+
+.null {
+    cursor: pointer;
+}
+
+.null h1 {
+    #ffffff80;
+}
+
+.inGame h1 {
+    color: #ffffff50;
+}
+
+.popup_container {
+    z-index: 2;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid aliceblue;
+    border-radius: 30px;
+    backdrop-filter: blur(30px);
+    background: transparent;
+}
+
+.row {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.button {
+    color: #ffffff80;
+    backdrop-filter: blur(10px);
+    background: transparent;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 400;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid #ffffff80;
+    transition: 0.3s ease;
+    user-select: none;
+    margin: 10px;
+}
+
+.button_container {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.button_container .form {
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.start_leave_button {
+    position: relative;
+    display: inline-block;
+    font-family: Franklin Gothic;
+    backdrop-filter: blur(20px);
+    background: transparent;
+    padding: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 20px;
+    margin: 10px;
+    text-shadow: none;
+    cursor: pointer;
+    box-shadow: transparent;
+    border: 1px solid aliceblue;
+    transition: 0.3s ease;
+    user-select: none;
+    color: #ffffff;
+    height: fit-content;
+    font-size: 20px;
+}
+
+.button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}
+
+.start_leave_button:hover,
+:focus {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}
+
+.container::-webkit-scrollbar {
+	display: none;
+}
+
+.null:hover {
+    background: #008cff;
+    border: 1px solid #008cff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+        0 0 100px #008cff;
+}
+

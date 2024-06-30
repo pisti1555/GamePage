@@ -40,7 +40,6 @@ async function getGameInviteCount() {
     const response = await fetch('/nav-bar/game-invites-count');
     const data = await response.json();
     gameInvitationCount = data;
-    console.log('invcount: ', data);
 }
 
 async function loadNavBar() {
@@ -92,19 +91,37 @@ async function loadNavBar() {
     gameInvitationListDoc.innerHTML = '';
     for (let invite of gameInvitationList) {
         const li = document.createElement('li');
-        li.innerHTML = `
+        if (invite.game == "FITW") {
+            li.innerHTML = `
             <div class="row">
-                <h3 class="invMessage">${invite} invited you to play</h3>
+                <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
                 <form action="/fly-in-the-web/lobby/join" method="post">
-                    <input type="hidden" name="inviter" value="${invite}" />
+                    <input type="hidden" name="inviter" value="${invite.inviter}" />
                     <button class="button" type="submit">Join</button>
                 </form>
                 <form action="/fly-in-the-web/lobby/decline-lobby-invitation" method="post">
-                    <input type="hidden" name="inviter" value="${invite}" />
+                    <input type="hidden" name="inviter" value="${invite.inviter}" />
                     <button class="button" type="submit">Decline</button>
                 </form>
             </div>
         `;
+        }
+        if (invite.game == "TicTacToe") {
+            li.innerHTML = `
+            <div class="row">
+                <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
+                <form action="/tic-tac-toe/join" method="post">
+                    <input type="hidden" name="inviter" value="${invite.inviter}" />
+                    <button class="button" type="submit">Join</button>
+                </form>
+                <form action="/tic-tac-toe/decline-lobby-invitation" method="post">
+                    <input type="hidden" name="inviter" value="${invite.inviter}" />
+                    <button class="button" type="submit">Decline</button>
+                </form>
+            </div>
+        `;
+        }
+        
         gameInvitationListDoc.appendChild(li);
     }
 

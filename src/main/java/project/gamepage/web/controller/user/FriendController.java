@@ -1,7 +1,7 @@
 package project.gamepage.web.controller.user;
 
 import project.gamepage.data.model.user.User;
-import project.gamepage.service.InvitationService;
+import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
 import project.gamepage.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;

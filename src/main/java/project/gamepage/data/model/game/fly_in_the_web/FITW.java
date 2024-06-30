@@ -1,12 +1,12 @@
-package project.gamepage.data.model.game.spiderweb;
+package project.gamepage.data.model.game.fly_in_the_web;
 
 import java.util.Random;
 
-public class Board {
+public class FITW {
     public Integer id;
-    public final Field[] field;
-    public final Piece fly;
-    public final Piece[] spider;
+    public final Field_FITW[] field;
+    public final Piece_FITW fly;
+    public final Piece_FITW[] spider;
 
 
     public short gameMode;
@@ -22,9 +22,9 @@ public class Board {
 
 
 
-    public Board() {
+    public FITW() {
         random = new Random();
-        CreateBoard cb = new CreateBoard();
+        CreateBoard_FITW cb = new CreateBoard_FITW();
         field = cb.giveField();
         fly = cb.giveFly();
         spider = cb.giveSpiders();
@@ -35,15 +35,15 @@ public class Board {
         spiderStepsDone = 0;
     }
 
-    public Field[] getField() {
+    public Field_FITW[] getField() {
         return field;
     }
 
-    public Piece getFly() {
+    public Piece_FITW getFly() {
         return fly;
     }
 
-    public Piece[] getSpider() {
+    public Piece_FITW[] getSpider() {
         return spider;
     }
 

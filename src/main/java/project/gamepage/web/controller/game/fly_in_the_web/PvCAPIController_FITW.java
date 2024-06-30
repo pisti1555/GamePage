@@ -1,7 +1,7 @@
 package project.gamepage.web.controller.game.fly_in_the_web;
 
-import project.gamepage.data.model.game.spiderweb.Board;
-import project.gamepage.service.GameService;
+import project.gamepage.data.model.game.fly_in_the_web.FITW;
+import project.gamepage.service.game.fly_in_the_web.GameService_FITW;
 import project.gamepage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,64 +12,64 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/fly-in-the-web/api/game/pvc")
-public class GamePvCAPIController {
-    GameService service;
+public class PvCAPIController_FITW {
+    GameService_FITW service;
     UserService userService;
 
     @Autowired
-    public GamePvCAPIController(GameService service, UserService userService) {
+    public PvCAPIController_FITW(GameService_FITW service, UserService userService) {
         this.service = service;
         this.userService = userService;
     }
 
     @PostMapping("/pvs")
     public int playVsSpider(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
-        Board board = service.getPvC(principal.getName()).getBoard();
-        service.moveVsComputer(from, to, board);
-        service.randomMoveSpider(board);
-        return service.whoWon(board);
+        FITW boardFITW = service.getPvC(principal.getName()).getBoard();
+        service.moveVsComputer(from, to, boardFITW);
+        service.randomMoveSpider(boardFITW);
+        return service.whoWon(boardFITW);
     }
 
     @PostMapping("/pvf")
     public int playVsFly(@RequestParam("from")int from, @RequestParam("to")int to, Principal principal) {
-        Board board = service.getPvC(principal.getName()).getBoard();
-        service.moveVsComputer(from, to, board);
-        service.randomMoveFly(board);
-        return service.whoWon(board);
+        FITW boardFITW = service.getPvC(principal.getName()).getBoard();
+        service.moveVsComputer(from, to, boardFITW);
+        service.randomMoveFly(boardFITW);
+        return service.whoWon(boardFITW);
     }
 
     @PostMapping("/getPositions")
     public int[] sendPositionsToClient(Principal principal) {
-        Board board = findBoardPvC(principal.getName());
-        return service.getPositions(board);
+        FITW boardFITW = findBoardPvC(principal.getName());
+        return service.getPositions(boardFITW);
     }
 
     @GetMapping("/getConnections")
     public HashMap<Integer, ArrayList<Integer>> getConnections(Principal principal) {
-        Board board = findBoardPvC(principal.getName());
-        return service.getConnections(board);
+        FITW boardFITW = findBoardPvC(principal.getName());
+        return service.getConnections(boardFITW);
     }
 
     @GetMapping("/get-available-fields")
     public ArrayList<Integer> getAvailableFields(@RequestParam("from") int from, Principal principal) {
-        Board board = findBoardPvC(principal.getName());
+        FITW boardFITW = findBoardPvC(principal.getName());
         ArrayList<Integer> available = new ArrayList<>();
-        for (int i = 0; i < board.getField()[from].getConnection().length; i++) {
-            available.add(board.getField()[from].getConnection()[i].getNumber());
+        for (int i = 0; i < boardFITW.getField()[from].getConnection().length; i++) {
+            available.add(boardFITW.getField()[from].getConnection()[i].getNumber());
         }
         return available;
     }
 
     @GetMapping("/getGameMode")
     public short getGameMode(Principal principal) {
-        Board board = findBoardPvC(principal.getName());
-        return service.getGameMode(board);
+        FITW boardFITW = findBoardPvC(principal.getName());
+        return service.getGameMode(boardFITW);
     }
 
     @GetMapping("/isFlysTurn")
     public boolean isFlysTurn(Principal principal) {
-        Board board = findBoardPvC(principal.getName());
-        return service.isFlysTurn(board);
+        FITW boardFITW = findBoardPvC(principal.getName());
+        return service.isFlysTurn(boardFITW);
     }
 
     @PostMapping("/newGame")
@@ -80,23 +80,23 @@ public class GamePvCAPIController {
 
     @GetMapping("/isGameRunning")
     public boolean isGameRunning(Principal principal) {
-        Board board = findBoardPvC(principal.getName());
-        return service.getIsGameRunning(board);
+        FITW boardFITW = findBoardPvC(principal.getName());
+        return service.getIsGameRunning(boardFITW);
     }
 
     @GetMapping("/getFlyStepsDone")
     public int getStepsDone(Principal principal) {
-        Board board = findBoardPvC(principal.getName());
-        return service.getFlyStepsDone(board);
+        FITW boardFITW = findBoardPvC(principal.getName());
+        return service.getFlyStepsDone(boardFITW);
     }
 
     @GetMapping("/getSpiderStepsDone")
     public int getSpiderStepsDone(Principal principal) {
-        Board board = findBoardPvC(principal.getName());
-        return service.getSpiderStepsDone(board);
+        FITW boardFITW = findBoardPvC(principal.getName());
+        return service.getSpiderStepsDone(boardFITW);
     }
 
-    private Board findBoardPvC(String name) {
+    private FITW findBoardPvC(String name) {
         return service.getPvC(name).getBoard();
     }
 }
