@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Lobby - Tic-Tac-Toe</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/invites.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tic_tac_toe/lobby.css}"/>
+    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <style th:inline="text">
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/fly_in_the_web/game_background.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
+        }
+    </style>
+
+</head>
+<body>
+    <nav th:replace="navbar :: navbar"></nav>
+
+    <div id="lobby" class="lobby_container">
+        <div class="player_container" id="player1">
+            <img th:src="@{/img/player/player_logo.svg}" alt="Player 1">
+            <h1 th:text="${player}"></h1>
+        </div>
+        <div class="player_container" id="player2">
+            <img th:src="@{/img/player/computer.svg}" alt="Player 2">
+            <h1 id="player2">Computer</h1>
+        </div>
+    </div>
+
+    <div class="button_container">
+        <a th:href="@{/tic-tac-toe}" class="start_leave_button">Leave lobby</a>
+        <form th:action="@{/tic-tac-toe/pvc/start}" method="post" class="form">
+            <button class="start_leave_button" type="submit">Start Game</button>
+        </form>
+    </div>
+
+    
+
+    <script th:src="@{/js/popup.js}"></script>
+    <script th:src="@{/js/tic_tac_toe/lobby.js}"></script>
+
+</body>
+</html>

@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Lobby - Fly in the web</title>
+    <title>Lobby - Tic-Tac-Toe</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/invites.css}"/>
@@ -43,29 +43,29 @@
     <div id="lobby" class="lobby_container">
 
         <div th:if="${user1InGame}" class="player_container inGame" id="player1">
-            <img th:src="@{/img//fly_in_the_web/playerInGameLogo.svg}" alt="Player 1">
+            <img th:src="@{/img/player/player_in_game.svg}" alt="Player 1">
             <h1 th:text="${player1}"></h1>
         </div>
 
         <div th:if="${!user1InGame}" class="player_container ready" id="player1">
-            <img th:src="@{/img/fly_in_the_web/LoginLogoBig.svg}" alt="Player 1">
+            <img th:src="@{/img/player/player_logo.svg}" alt="Player 1">
             <h1 th:text="${player1}"></h1>
         </div>
 
 
 
         <a th:if="${player2 != null and !user2InGame}" class="player_container ready" id="player2">
-            <img th:src="@{/img/fly_in_the_web/LoginLogoBig.svg}" alt="Player 2">
+            <img th:src="@{/img/player/player_logo.svg}" alt="Player 2">
             <h1 id="player2" th:text="${player2}"></h1>
         </a>
 
         <a th:if="${user2InGame}" class="player_container inGame" id="player2">
-            <img th:src="@{/img/fly_in_the_web/playerInGameLogo.svg}" alt="Player 2">
+            <img th:src="@{/img/player/player_in_game.svg}" alt="Player 2">
             <h1 id="player2" th:text="${player2}"></h1>
         </a>
 
         <a th:if="${player2 == null}" class="player_container null" id="player2" onclick="showInvite()">
-            <img th:src="@{/img/fly_in_the_web/invite_user.svg}" alt="Invite a friend">
+            <img th:src="@{/img/player/player_invite.svg}" alt="Invite a friend">
             <h1 id="player2">Invite a friend</h1>
         </a>
         
@@ -111,7 +111,7 @@
     
 
     <script th:src="@{/js/popup.js}"></script>
-    <script th:src="@{/js/lobby.js}"></script>
+    <script th:src="@{/js/fly_in_the_web/lobby.js}"></script>
     
     <script>
         function showInvite() {

@@ -1,6 +1,11 @@
 .header {
-    display: inline-flex;
-    width: 100vw;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    width: 100%;
     height: fit-content;
     background: transparent;
     backdrop-filter: blur(10px);
@@ -41,9 +46,10 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        margin-right: 5px;
 
-        .inv-button,
-        .friend-requests-button {
+        .inv-button {
+            display: flex;
             margin-top: 5px;
             margin-left: 10px;
             width: 50px;
@@ -51,7 +57,6 @@
             border-radius: 50%;
             border: none;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.082);
-            display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
@@ -59,8 +64,8 @@
             cursor: pointer;
             transition: all 0.3s;
 
-            .inv-count,
-            .friend-requests-count {
+            .inv-count {
+                display: none;
                 position: absolute;
                 bottom: -5px;
                 right: -5px;
@@ -70,7 +75,6 @@
                 color: rgb(0, 0, 0);
                 width: 20px;
                 height: 20px;
-                display: flex;
                 align-items: center;
                 justify-content: center;
             }
@@ -96,37 +100,19 @@
     }
 }
 
-
-
-  
-
-
-
-
-.navLeftSide:hover {
-    cursor: pointer;
-    background: #008cff;
-    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
-        0 0 100px #008cff;
-}
-
 .navLeftSide:hover h2 {
     color: #ffffff;
 }
 
-.navRightSide .profile:hover {
-    cursor: pointer;
-    background: #008cff;
-    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
-        0 0 100px #008cff;
-}
 
 .navRightSide .profile:hover h3 {
     color: #ffffff;
 }
 
+.navLeftSide:hover,
 .navRightSide .inv-button:hover,
-.navRightSide .friend-requests-button:hover {
+.navRightSide .friend-requests-button:hover,
+.navRightSide .profile:hover {
     transform: scale(1.1);
     background: #008cff;
     box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,

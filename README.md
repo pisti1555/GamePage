@@ -1,4 +1,4 @@
-Spring Boot web application about board games.
+Spring Boot web application about boardFITW games.
 Contains
 - Pókháló game
 - Authentication

@@ -1,9 +1,8 @@
 package project.gamepage.data.model.game;
 
-import project.gamepage.data.model.game.spiderweb.Board;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class PvP {
+public class PvP <Game> {
     String id;
     String user1;
     String user2;
@@ -11,9 +10,9 @@ public class PvP {
     boolean user2InGame;
     boolean dbUpdated;
     @JsonIgnore
-    Board board;
+    Game board;
 
-    public PvP(String user1, String user2, Board board) {
+    public PvP(String user1, String user2, Game board) {
         this.id = user1;
         this.user1 = user1;
         this.user2 = user2;
@@ -60,11 +59,11 @@ public class PvP {
         this.id = id;
     }
 
-    public Board getBoard() {
+    public Game getBoard() {
         return board;
     }
 
-    public void setBoard(Board board) {
+    public void setBoard(Game board) {
         this.board = board;
     }
 

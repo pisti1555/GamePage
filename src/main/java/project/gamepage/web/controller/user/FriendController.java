@@ -1,7 +1,7 @@
 package project.gamepage.web.controller.user;
 
 import project.gamepage.data.model.user.User;
-import project.gamepage.service.InvitationService;
+import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
 import project.gamepage.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,25 +43,12 @@ public class FriendController {
             model.addAttribute("count", friendList.size());
         }
 
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-
-        model.addAttribute("friendRequests", service.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", service.getFriendRequestCount(principal.getName()));
-
         return "player/friendList";
     }
 
     @GetMapping("/add")
     public String getAddFriend(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-
-        model.addAttribute("invites", invitationService.getInvites(principal.getName()));
-        model.addAttribute("invCount", invitationService.invCount(principal.getName()));
-
-        model.addAttribute("friendRequests", service.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", service.getFriendRequestCount(principal.getName()));
-
         return "player/addFriend";
     }
 

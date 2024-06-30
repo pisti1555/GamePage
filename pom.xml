@@ -12,7 +12,7 @@
 	<artifactId>gamepage</artifactId>
 	<version>0.1</version>
 	<name>GamePage</name>
-	<description>Web application for a 2 player board game</description>
+	<description>Web application for a 2 player boardFITW game</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

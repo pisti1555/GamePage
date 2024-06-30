@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import project.gamepage.service.InvitationService;
+import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
 
 import java.security.Principal;
-import java.util.ArrayList;
 
 @Controller
 public class IndexController {
@@ -25,10 +24,6 @@ public class IndexController {
     public String getIndexPage(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("username", username);
-        model.addAttribute("invites", invitationService.getInvites(username));
-        model.addAttribute("invCount", invitationService.invCount(username));
-        model.addAttribute("friendRequests", friendsService.getFriendRequests(principal.getName()));
-        model.addAttribute("friendRequestCount", friendsService.getFriendRequestCount(principal.getName()));
         return "index";
     }
 }

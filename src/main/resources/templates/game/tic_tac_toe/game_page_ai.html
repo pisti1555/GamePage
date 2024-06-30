@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Play - Tic-Tac-Toe</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/invites.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tic_tac_toe/game_page.css}"/>
+    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <style th:inline="text">
+        body {
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url([[@{/img/fly_in_the_web/game_background.jpg}]]) no-repeat center center fixed;
+            filter: brightness(80%);
+            z-index: -1;
+        }
+    </style>
+
+</head>
+<body>
+    <nav th:replace="navbar :: navbar"></nav>
+
+    <div class="board-container" id="board-container">
+        <h2 id="playersTurnText"></h2>
+        <div class="gameboard" id="gameboard">
+            <div class="field" id="0-0"></div>
+            <div class="field" id="0-1"></div>
+            <div class="field" id="0-2"></div>
+            <div class="field" id="1-0"></div>
+            <div class="field" id="1-1"></div>
+            <div class="field" id="1-2"></div>
+            <div class="field" id="2-0"></div>
+            <div class="field" id="2-1"></div>
+            <div class="field" id="2-2"></div>
+        </div>
+    </div>
+
+    <div class="game_over hidden" id="game-over-screen">
+        <h1 class="text" id="whoWonText"></h1>
+        <div class="button_container">
+            <a th:href="@{/tic-tac-toe/pvc}" class="button">return to Lobby</a>
+            <button class="button" onclick="newGame()">New game</button>
+        </div>
+    </div>
+
+    <script th:src="@{/js/tic_tac_toe/pvc.js}"></script>
+
+</body>
+</html>
