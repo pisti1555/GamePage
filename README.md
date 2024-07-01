@@ -1,6 +1,7 @@
-Spring Boot web application about boardFITW games.
+Spring Boot web application about board games.
 Contains
-- Pókháló game
+- Fly in the web game
+- TicTacToe game
 - Authentication
 - Database management
 - Friend invitations

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
+import project.gamepage.data.model.game.ai.tic_tac_toe.AI_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.Pieces_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.invitations.GameInvitation;
@@ -100,6 +101,24 @@ public class GameService_TicTacToe {
             game.getBoard()[row][col] = piece;
             game.setXTurn(!game.isXTurn());
             return isSomebodyWon(game);
+        }
+        return false;
+    }
+
+    public boolean moveAI(int row, int col, TicTacToe game, Pieces_TicTacToe piece) {
+        if (isMoveValid(row, col, piece, game)) {
+            game.getBoard()[row][col] = piece;
+            if (isSomebodyWon(game)) return isSomebodyWon(game);
+            game.setXTurn(!game.isXTurn());
+            AI_TicTacToe ai = new AI_TicTacToe(game.cloneBoard());
+            int aiRow = ai.getBestMove()[0];
+            int aiCol = ai.getBestMove()[1];
+
+            if (piece.equals(Pieces_TicTacToe.X)) {
+                move(aiRow, aiCol, game, Pieces_TicTacToe.O);
+            } else {
+                move(aiRow, aiCol, game, Pieces_TicTacToe.X);
+            }
         }
         return false;
     }
