@@ -31,7 +31,7 @@ var connectionMap;
 //-------------- Load board data --------------
 
 function fetchPositions() {
-    fetch('/fly-in-the-web/api/game/pvp/getPositions')
+    fetch('/fly-in-the-web/api/game/pvp/get-positions')
         .then(response => response.json())
             .then(data => {
                 locations = data;
@@ -48,7 +48,7 @@ function fetchPositions() {
 }
 
 function fetchConnections() {
-    fetch('/fly-in-the-web/api/game/pvp/getConnections')
+    fetch('/fly-in-the-web/api/game/pvp/get-connections')
         .then(response => response.json())
             .then(data => {
                 connectionMap = data;
@@ -190,13 +190,13 @@ function gameOver() {
     const flyStepsMade = document.getElementById('flyStepsMade');
     const spiderStepsMade = document.getElementById('spiderStepsMade');
 
-    fetch('/fly-in-the-web/api/game/pvp/getFlyStepsDone')
+    fetch('/fly-in-the-web/api/game/pvp/get-fly-steps-done')
         .then(response => response.json())
             .then(data => {
                 flyStepsMade.textContent = 'Fly made ' + data + ' steps';
             });
 
-    fetch('/fly-in-the-web/api/game/pvp/getSpiderStepsDone')
+    fetch('/fly-in-the-web/api/game/pvp/get-spider-steps-done')
         .then(response => response.json())
             .then(data => {
                 spiderStepsMade.textContent = 'Spiders made ' + data + ' steps';

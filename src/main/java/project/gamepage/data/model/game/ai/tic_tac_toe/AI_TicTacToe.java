@@ -3,13 +3,13 @@ package project.gamepage.data.model.game.ai.tic_tac_toe;
 import project.gamepage.data.model.game.tic_tac_toe.Pieces_TicTacToe;
 
 public class AI_TicTacToe {
-    private final Pieces_TicTacToe pieceAI;
-    private final Pieces_TicTacToe pieceHuman;
+    private final Pieces_TicTacToe User_Piece;
+    private final Pieces_TicTacToe AI_Piece;
     private final int[] bestMove;
 
-    public AI_TicTacToe(Pieces_TicTacToe[][] board) {
-        this.pieceAI = Pieces_TicTacToe.O;
-        this.pieceHuman = Pieces_TicTacToe.X;
+    public AI_TicTacToe(Pieces_TicTacToe[][] board, Pieces_TicTacToe user) {
+        this.User_Piece = user;
+        if (user.equals(Pieces_TicTacToe.X)) this.AI_Piece = Pieces_TicTacToe.O; else this.AI_Piece = Pieces_TicTacToe.X;
         this.bestMove = new int[2];
         bestMove(board);
     }
@@ -22,7 +22,7 @@ public class AI_TicTacToe {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
                 if (board[i][j].equals(Pieces_TicTacToe.EMPTY)) {
-                    board[i][j] = pieceAI;
+                    board[i][j] = AI_Piece;
                     int score = minimax(board, 0, false);
                     board[i][j] = Pieces_TicTacToe.EMPTY;
                     if (score > bestScore) {
@@ -49,7 +49,7 @@ public class AI_TicTacToe {
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board.length; j++) {
                     if (board[i][j].equals(Pieces_TicTacToe.EMPTY)) {
-                        board[i][j] = pieceAI;
+                        board[i][j] = AI_Piece;
                         int score = minimax(board, depth + 1, false);
                         board[i][j] = Pieces_TicTacToe.EMPTY;
                         bestScore = Math.max(score, bestScore);
@@ -62,7 +62,7 @@ public class AI_TicTacToe {
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board.length; j++) {
                     if (board[i][j].equals(Pieces_TicTacToe.EMPTY)) {
-                        board[i][j] = pieceHuman;
+                        board[i][j] = User_Piece;
                         int score = minimax(board, depth + 1, true);
                         board[i][j] = Pieces_TicTacToe.EMPTY;
                         bestScore = Math.min(score, bestScore);

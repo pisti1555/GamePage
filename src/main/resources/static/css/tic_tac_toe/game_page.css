@@ -101,16 +101,23 @@ body {
 }
 
 .game_over {
-    position: relative;
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: fit-content;
+    padding: 20px;
     border: 1px solid aliceblue;
-    border-radius: 20px;
-    backdrop-filter: blur 5px;
+    border-radius: 30px;
+    backdrop-filter: blur(2px);
     color: #ffff;
     font-family: Franklin Gothic;
+    background-color: #00025d9e;
 }
 
 .button_container {
@@ -136,7 +143,7 @@ body {
     border-radius: 20px;
     background: none;
     padding: 20px;
-    background: rgb(0, 70, 128);
+    background: rgba(21, 0, 159, 0.9);
     font-family: Franklin Gothic;
     font-weight: 600;
     font-size: large;

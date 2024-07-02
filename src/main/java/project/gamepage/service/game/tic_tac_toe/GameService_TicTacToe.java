@@ -102,6 +102,7 @@ public class GameService_TicTacToe {
             game.setXTurn(!game.isXTurn());
             return isSomebodyWon(game);
         }
+
         return false;
     }
 
@@ -110,7 +111,7 @@ public class GameService_TicTacToe {
             game.getBoard()[row][col] = piece;
             if (isSomebodyWon(game)) return isSomebodyWon(game);
             game.setXTurn(!game.isXTurn());
-            AI_TicTacToe ai = new AI_TicTacToe(game.cloneBoard());
+            AI_TicTacToe ai = new AI_TicTacToe(game.cloneBoard(), piece);
             int aiRow = ai.getBestMove()[0];
             int aiCol = ai.getBestMove()[1];
 
@@ -121,46 +122,6 @@ public class GameService_TicTacToe {
             }
         }
         return false;
-    }
-
-    public boolean movePvC(int row, int col, TicTacToe game, Pieces_TicTacToe piece) {
-        if (isMoveValid(row, col, piece, game)) {
-            game.getBoard()[row][col] = piece;
-            if (isSomebodyWon(game)) return isSomebodyWon(game);
-            game.setXTurn(!game.isXTurn());
-            if (piece.equals(Pieces_TicTacToe.X)) {
-                randomMoveO(game);
-            } else {
-                randomMoveX(game);
-            }
-        }
-        return false;
-    }
-
-    public void randomMoveX(TicTacToe game) {
-        List<int[]> available = getFreeFields(game);
-        int[] field = available.get(random.nextInt(available.size()));
-
-        int row = field[0];
-        int col = field[1];
-
-        if (isMoveValid(row, col, Pieces_TicTacToe.X, game)) {
-            move(row, col, game, Pieces_TicTacToe.X);
-        } else randomMoveX(game);
-    }
-
-    public void randomMoveO(TicTacToe game) {
-        System.out.println("randomMoveO");
-
-        List<int[]> available = getFreeFields(game);
-        int[] field = available.get(random.nextInt(available.size()));
-
-        int row = field[0];
-        int col = field[1];
-
-        if (isMoveValid(row, col, Pieces_TicTacToe.O, game)) {
-            move(row, col, game, Pieces_TicTacToe.O);
-        } else randomMoveO(game);
     }
 
     private List<int[]> getFreeFields(TicTacToe game) {
@@ -193,6 +154,7 @@ public class GameService_TicTacToe {
     }
 
     private boolean isMoveValid(int row, int col, Pieces_TicTacToe piece, TicTacToe game) {
+        if (isSomebodyWon(game)) return false;
         if (game.getBoard()[row][col] == Pieces_TicTacToe.EMPTY) {
             if (piece.equals(Pieces_TicTacToe.X) && game.isXTurn()) {
                 return true;
