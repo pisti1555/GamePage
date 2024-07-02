@@ -1,6 +1,9 @@
 package project.gamepage.service.game.fly_in_the_web;
 
+import project.gamepage.data.model.game.ai.fly_in_the_web.AI_FITW;
+import project.gamepage.data.model.game.ai.fly_in_the_web.AiFITW;
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
+import project.gamepage.data.model.game.fly_in_the_web.Field_FITW;
 import project.gamepage.data.model.user.User;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
@@ -95,6 +98,7 @@ public class GameService_FITW {
 
 
     //------------------------FITW--------------------------
+
     public int moveVsComputer(int from, int to, FITW boardFITW) {
         if (whichPiece(from, boardFITW) == boardFITW.getFly()) {
             moveFly(from, to, boardFITW);
@@ -128,16 +132,9 @@ public class GameService_FITW {
 
     public boolean randomMoveFly(FITW boardFITW) {
         Piece_FITW fly = boardFITW.getFly();
-        int unavailableFields = 0;
-        for (int i = 0; i < boardFITW.getField()[fly.location].getConnection().length; i++) {
-            if(boardFITW.getField()[fly.location]
-                    .getConnection()[i] == null) unavailableFields++;
-        }
-        int availableFields = 6 - unavailableFields;
-        int randomConnection = random.nextInt(availableFields);
-        int randomField = boardFITW.getField()[fly.location]
-                .getConnection()[randomConnection].getNumber();
 
+        int randomConnection = random.nextInt(boardFITW.getField()[fly.location].getConnections().size());
+        int randomField = boardFITW.getField()[fly.location].getConnections().get(randomConnection).getNumber();
 
         if (boardFITW.isGameRunning) {
             if(isMoveValid(boardFITW.getFly().location, randomField, boardFITW)) {
@@ -153,15 +150,8 @@ public class GameService_FITW {
     public boolean randomMoveSpider(FITW boardFITW) {
         Piece_FITW randomSpider = boardFITW.getSpider()[random.nextInt(boardFITW.getSpider().length)];
 
-        int unavailableFields = 0;
-        for (int i = 0; i < boardFITW.getField()[randomSpider.location].getConnection().length; i++) {
-            if(boardFITW.getField()[randomSpider.location]
-                    .getConnection()[i] == null) unavailableFields++;
-        }
-        int availableFields = 6 - unavailableFields;
-        int randomConnection = random.nextInt(availableFields);
-        int randomField = boardFITW.getField()[randomSpider.location]
-                .getConnection()[randomConnection].getNumber();
+        int randomConnection = random.nextInt(boardFITW.getField()[randomSpider.location].getConnections().size());
+        int randomField = boardFITW.getField()[randomSpider.location].getConnections().get(randomConnection).getNumber();
 
         if (boardFITW.isGameRunning) {
             if(isMoveValid(randomSpider.location, randomField, boardFITW)) {
@@ -190,8 +180,8 @@ public class GameService_FITW {
         boolean isFromFieldEmpty = boardFITW.getField()[from].getPiece() == Pieces_FITW.EMPTY;
         boolean isToFieldEmpty = boardFITW.getField()[to].getPiece() == Pieces_FITW.EMPTY;
 
-        for (int i = 0; i < boardFITW.getField()[from].getConnection().length; i++) {
-            if (boardFITW.getField()[from].getConnection()[i] == boardFITW.getField()[to]) {
+        for (int i = 0; i < boardFITW.getField()[from].getConnections().size(); i++) {
+            if (boardFITW.getField()[from].getConnections().get(i) == boardFITW.getField()[to]) {
                 areFieldsConnected = true;
             }
         }
@@ -216,15 +206,9 @@ public class GameService_FITW {
     public HashMap<Integer, ArrayList<Integer>> getConnections(FITW boardFITW) {
         HashMap<Integer, ArrayList<Integer>> connections = new HashMap<>();
         for (int i = 0; i < boardFITW.getField().length; i++) {
-            int numberOfConnections = 6;
-            for (int j = 0; j < 6; j++) {
-                if (boardFITW.getField()[i].getConnection()[j] == null) numberOfConnections--;
-            }
-
             ArrayList<Integer> connectionOfField = new ArrayList<>();
-
-            for (int j = 0; j < numberOfConnections; j++) {
-                connectionOfField.add(boardFITW.getField()[i].getConnection()[j].getNumber());
+            for (int j = 0; j < boardFITW.getField()[i].getConnections().size(); j++) {
+                connectionOfField.add(boardFITW.getField()[i].getConnections().get(j).getNumber());
                 connections.put(i, connectionOfField);
             }
         }
@@ -277,19 +261,22 @@ public class GameService_FITW {
             boardFITW.pieceWon = 1;
         }
 
-        int unavailableFields = 0;
-        for (int i = 0; i < boardFITW.getField()[boardFITW.getFly().location].getConnection().length; i++) {
-            if(
-                    boardFITW.getField()[boardFITW.getFly().location].getConnection()[i] == null ||
-                            boardFITW.getField()[boardFITW.getFly().location].getConnection()[i].getPiece() != Pieces_FITW.EMPTY
-            ) unavailableFields++;
-        }
-
-        if (unavailableFields >= boardFITW.getField()[boardFITW.getFly().location].getConnection().length) {
+        int availableFields = getAvailableFields(boardFITW);
+        if (availableFields == 0) {
             boardFITW.isGameRunning = false;
             boardFITW.pieceWon = 2;
         }
         return boardFITW.isGameRunning;
+    }
+
+    private int getAvailableFields(FITW boardFITW) {
+        int availableFields = 0;
+        for (int i = 0; i < boardFITW.getField()[boardFITW.getFly().location].getConnections().size(); i++) {
+            if(
+                    boardFITW.getField()[boardFITW.getFly().location].getConnections().get(i).getPiece() == Pieces_FITW.EMPTY
+            ) availableFields++;
+        }
+        return availableFields;
     }
 
     public boolean isFlysTurn(FITW boardFITW) {

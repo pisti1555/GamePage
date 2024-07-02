@@ -50,10 +50,10 @@ public class GameAPIController_TicTacToe {
         TicTacToe game = service.getPvC(principal.getName()).getBoard();
 
         if (pvc.getUser().equals(principal.getName())) {
-            return service.movePvC(row, col, game, Pieces_TicTacToe.X);
+            return service.moveAI(row, col, game, Pieces_TicTacToe.X);
         }
         if (pvc.getUser2().equals(principal.getName())) {
-            return service.movePvC(row, col, game, Pieces_TicTacToe.O);
+            return service.moveAI(row, col, game, Pieces_TicTacToe.O);
         }
 
         return false;

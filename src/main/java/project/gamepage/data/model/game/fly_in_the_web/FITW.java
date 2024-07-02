@@ -119,4 +119,23 @@ public class FITW {
     public void setSpiderStepsDone(int spiderStepsDone) {
         this.spiderStepsDone = spiderStepsDone;
     }
+
+    public Field_FITW[] cloneBoard() {
+        Field_FITW[] clonedBoard = new CreateBoard_FITW().giveField();
+
+        for (int i = 0; i < clonedBoard.length; i++) {
+            clonedBoard[i].setPiece(Pieces_FITW.EMPTY);
+        }
+
+        for (int i = 0; i < clonedBoard.length; i++) {
+            if (field[i].getPiece().equals(Pieces_FITW.FLY)) {
+                clonedBoard[i].setPiece(Pieces_FITW.FLY);
+            }
+            if (field[i].getPiece().equals(Pieces_FITW.SPIDER)) {
+                clonedBoard[i].setPiece(Pieces_FITW.SPIDER);
+            }
+        }
+
+        return clonedBoard;
+    }
 }

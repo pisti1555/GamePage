@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
+import project.gamepage.data.model.game.ai.tic_tac_toe.AI_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.Pieces_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.invitations.GameInvitation;
@@ -101,47 +102,26 @@ public class GameService_TicTacToe {
             game.setXTurn(!game.isXTurn());
             return isSomebodyWon(game);
         }
+
         return false;
     }
 
-    public boolean movePvC(int row, int col, TicTacToe game, Pieces_TicTacToe piece) {
+    public boolean moveAI(int row, int col, TicTacToe game, Pieces_TicTacToe piece) {
         if (isMoveValid(row, col, piece, game)) {
             game.getBoard()[row][col] = piece;
             if (isSomebodyWon(game)) return isSomebodyWon(game);
             game.setXTurn(!game.isXTurn());
+            AI_TicTacToe ai = new AI_TicTacToe(game.cloneBoard(), piece);
+            int aiRow = ai.getBestMove()[0];
+            int aiCol = ai.getBestMove()[1];
+
             if (piece.equals(Pieces_TicTacToe.X)) {
-                randomMoveO(game);
+                move(aiRow, aiCol, game, Pieces_TicTacToe.O);
             } else {
-                randomMoveX(game);
+                move(aiRow, aiCol, game, Pieces_TicTacToe.X);
             }
         }
         return false;
-    }
-
-    public void randomMoveX(TicTacToe game) {
-        List<int[]> available = getFreeFields(game);
-        int[] field = available.get(random.nextInt(available.size()));
-
-        int row = field[0];
-        int col = field[1];
-
-        if (isMoveValid(row, col, Pieces_TicTacToe.X, game)) {
-            move(row, col, game, Pieces_TicTacToe.X);
-        } else randomMoveX(game);
-    }
-
-    public void randomMoveO(TicTacToe game) {
-        System.out.println("randomMoveO");
-
-        List<int[]> available = getFreeFields(game);
-        int[] field = available.get(random.nextInt(available.size()));
-
-        int row = field[0];
-        int col = field[1];
-
-        if (isMoveValid(row, col, Pieces_TicTacToe.O, game)) {
-            move(row, col, game, Pieces_TicTacToe.O);
-        } else randomMoveO(game);
     }
 
     private List<int[]> getFreeFields(TicTacToe game) {
@@ -174,6 +154,7 @@ public class GameService_TicTacToe {
     }
 
     private boolean isMoveValid(int row, int col, Pieces_TicTacToe piece, TicTacToe game) {
+        if (isSomebodyWon(game)) return false;
         if (game.getBoard()[row][col] == Pieces_TicTacToe.EMPTY) {
             if (piece.equals(Pieces_TicTacToe.X) && game.isXTurn()) {
                 return true;

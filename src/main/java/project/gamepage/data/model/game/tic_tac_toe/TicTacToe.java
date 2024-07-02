@@ -21,6 +21,16 @@ public class TicTacToe {
         this.winnerPiece = Pieces_TicTacToe.EMPTY;
     }
 
+    public Pieces_TicTacToe[][] cloneBoard() {
+        Pieces_TicTacToe[][] clonedBoard = new Pieces_TicTacToe[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                clonedBoard[i][j] = board[i][j];
+            }
+        }
+        return clonedBoard;
+    }
+
     public Pieces_TicTacToe[][] getBoard() {
         return board;
     }

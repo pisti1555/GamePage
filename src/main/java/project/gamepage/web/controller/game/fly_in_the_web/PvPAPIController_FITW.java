@@ -38,31 +38,31 @@ public class PvPAPIController_FITW {
         return service.whoWon(boardFITW);
     }
 
-    @GetMapping("/getPositions")
+    @GetMapping("/get-positions")
     public int[] sendPositionsToClient(Principal principal) {
         FITW boardFITW = findBoardPvP(principal.getName());
         return service.getPositions(boardFITW);
     }
 
-    @GetMapping("/getConnections")
+    @GetMapping("/get-connections")
     public HashMap<Integer, ArrayList<Integer>> getConnections(Principal principal) {
         FITW boardFITW = findBoardPvP(principal.getName());
         return service.getConnections(boardFITW);
     }
 
-    @GetMapping("/getGameMode")
+    @GetMapping("/get-game-mode")
     public short getGameMode(Principal principal) {
         FITW boardFITW = findBoardPvP(principal.getName());
         return service.getGameMode(boardFITW);
     }
 
-    @GetMapping("/isFlysTurn")
+    @GetMapping("/is-flys-turn")
     public boolean isFlysTurn(Principal principal) {
         FITW boardFITW = findBoardPvP(principal.getName());
         return service.isFlysTurn(boardFITW);
     }
 
-    @PostMapping("/newGame")
+    @PostMapping("/new-game")
     public void newGame(@RequestParam("mode") String mode, Principal principal) {
         service.newGamePvP(principal.getName());
     }
@@ -80,13 +80,13 @@ public class PvPAPIController_FITW {
         return !pvp.getBoard().isGameRunning();
     }
 
-    @GetMapping("/getFlyStepsDone")
+    @GetMapping("/get-fly-steps-done")
     public int getStepsDone(Principal principal) {
         FITW boardFITW = findBoardPvP(principal.getName());
         return service.getFlyStepsDone(boardFITW);
     }
 
-    @GetMapping("/getSpiderStepsDone")
+    @GetMapping("/get-spider-steps-done")
     public int getSpiderStepsDone(Principal principal) {
         FITW boardFITW = findBoardPvP(principal.getName());
         return service.getSpiderStepsDone(boardFITW);

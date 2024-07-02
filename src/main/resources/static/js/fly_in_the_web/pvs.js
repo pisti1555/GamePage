@@ -7,7 +7,7 @@ var connectionMap;
 
 
 function newGame() {
-  fetch("/fly-in-the-web/api/game/pvc/newGame", {
+  fetch("/fly-in-the-web/api/game/pvc/new-game", {
      method: "POST",
      credentials: 'include',
         headers: {
@@ -22,7 +22,7 @@ function newGame() {
 //-------------- Load board data --------------
 
 function getBoardDataFromServer() {
-    fetch("/fly-in-the-web/api/game/pvc/getPositions", {
+    fetch("/fly-in-the-web/api/game/pvc/get-positions", {
        method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -36,7 +36,7 @@ function getBoardDataFromServer() {
 }
 
 function fetchConnections() {
-    fetch('/fly-in-the-web/api/game/pvc/getConnections')
+    fetch('/fly-in-the-web/api/game/pvc/get-connections')
         .then(response => response.json())
         .then(data => {
             connectionMap = data;
