@@ -40,18 +40,14 @@ public class GameController_FITW {
     public String pvp_FITW(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("username", username);
-        PvP<FITW> pvP = service.getPvP(username);
-        if (pvP.getUser2() != null) {
-            if (pvP.isReadyToStart()) {
-                pvP.setUser1InGame(true);
-                pvP.setUser2InGame(true);
-                pvP.setDbUpdated(false);
-            }
+        PvP<FITW> pvp = service.getPvP(username);
+        if (pvp.isUser1InGame() && pvp.isUser2InGame()) return "game/tic_tac_toe/game_page_pvp";
+        if (pvp.getUser2() == null || !pvp.isReadyToStart())  return "redirect:/fly-in-the-web/lobby?error=noGameFound";
+        pvp.setUser1InGame(true);
+        pvp.setUser2InGame(true);
+        pvp.setOver(false);
 
-            return "game/fly_in_the_web/spiderweb_pvp";
-        }
-
-        return "redirect:/fly-in-the-web/lobby?error=noGameFound";
+        return "game/fly_in_the_web/spiderweb_pvp";
     }
 
     @GetMapping("/pvs")
@@ -70,15 +66,13 @@ public class GameController_FITW {
 
     @GetMapping("/return-to-lobby")
     public String returnToLobby_FITW(Principal principal) {
-        PvP<FITW> pvP = service.getPvP(principal.getName());
-        if (principal.getName().equals(pvP.getUser1())) {
-            pvP.setUser1InGame(false);
-            template.convertAndSendToUser(pvP.getUser2(), "/topic/game/update", "return");
-            template.convertAndSendToUser(pvP.getUser2(), "/topic/lobby/update", "return");
+        PvP<FITW> pvp = service.getPvP(principal.getName());
+        if (principal.getName().equals(pvp.getUser1())) {
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/game/update", "return");
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "return");
         } else {
-            pvP.setUser2InGame(false);
-            template.convertAndSendToUser(pvP.getUser1(), "/topic/game/update", "return");
-            template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "return");
+            template.convertAndSendToUser(pvp.getUser1(), "/topic/game/update", "return");
+            template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "return");
         }
 
         return "redirect:/fly-in-the-web/lobby";

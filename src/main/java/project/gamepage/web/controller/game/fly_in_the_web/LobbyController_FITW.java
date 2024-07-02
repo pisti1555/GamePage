@@ -34,6 +34,19 @@ public class LobbyController_FITW {
     public String getLobby_FITW(Model model, Principal principal) {
         String username = principal.getName();
         PvP<FITW> pvp = service.getPvP(username);
+
+
+        if (pvp.getUser1().equals(username) && pvp.isOver()) {
+            pvp.setUser1InGame(false);
+        }
+        if (pvp.getUser2() != null && pvp.isOver()) {
+            if (pvp.getUser2().equals(username)) {
+                pvp.setUser2InGame(false);
+            }
+        }
+
+
+
         model.addAttribute("username", username);
         model.addAttribute("user1InGame", pvp.isUser1InGame());
         model.addAttribute("user2InGame", pvp.isUser2InGame());

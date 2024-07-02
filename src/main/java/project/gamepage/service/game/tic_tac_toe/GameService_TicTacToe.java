@@ -102,7 +102,6 @@ public class GameService_TicTacToe {
             game.setXTurn(!game.isXTurn());
             return isSomebodyWon(game);
         }
-
         return false;
     }
 

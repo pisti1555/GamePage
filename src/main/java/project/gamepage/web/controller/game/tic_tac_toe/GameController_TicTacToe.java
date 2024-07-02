@@ -32,7 +32,14 @@ public class GameController_TicTacToe {
 
     @GetMapping("/pvp")
     public String getGamePagePvP(Principal principal, Model model) {
-        model.addAttribute("username", principal.getName());
+        String username = principal.getName();
+        model.addAttribute("username", username);
+
+        PvP<TicTacToe> pvp = service.getPvP(username);
+        if (pvp.isUser1InGame() && pvp.isUser2InGame()) return "game/tic_tac_toe/game_page_pvp";
+        if (pvp.getUser2() == null || !pvp.isReadyToStart()) return "redirect:/tic-tac-toe/pvp";
+        pvp.setUser1InGame(true);
+        pvp.setUser2InGame(true);
         return "game/tic_tac_toe/game_page_pvp";
     }
 
@@ -40,11 +47,9 @@ public class GameController_TicTacToe {
     public String returnToLobby_TicTacToe(Principal principal) {
         PvP<TicTacToe> pvp = service.getPvP(principal.getName());
         if (principal.getName().equals(pvp.getUser1())) {
-            pvp.setUser1InGame(false);
             template.convertAndSendToUser(pvp.getUser2(), "/topic/game/update", "return");
             template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "return");
         } else {
-            pvp.setUser2InGame(false);
             template.convertAndSendToUser(pvp.getUser1(), "/topic/game/update", "return");
             template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "return");
         }

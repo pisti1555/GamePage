@@ -38,33 +38,33 @@
 
 </head>
 <body>
-<nav th:replace="navbar :: navbar"></nav>
+    <nav th:replace="navbar :: navbar"></nav>
 
-<div class="board-container" id="board-container">
-    <h2 id="playersTurnText"></h2>
-    <div class="gameboard" id="gameboard">
-        <div class="field" id="0-0"></div>
-        <div class="field" id="0-1"></div>
-        <div class="field" id="0-2"></div>
-        <div class="field" id="1-0"></div>
-        <div class="field" id="1-1"></div>
-        <div class="field" id="1-2"></div>
-        <div class="field" id="2-0"></div>
-        <div class="field" id="2-1"></div>
-        <div class="field" id="2-2"></div>
+    <div class="board-container" id="board-container">
+        <h2 id="playersTurnText"></h2>
+        <div class="gameboard" id="gameboard">
+            <div class="field" id="0-0"></div>
+            <div class="field" id="0-1"></div>
+            <div class="field" id="0-2"></div>
+            <div class="field" id="1-0"></div>
+            <div class="field" id="1-1"></div>
+            <div class="field" id="1-2"></div>
+            <div class="field" id="2-0"></div>
+            <div class="field" id="2-1"></div>
+            <div class="field" id="2-2"></div>
+        </div>
     </div>
-</div>
 
-<div class="game_over hidden" id="game-over-screen">
-    <h1 class="text" id="whoWonText"></h1>
-    <div class="button_container">
-        <form th:action="@{/tic-tac-toe/game/return-to-lobby}">
-            <button class="button" type="submit">return to Lobby</button>
-        </form>
+    <div class="game_over hidden" id="game-over-screen">
+        <h1 class="text" id="whoWonText"></h1>
+        <div class="button_container">
+            <form th:action="@{/tic-tac-toe/game/return-to-lobby}">
+                <button class="button" type="submit">return to Lobby</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<script th:src="@{/js/tic_tac_toe/pvp.js}"></script>
+    <script th:src="@{/js/tic_tac_toe/pvp.js}"></script>
 
 </body>
 </html>

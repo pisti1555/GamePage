@@ -8,7 +8,7 @@ public class PvP <Game> {
     String user2;
     boolean user1InGame;
     boolean user2InGame;
-    boolean dbUpdated;
+    boolean isOver;
     @JsonIgnore
     Game board;
 
@@ -18,7 +18,7 @@ public class PvP <Game> {
         this.user2 = user2;
         this.user1InGame = false;
         this.user2InGame = false;
-        this.dbUpdated = false;
+        this.isOver = false;
         this.board = board;
     }
 
@@ -83,11 +83,11 @@ public class PvP <Game> {
         this.user2InGame = user2InGame;
     }
 
-    public boolean isDbUpdated() {
-        return dbUpdated;
+    public boolean isOver() {
+        return isOver;
     }
 
-    public void setDbUpdated(boolean dbUpdated) {
-        this.dbUpdated = dbUpdated;
+    public void setOver(boolean isOver) {
+        this.isOver = isOver;
     }
 }

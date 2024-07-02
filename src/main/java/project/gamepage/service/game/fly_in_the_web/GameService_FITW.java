@@ -1,9 +1,6 @@
 package project.gamepage.service.game.fly_in_the_web;
 
-import project.gamepage.data.model.game.ai.fly_in_the_web.AI_FITW;
-import project.gamepage.data.model.game.ai.fly_in_the_web.AiFITW;
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
-import project.gamepage.data.model.game.fly_in_the_web.Field_FITW;
 import project.gamepage.data.model.user.User;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
@@ -38,9 +35,9 @@ public class GameService_FITW {
     }
 
     public PvP<FITW> getPvP(String username) {
-        for (PvP<FITW> pvP : pvpList) {
-            if (pvP.getUser1().equals(username) || (pvP.getUser2() != null && pvP.getUser2().equals(username))) {
-                return pvP;
+        for (PvP<FITW> pvp : pvpList) {
+            if (pvp.getUser1().equals(username) || (pvp.getUser2() != null && pvp.getUser2().equals(username))) {
+                return pvp;
             }
         }
 
@@ -349,7 +346,7 @@ public class GameService_FITW {
     }
 
     public int gameOver(PvP<FITW> pvp) {
-        if (pvp.isDbUpdated()) return whoWon(pvp.getBoard());
+        if (pvp.isOver()) return whoWon(pvp.getBoard());
 
         User user1 = userService.findByUsername(pvp.getUser1());
         User user2 = userService.findByUsername(pvp.getUser2());
@@ -372,7 +369,7 @@ public class GameService_FITW {
 
         userService.update(user1);
         userService.update(user2);
-        pvp.setDbUpdated(true);
+        pvp.setOver(true);
 
         return whoWon(pvp.getBoard());
     }

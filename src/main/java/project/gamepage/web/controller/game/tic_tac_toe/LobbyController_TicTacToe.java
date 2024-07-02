@@ -43,8 +43,18 @@ public class LobbyController_TicTacToe {
 
     @GetMapping("/pvp")
     public String getLobby_TicTacToe(Principal principal, Model model) {
-        model.addAttribute("username", principal.getName());
+        String username = principal.getName();
+        model.addAttribute("username", username);
         PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        if (pvp.getUser1().equals(username) && pvp.isOver()) {
+            pvp.setUser1InGame(false);
+        }
+        if (pvp.getUser2() != null && pvp.isOver()) {
+            if (pvp.getUser2().equals(username)) {
+                pvp.setUser2InGame(false);
+            }
+        }
+
         model.addAttribute("user1InGame", pvp.isUser1InGame());
         model.addAttribute("user2InGame", pvp.isUser2InGame());
         model.addAttribute("isReady", pvp.isReadyToStart());
