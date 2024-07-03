@@ -82,7 +82,7 @@ public class LobbyController_FITW {
 
     @PostMapping("/decline-lobby-invitation")
     public String declineLobbyInvitation_FITW(HttpServletRequest http, Principal principal, @RequestParam("inviter") String inviter) {
-        invitationService.declineInvite(principal.getName(), inviter, "FITW");
+        invitationService.removeInvitation(principal.getName(), inviter, "FITW");
         return "redirect:" + http.getHeader("Referer");
     }
 

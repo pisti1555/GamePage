@@ -71,6 +71,7 @@ public class GameService_TicTacToe {
                 pvpList.removeIf(i -> i.getUser1().equals(invited));
                 pvp.setUser2(invited);
 
+                /*
                 for (Map.Entry<String, GameInvitation> entry : invitationService.invites.entrySet()) {
                     String invitedUser = entry.getKey();
                     String inviterUser = entry.getValue().getInviter();
@@ -79,6 +80,10 @@ public class GameService_TicTacToe {
                         invitationService.invites.remove(invitedUser);
                     }
                 }
+
+                 */
+
+                invitationService.removeInvitation(invited, inviter, game);
 
                 return pvp;
             }

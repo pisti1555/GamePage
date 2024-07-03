@@ -102,7 +102,7 @@ public class LobbyController_TicTacToe {
 
     @PostMapping("/decline-lobby-invitation")
     public String declineLobbyInvitation_TicTacToe(HttpServletRequest http, Principal principal, @RequestParam("inviter") String inviter) {
-        invitationService.declineInvite(principal.getName(), inviter, "TicTacToe");
+        invitationService.removeInvitation(principal.getName(), inviter, "TicTacToe");
         return "redirect:" + http.getHeader("Referer");
     }
 

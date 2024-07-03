@@ -8,7 +8,6 @@ import project.gamepage.data.model.game.fly_in_the_web.Piece_FITW;
 import project.gamepage.data.model.game.fly_in_the_web.Pieces_FITW;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import project.gamepage.service.invitations.GameInvitation;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserService;
 
@@ -72,7 +71,8 @@ public class GameService_FITW {
                 pvpList.removeIf(i -> i.getUser1().equals(invited));
                 pvP.setUser2(invited);
 
-                for (Map.Entry<String, GameInvitation> entry : invitationService.invites.entrySet()) {
+                /*
+                for (Map.Entry<String, List<GameInvitation>> entry : invitationService.invites.entrySet()) {
                     String invitedUser = entry.getKey();
                     String inviterUser = entry.getValue().getInviter();
                     String gameName = entry.getValue().getGame();
@@ -80,6 +80,10 @@ public class GameService_FITW {
                         invitationService.invites.remove(invitedUser);
                     }
                 }
+
+                 */
+
+                invitationService.removeInvitation(invited, inviter, game);
 
                 return pvP;
             }
