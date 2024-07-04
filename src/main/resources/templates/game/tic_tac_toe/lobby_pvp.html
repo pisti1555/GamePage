@@ -64,7 +64,7 @@
             <h1 id="player2" th:text="${player2}"></h1>
         </a>
 
-        <a th:if="${player2 == null}" class="player_container null" id="player2" onclick="showInvite()">
+        <a th:if="${player2 == null}" class="player_container null" id="player2" onclick="openPopUp('friendlist')">
             <img th:src="@{/img/player/player_invite.svg}" alt="Invite a friend">
             <h1 id="player2">Invite a friend</h1>
         </a>
@@ -80,12 +80,12 @@
                     <button class="button" type="submit">Invite</button>
                 </form>
             </li>
-            <button class="button" onclick="closePopUp('friendlist'); openPopUp('lobby');">Close</button>
+            <button class="button" onclick="closePopUp('friendlist');">Close</button>
         </ul>
     
         <div th:if="${friends == null || friends.isEmpty()}">
             <span>You do not have any friends</span>
-            <button class="button" onclick="closePopUp('friendlist'); openPopUp('lobby');">Close</button>
+            <button class="button" onclick="closePopUp('friendlist');">Close</button>
         </div>
         
     </div>
@@ -101,27 +101,14 @@
         <h2>Waiting for <span th:text="${player1}"></span> to start the game</h2>
     </div>
 
-    <div class="button_container">
-        <form th:if="${isReady}" th:action="@{/tic-tac-toe/leave}" method="post">
-            <button class="start_leave_button" type="submit">Leave Lobby</button>
-        </form>
-        <form th:if="${isReady and player1 == username}" th:action="@{/tic-tac-toe/pvp/start}" method="post">
-            <button class="start_leave_button" type="submit">Start Game</button>
-        </form>
+    <div class="button-container">
+        <a th:href="@{/tic-tac-toe/leave}" class="start-leave-button">Leave Lobby</a>
+        <a th:if="${isReady and player1 == username}" th:href="@{/tic-tac-toe/pvp/start}" class="start-leave-button">Start Game</a>
     </div>
     
 
     <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/tic_tac_toe/lobby.js}"></script>
-    
-    <script>
-        function showInvite() {
-            openPopUp('friendlist'); 
-            closePopUp('lobby');
-        }
-    </script>
 
-    
-   
 </body>
 </html>

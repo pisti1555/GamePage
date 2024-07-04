@@ -6,7 +6,7 @@
     z-index: 100;
     display: flex;
     width: 100%;
-    height: fit-content;
+    height: 60px;
     background: transparent;
     backdrop-filter: blur(10px);
     justify-content: space-between;
@@ -17,6 +17,7 @@
 }
 
 .nav-left {
+    border-radius: 20px;
     padding-left: 10px;
     padding-right: 10px;
     display: flex;
@@ -51,6 +52,7 @@
 }
 
 .nav-right .profile {
+    border-radius: 20px;
     margin-left: 15px;
     padding-right: 10px;
     padding-left: 10px;
@@ -130,7 +132,7 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.nav-right .dropdown .dropdown-content .button {
+.nav-right .dropdown .dropdown-content .nav-button {
     position: relative;
     display: inline-block;
     font-family: Arial, Helvetica, sans-serif;
@@ -151,7 +153,7 @@
 }
 
 .nav-right .dropdown .dropdown-content ul li .row {
-    display: flex;
+    display: inline-flex;
     background: #000329ef;
     padding: 10px;
     border: 0px;
@@ -159,7 +161,8 @@
     margin-bottom: 10px;
 }
 
-.nav-right .dropdown .dropdown-content ul li .row .invMessage {
+.nav-right .dropdown .dropdown-content ul li .row .invMessage,
+.nav-right .dropdown .dropdown-content ul li .row .requestMessage {
     white-space: nowrap;
     flex-shrink: 0;
     font-family: Arial, Helvetica, sans-serif
@@ -186,7 +189,7 @@
     display: block;
 }
 
-.nav-right .dropdown .dropdown-content .button:hover {
+.nav-right .dropdown .dropdown-content .nav-button:hover {
     background: #008cff;
     box-shadow: 0 0 2px #008cff, 0 0 10px #008cff, 0 0 20px #008cff, 0 0 50px #008cff;
     border-color: #008cff;

@@ -1,6 +1,6 @@
 body {
     background-color:#070053;
-    background-size: cover;
+    background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
 
@@ -12,12 +12,32 @@ body {
     height: fit-content;
 
     font-family: Franklin Gothic;
-    color: #ffffff80;
+    color: #ffffffaa;
 }
 
-a {
-    font-family: Franklin Gothic;
-    color: #ffffff80;
+.back-button {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    margin: 20px;
+    padding: 10px;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid #ffffffd6;
+    border-radius: 10px;
+    color: #ffffffd6;
+    background: #00063e75;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s;
+}
+
+.back-button:hover {
+    background: #008cff;
+    border: 1px solid #008cff;
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    box-shadow: 0 0 5px #008cff, 0 0 10px #008cff, 0 0 20px #008cff,
+        0 0 50px #008cff;
 }
 
 
@@ -45,8 +65,9 @@ a {
     display: block;
     font-family: Franklin Gothic;
     font-weight: 400;
-    backdrop-filter: blur(10px);
-    background: transparent;
+    color: #ffffff80;
+    background: #001756dc;
+    backdrop-filter: brightness(50%) blur(10px);
     padding: 10px;
     margin: 10px;
     width: fit-content;
@@ -56,8 +77,7 @@ a {
     border-radius: 10px;
     text-shadow: none;
     cursor: pointer;
-    box-shadow: transparent;
-    border: 1px solid #ffffff80;
+    border: 1px solid #ffffffaa;
     transition: 0.3s ease;
     user-select: none;
 }
@@ -109,8 +129,8 @@ a {
 .gameOverContainer {
     position: absolute;
     z-index: 4;
-    left: 50%;
-    top: 50%;
+    left: 50vw;
+    top: 50vh;
     transform: translate(-50%, -50%);
     font-family: Franklin Gothic;
     font-weight: 400;

@@ -70,21 +70,7 @@ public class GameService_FITW {
             if (pvP.getUser1().equals(inviter)) {
                 pvpList.removeIf(i -> i.getUser1().equals(invited));
                 pvP.setUser2(invited);
-
-                /*
-                for (Map.Entry<String, List<GameInvitation>> entry : invitationService.invites.entrySet()) {
-                    String invitedUser = entry.getKey();
-                    String inviterUser = entry.getValue().getInviter();
-                    String gameName = entry.getValue().getGame();
-                    if (invited.equals(invitedUser)  && inviter.equals(inviterUser) && game.equals(gameName)) {
-                        invitationService.invites.remove(invitedUser);
-                    }
-                }
-
-                 */
-
                 invitationService.removeInvitation(invited, inviter, game);
-
                 return pvP;
             }
         }
@@ -93,8 +79,10 @@ public class GameService_FITW {
 
     public PvP<FITW> quitLobby(String name) {
         PvP<FITW> pvp = getPvP(name);
-        pvpList.remove(pvp);
-        return pvp;
+        if (pvp.getUser1() != null && pvp.getUser2() != null) {
+            pvpList.remove(pvp);
+        }
+        return getPvP(name);
     }
 
 

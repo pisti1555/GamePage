@@ -5,6 +5,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
@@ -36,11 +37,28 @@ public class GameController_TicTacToe {
         model.addAttribute("username", username);
 
         PvP<TicTacToe> pvp = service.getPvP(username);
+        System.out.println("game of " + username);
+        System.out.println("user2: " + pvp.getUser2() + "\nisUser2InGame" + pvp.isUser2InGame());
         if (pvp.isUser1InGame() && pvp.isUser2InGame()) return "game/tic_tac_toe/game_page_pvp";
         if (pvp.getUser2() == null || !pvp.isReadyToStart()) return "redirect:/tic-tac-toe/pvp";
         pvp.setUser1InGame(true);
         pvp.setUser2InGame(true);
         return "game/tic_tac_toe/game_page_pvp";
+    }
+
+    @GetMapping("/leave-game")
+    public String leaveGame(Principal principal) {
+        PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        if (!pvp.isInProgress()) return "redirect:/tic-tac-toe/pvp";
+        if (pvp.getUser1().equals(principal.getName())) {
+            service.quitLobby(principal.getName());
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/game/update", "return");
+        }
+        if (pvp.getUser2().equals(principal.getName())) {
+            service.quitLobby(principal.getName());
+            template.convertAndSendToUser(pvp.getUser1(), "/topic/game/update", "return");
+        }
+        return "redirect:/tic-tac-toe/pvp";
     }
 
     @GetMapping("/return-to-lobby")
@@ -56,5 +74,4 @@ public class GameController_TicTacToe {
 
         return "redirect:/tic-tac-toe/pvp";
     }
-
 }

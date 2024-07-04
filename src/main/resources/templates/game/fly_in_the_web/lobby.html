@@ -64,7 +64,7 @@
             <h1 id="player2" th:text="${player2}"></h1>
         </a>
 
-        <a th:if="${player2 == null}" class="player_container null" id="player2" onclick="showInvite()">
+        <a th:if="${player2 == null}" class="player_container null" id="player2" onclick="openPopUp('friendlist')">
             <img th:src="@{/img/player/player_invite.svg}" alt="Invite a friend">
             <h1 id="player2">Invite a friend</h1>
         </a>
@@ -97,30 +97,17 @@
         <h2><span th:text="${player2}"></span> is in-game</h2>
     </div>
 
-    <form th:if="${isReady and player1 == username}" th:action="@{/fly-in-the-web/lobby/start}" method="post">
-        <button class="startOrLeaveButton" type="submit">Start Game</button>
-    </form>
-
     <div th:if="${isReady and player2 == username}" class="notReady">
         <h2>Waiting for <span th:text="${player1}"></span> to start the game</h2>
     </div>
 
-    <form th:if="${isReady}" th:action="@{/fly-in-the-web/lobby/leave}" method="post">
-        <button class="startOrLeaveButton" type="submit">Leave Lobby</button>
-    </form>
-    
+    <div class="button-container">
+        <a th:href="@{/fly-in-the-web/lobby/leave}" class="start-leave-button">Leave Lobby</a>
+        <a th:if="${isReady and player1 == username}" th:href="@{/fly-in-the-web/lobby/start}" class="start-leave-button">Start Game</a>
+    </div>
 
     <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/fly_in_the_web/lobby.js}"></script>
-    
-    <script>
-        function showInvite() {
-            openPopUp('friendlist'); 
-            closePopUp('lobby');
-        }
-    </script>
-
-    
    
 </body>
 </html>

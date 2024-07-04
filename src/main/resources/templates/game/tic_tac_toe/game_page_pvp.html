@@ -39,6 +39,7 @@
 </head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
+    <a th:href="@{/tic-tac-toe/game/leave-game}" class="back-button">Return to Lobby</a>
 
     <div class="board-container" id="board-container">
         <h2 id="playersTurnText"></h2>

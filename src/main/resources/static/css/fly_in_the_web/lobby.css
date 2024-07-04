@@ -30,6 +30,7 @@ h1 {
 .lobby_container {
     position: relative;
 	margin: 10px;
+    margin-top: 80px;
     border: 1px solid aliceblue;
     border-radius: 30px;
     overflow: auto;
@@ -62,6 +63,7 @@ h1 {
     height: 80%;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s;
 }
 
 .notReady {
@@ -85,12 +87,12 @@ h1 {
     color: #ffffff;
 }
 
-.null {
+.player_container {
     cursor: pointer;
 }
 
-.null h1 {
-    #ffffff80;
+.player_container h1 {
+    color: #ffffff80;
 }
 
 .inGame h1 {
@@ -118,7 +120,7 @@ h1 {
 
 .row {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
 }
 
@@ -143,8 +145,17 @@ h1 {
     margin: 10px;
 }
 
-.startOrLeaveButton {
+.button-container {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-container .start-leave-button {
     position: relative;
+    display: inline-block;
     font-family: Franklin Gothic;
     backdrop-filter: blur(20px);
     background: transparent;
@@ -161,11 +172,8 @@ h1 {
     transition: 0.3s ease;
     user-select: none;
     color: #ffffff;
-    width: 50%;
     height: fit-content;
     font-size: 20px;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .button:hover,
@@ -178,7 +186,7 @@ h1 {
     0 0 100px #008cff;
 }
 
-.startOrLeaveButton:hover,
+.start-leave-button:hover,
 :focus {
   color: #ffffff;
   background: #008cff;

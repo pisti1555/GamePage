@@ -67,11 +67,11 @@ async function loadNavBar() {
                 <h3 class="requestMessage">${request} has sent a friend request</h3>
                 <form action="/friends/add" method="post">
                     <input type="hidden" name="invited" value="${request}" />
-                    <button class="button" type="submit">Accept</button>
+                    <button class="nav-button" type="submit">Accept</button>
                 </form>
                 <form action="/friends/decline-friend-request" method="post">
                     <input type="hidden" name="inviter" value="${request}" />
-                    <button class="button" type="submit">Decline</button>
+                    <button class="nav-button" type="submit">Decline</button>
                 </form>
             </div>
         `;
@@ -97,11 +97,11 @@ async function loadNavBar() {
                 <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
                 <form action="/fly-in-the-web/lobby/join" method="post">
                     <input type="hidden" name="inviter" value="${invite.inviter}" />
-                    <button class="button" type="submit">Join</button>
+                    <button class="nav-button" type="submit">Join</button>
                 </form>
                 <form action="/fly-in-the-web/lobby/decline-lobby-invitation" method="post">
                     <input type="hidden" name="inviter" value="${invite.inviter}" />
-                    <button class="button" type="submit">Decline</button>
+                    <button class="nav-button" type="submit">Decline</button>
                 </form>
             </div>
         `;
@@ -112,11 +112,11 @@ async function loadNavBar() {
                 <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
                 <form action="/tic-tac-toe/join" method="post">
                     <input type="hidden" name="inviter" value="${invite.inviter}" />
-                    <button class="button" type="submit">Join</button>
+                    <button class="nav-button" type="submit">Join</button>
                 </form>
                 <form action="/tic-tac-toe/decline-lobby-invitation" method="post">
                     <input type="hidden" name="inviter" value="${invite.inviter}" />
-                    <button class="button" type="submit">Decline</button>
+                    <button class="nav-button" type="submit">Decline</button>
                 </form>
             </div>
         `;

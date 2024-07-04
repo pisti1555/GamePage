@@ -22,10 +22,10 @@ public class GameAPIController_TicTacToe {
         this.template = template;
     }
 
-    @GetMapping("/is-game-over")
-    public void alertOpponent(Principal principal) {
-        TicTacToe game = service.getPvP(principal.getName()).getBoard();
-
+    @GetMapping("/is-game-in-progress")
+    public boolean isOver(Principal principal) {
+        PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        return pvp.isInProgress();
     }
 
     @PostMapping("/move")

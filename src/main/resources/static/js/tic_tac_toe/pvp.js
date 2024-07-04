@@ -56,6 +56,14 @@ function click(field) {
 }
 
 async function updateBoard() {
+    await fetch("/tic-tac-toe/api/game/is-game-in-progress")
+    .then(response => response.json())
+          .then(data => {
+              if (!data) {
+                const container = document.getElementById('board-container');
+                container.innerHTML = '<h2>Your opponent has left the game</h2>';
+              }
+           });
     await fetch("/tic-tac-toe/api/game/get-positions-pvp")
     .then(response => response.json())
           .then(data => {

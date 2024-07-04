@@ -26,12 +26,15 @@ public class PvP <Game> {
     }
 
     public boolean isReadyToStart() {
-        System.out.println("user1 ingame: " + user1InGame);
-        System.out.println("user2 ingame: " + user2InGame);
         return user1 != null && user2 != null && board != null && !user1InGame && !user2InGame;
     }
 
     public boolean isInProgress() {
+        System.out.println("user1: " + user1);
+        System.out.println("user2: " + user2);
+        System.out.println("board: " + board);
+        System.out.println("user1-ingame: " + user1InGame);
+        System.out.println("user2-ingame: " + user2InGame);
         return user1 != null && user2 != null && board != null && user1InGame && user2InGame;
     }
 

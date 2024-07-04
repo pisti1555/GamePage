@@ -13,6 +13,31 @@ body::-webkit-scrollbar {
 	display: none;
 }
 
+.back-button {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    margin: 20px;
+    padding: 10px;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid #ffffffd6;
+    border-radius: 10px;
+    color: #ffffffd6;
+    background: #00063e75;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s;
+}
+
+.back-button:hover {
+    background: #008cff;
+    border: 1px solid #008cff;
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    box-shadow: 0 0 5px #008cff, 0 0 10px #008cff, 0 0 20px #008cff,
+        0 0 50px #008cff;
+}
+
 a {
 	color: #ffffff80;
     font-family: Franklin Gothic;
@@ -135,23 +160,15 @@ h1 {
     margin: 10px;
 }
 
-.button_container {
+.button-container {
     display: flex;
     width: 80%;
     margin: 0 auto;
     align-items: center;
     justify-content: center;
-    
 }
 
-.button_container .form {
-    display: inline-block;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.start_leave_button {
+.button-container .start-leave-button {
     position: relative;
     display: inline-block;
     font-family: Franklin Gothic;
@@ -184,7 +201,7 @@ h1 {
     0 0 100px #008cff;
 }
 
-.start_leave_button:hover,
+.start-leave-button:hover,
 :focus {
   color: #ffffff;
   background: #008cff;

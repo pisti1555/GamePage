@@ -1,5 +1,6 @@
 package project.gamepage.web.controller.game.fly_in_the_web;
 
+import org.springframework.web.bind.annotation.PostMapping;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.service.game.fly_in_the_web.GameService_FITW;
@@ -41,7 +42,7 @@ public class GameController_FITW {
         String username = principal.getName();
         model.addAttribute("username", username);
         PvP<FITW> pvp = service.getPvP(username);
-        if (pvp.isUser1InGame() && pvp.isUser2InGame()) return "game/tic_tac_toe/game_page_pvp";
+        if (pvp.isUser1InGame() && pvp.isUser2InGame()) return "game/fly_in_the_web/spiderweb_pvp";
         if (pvp.getUser2() == null || !pvp.isReadyToStart())  return "redirect:/fly-in-the-web/lobby?error=noGameFound";
         pvp.setUser1InGame(true);
         pvp.setUser2InGame(true);
@@ -62,6 +63,21 @@ public class GameController_FITW {
         model.addAttribute("username", principal.getName());
         service.newGamePvC("pvf", principal.getName());
         return "game/fly_in_the_web/spiderweb_pvf";
+    }
+
+    @GetMapping("/leave-game")
+    public String leaveGame(Principal principal) {
+        PvP<FITW> pvp = service.getPvP(principal.getName());
+        if (!pvp.isInProgress()) return "redirect:/fly-in-the-web/lobby";
+        if (pvp.getUser1().equals(principal.getName())) {
+            service.quitLobby(principal.getName());
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/game/update", "return");
+        }
+        if (pvp.getUser2().equals(principal.getName())) {
+            service.quitLobby(principal.getName());
+            template.convertAndSendToUser(pvp.getUser1(), "/topic/game/update", "return");
+        }
+        return "redirect:/fly-in-the-web/lobby";
     }
 
     @GetMapping("/return-to-lobby")

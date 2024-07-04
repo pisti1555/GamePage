@@ -73,7 +73,6 @@ public class LobbyController_FITW {
         PvP<FITW> pvp = service.joinLobby(inviter, principal.getName(), "FITW");
         if (pvp != null) {
             template.convertAndSendToUser(inviter, "/topic/lobby/update", "update");
-            template.convertAndSendToUser(principal.getName(), "/topic/lobby/update", "update");
             return "redirect:/fly-in-the-web/lobby";
         } else {
             return "redirect:/fly-in-the-web/lobby?error=joinFailed";
@@ -86,7 +85,7 @@ public class LobbyController_FITW {
         return "redirect:" + http.getHeader("Referer");
     }
 
-    @PostMapping("/start")
+    @GetMapping("/start")
     public String startGame_FITW(Model model, Principal principal) {
         String username = principal.getName();
         PvP<FITW> pvp = service.getPvP(username);
@@ -101,12 +100,18 @@ public class LobbyController_FITW {
         }
     }
 
-    @PostMapping("/leave")
+    @GetMapping("/leave")
     public String quit_FITW(Principal principal) {
-        PvP<FITW> pvP = service.quitLobby(principal.getName());
-        template.convertAndSendToUser(pvP.getUser1(), "/topic/lobby/update", "quit");
-        template.convertAndSendToUser(pvP.getUser2(), "/topic/lobby/update", "quit");
-        return "redirect:/fly-in-the-web/lobby";
+        PvP<FITW> pvp = service.getPvP(principal.getName());
+        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/fly-in-the-web/game";
+        service.quitLobby(principal.getName());
+        if (pvp.getUser2() != null && pvp.getUser1().equals(principal.getName())) {
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "quit");
+        }
+        if (pvp.getUser1() != null && pvp.getUser2().equals(principal.getName())) {
+            template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "quit");
+        }
+        return "redirect:/fly-in-the-web/game";
     }
 
 }

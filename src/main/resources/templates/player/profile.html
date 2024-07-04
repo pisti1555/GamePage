@@ -39,6 +39,7 @@
 </head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
+    <a th:href="@{/}" class="back-button">return Home</a>
     
     <div class="container">
         <h1 class="title" th:text="'Profile of ' + ${name}"></h1>
