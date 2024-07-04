@@ -4,17 +4,22 @@ body {
 }
 
 .gameboard {
-    top: 10%;
-    background: transparent;
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    border: 1px solid #ffffff80;
     position: relative;
     margin: auto;
+    background: transparent;
+    backdrop-filter: brightness(80%) blur(20px);
+    border-radius: 20px;
+    border: 1px solid #ffffff80;
     width: 700px;
     height: 700px;
     z-index: 1;
-    margin-top: -2%;
+}
+
+.gameboard h2 {
+    margin: 20px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
 #canvas {

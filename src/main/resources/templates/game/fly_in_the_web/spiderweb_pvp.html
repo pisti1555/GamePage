@@ -9,8 +9,8 @@
     <title>Play - Fly in the web</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
-    <link rel="stylesheet" th:href="@{/css/fly_in_the_web/gameBoard.css}"/>
     <link rel="stylesheet" th:href="@{/css/fly_in_the_web/gamePage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/fly_in_the_web/gameBoard.css}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -37,6 +37,7 @@
 
 </head>
 <body>
+    <a th:href="@{/fly-in-the-web/game/leave-game}" class="back-button">Return to Lobby</a>
 
     <div class="gameOverContainer closed" id="gameOverContainer">
         <h2 id="pieceWon"></h2>
@@ -45,10 +46,10 @@
         <a th:href="@{/fly-in-the-web/game/return-to-lobby}" class="button">Return to Lobby</a>
     </div>
 
-
     <div class="gameboard" id="gameboard">
         <canvas id="canvas" width="700" height="700"></canvas>
     </div>
+
 
     <script th:src="@{/js/fly_in_the_web/pvp.js}"></script>
     <script th:src="@{/js/popup.js}"></script>

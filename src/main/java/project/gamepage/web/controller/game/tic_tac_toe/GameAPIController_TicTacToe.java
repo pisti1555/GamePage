@@ -22,10 +22,10 @@ public class GameAPIController_TicTacToe {
         this.template = template;
     }
 
-    @GetMapping("/is-game-over")
-    public void alertOpponent(Principal principal) {
-        TicTacToe game = service.getPvP(principal.getName()).getBoard();
-
+    @GetMapping("/is-game-in-progress")
+    public boolean isOver(Principal principal) {
+        PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        return pvp.isInProgress();
     }
 
     @PostMapping("/move")
@@ -34,10 +34,12 @@ public class GameAPIController_TicTacToe {
         TicTacToe game = service.getPvP(principal.getName()).getBoard();
 
         if (pvp.getUser1().equals(principal.getName())) {
-            service.move(row, col, game, Pieces_TicTacToe.X);
+            boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.X);
+            if (isSomebodyWon) pvp.setOver(true);
         }
         if (pvp.getUser2().equals(principal.getName())) {
-            service.move(row, col, game, Pieces_TicTacToe.O);
+            boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.O);
+            if (isSomebodyWon) pvp.setOver(true);
         }
 
         template.convertAndSendToUser(pvp.getUser1(), "/topic/game/update", "update");

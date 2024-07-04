@@ -29,6 +29,7 @@
 
 <body>
     <nav th:replace="navbar :: navbar"></nav>
+    <a th:href="@{/}" class="back-button">return Home</a>
 
     <div th:if="${success}" class="container">
         <h2 class="title">Friend list</h2>

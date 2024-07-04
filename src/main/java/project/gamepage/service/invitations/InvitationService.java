@@ -9,41 +9,37 @@ import java.util.Map;
 
 @Service
 public class InvitationService {
-    public Map<String, GameInvitation> invites;
+    public Map<String, List<GameInvitation>> invites;
 
     public InvitationService() {
         this.invites = new HashMap<>();
     }
 
     public void inviteFriend(String inviter, String invited, String game) {
-        invites.put(invited, new GameInvitation(inviter, game));
+        List<GameInvitation> invitations = getInvites(invited);
+        invitations.add(new GameInvitation(inviter, game));
+        invites.put(invited, invitations);
     }
 
     public List<GameInvitation> getInvites(String username) {
-        List<GameInvitation> invitations = new ArrayList<>();
-
-        for (Map.Entry<String, GameInvitation> entry : invites.entrySet()) {
-            String invited = entry.getKey();
-            GameInvitation invitation = entry.getValue();
-            if (invited.equals(username)) {
-                invitations.add(invitation);
+        for (Map.Entry<String, List<GameInvitation>> entry : invites.entrySet()) {
+            if (entry.getKey().equals(username)) {
+                return entry.getValue();
             }
         }
-
-        return invitations;
+        return new ArrayList<>();
     }
 
     public int invCount(String username) {
         return getInvites(username).size();
     }
 
-    public void declineInvite(String username, String inver, String game) {
-        for (Map.Entry<String, GameInvitation> entry : invites.entrySet()) {
+    public void removeInvitation(String username, String inver, String game) {
+        for (Map.Entry<String, List<GameInvitation>> entry : invites.entrySet()) {
             String invited = entry.getKey();
-            String inviter = entry.getValue().getInviter();
-            String gameName = entry.getValue().getGame();
-            if (invited.equals(username) && inviter.equals(inver) && gameName.equals(game)) {
-                invites.remove(entry.getKey());
+            if (invited.equals(username)) {
+                List<GameInvitation> invitations = entry.getValue();
+                invitations.removeIf(invitation -> invitation.getInviter().equals(inver) && invitation.getGame().equals(game));
             }
         }
     }

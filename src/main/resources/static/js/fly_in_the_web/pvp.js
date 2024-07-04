@@ -30,7 +30,17 @@ var connectionMap;
 
 //-------------- Load board data --------------
 
-function fetchPositions() {
+async function fetchPositions() {
+    await fetch("/fly-in-the-web/api/game/pvp/is-game-in-progress")
+    .then(response => response.json())
+          .then(data => {
+              if (!data) {
+                const board = document.getElementById('gameboard');
+                board.style.width = 'fit-content';
+                board.style.height = 'fit-content';
+                board.innerHTML = '<h2>Your opponent has left the game</h2>';
+              }
+           });
     fetch('/fly-in-the-web/api/game/pvp/get-positions')
         .then(response => response.json())
             .then(data => {

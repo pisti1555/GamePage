@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.ai.tic_tac_toe.AI_TicTacToe;
+import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.Pieces_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.invitations.GameInvitation;
@@ -70,16 +71,7 @@ public class GameService_TicTacToe {
             if (pvp.getUser1().equals(inviter)) {
                 pvpList.removeIf(i -> i.getUser1().equals(invited));
                 pvp.setUser2(invited);
-
-                for (Map.Entry<String, GameInvitation> entry : invitationService.invites.entrySet()) {
-                    String invitedUser = entry.getKey();
-                    String inviterUser = entry.getValue().getInviter();
-                    String gameName = entry.getValue().getGame();
-                    if (invited.equals(invitedUser)  && inviter.equals(inviterUser) && game.equals(gameName)) {
-                        invitationService.invites.remove(invitedUser);
-                    }
-                }
-
+                invitationService.removeInvitation(invited, inviter, game);
                 return pvp;
             }
         }
@@ -88,8 +80,10 @@ public class GameService_TicTacToe {
 
     public PvP<TicTacToe> quitLobby(String name) {
         PvP<TicTacToe> pvp = getPvP(name);
-        pvpList.remove(pvp);
-        return pvp;
+        if (pvp.getUser1() != null && pvp.getUser2() != null) {
+            pvpList.remove(pvp);
+        }
+        return getPvP(name);
     }
 
 
@@ -102,7 +96,6 @@ public class GameService_TicTacToe {
             game.setXTurn(!game.isXTurn());
             return isSomebodyWon(game);
         }
-
         return false;
     }
 

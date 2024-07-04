@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
+import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
@@ -43,8 +44,18 @@ public class LobbyController_TicTacToe {
 
     @GetMapping("/pvp")
     public String getLobby_TicTacToe(Principal principal, Model model) {
-        model.addAttribute("username", principal.getName());
+        String username = principal.getName();
+        model.addAttribute("username", username);
         PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        if (pvp.getUser1().equals(username) && pvp.isOver()) {
+            pvp.setUser1InGame(false);
+        }
+        if (pvp.getUser2() != null && pvp.isOver()) {
+            if (pvp.getUser2().equals(username)) {
+                pvp.setUser2InGame(false);
+            }
+        }
+
         model.addAttribute("user1InGame", pvp.isUser1InGame());
         model.addAttribute("user2InGame", pvp.isUser2InGame());
         model.addAttribute("isReady", pvp.isReadyToStart());
@@ -57,7 +68,7 @@ public class LobbyController_TicTacToe {
         return "game/tic_tac_toe/lobby_pvp";
     }
 
-    @PostMapping("/pvp/start")
+    @GetMapping("/pvp/start")
     public String startGame_TicTacToe_PvP(Model model, Principal principal) {
         String username = principal.getName();
         PvP<TicTacToe> pvp = service.getPvP(username);
@@ -83,7 +94,6 @@ public class LobbyController_TicTacToe {
         PvP<TicTacToe> pvp = service.joinLobby(inviter, principal.getName(), "TicTacToe");
         if (pvp != null) {
             template.convertAndSendToUser(inviter, "/topic/lobby/update", "update");
-            template.convertAndSendToUser(principal.getName(), "/topic/lobby/update", "update");
             return "redirect:/tic-tac-toe/pvp";
         } else {
             return "redirect:/tic-tac-toe/pvp?error=joinFailed";
@@ -92,16 +102,22 @@ public class LobbyController_TicTacToe {
 
     @PostMapping("/decline-lobby-invitation")
     public String declineLobbyInvitation_TicTacToe(HttpServletRequest http, Principal principal, @RequestParam("inviter") String inviter) {
-        invitationService.declineInvite(principal.getName(), inviter, "TicTacToe");
+        invitationService.removeInvitation(principal.getName(), inviter, "TicTacToe");
         return "redirect:" + http.getHeader("Referer");
     }
 
-    @PostMapping("/leave")
+    @GetMapping("/leave")
     public String quit_TicTacToe(Principal principal) {
-        PvP<TicTacToe> pvp = service.quitLobby(principal.getName());
-        template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "quit");
-        template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "quit");
-        return "redirect:/tic-tac-toe/pvp";
+        PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/tic-tac-toe";
+        service.quitLobby(principal.getName());
+        if (pvp.getUser2() != null && pvp.getUser1().equals(principal.getName())) {
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "quit");
+        }
+        if (pvp.getUser1() != null && pvp.getUser2().equals(principal.getName())) {
+            template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "quit");
+        }
+        return "redirect:/tic-tac-toe";
     }
 
 
@@ -115,7 +131,7 @@ public class LobbyController_TicTacToe {
         return "game/tic_tac_toe/lobby_pvc";
     }
 
-    @PostMapping("/pvc/start")
+    @GetMapping("/pvc/start")
     public String startGame_TicTacToe_PvC(Model model, Principal principal) {
         String username = principal.getName();
         PvC<TicTacToe> pvc = service.getPvC(username);

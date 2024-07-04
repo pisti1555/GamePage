@@ -56,6 +56,14 @@ function click(field) {
 }
 
 async function updateBoard() {
+    await fetch("/tic-tac-toe/api/game/is-game-in-progress")
+    .then(response => response.json())
+          .then(data => {
+              if (!data) {
+                const container = document.getElementById('board-container');
+                container.innerHTML = '<h2>Your opponent has left the game</h2>';
+              }
+           });
     await fetch("/tic-tac-toe/api/game/get-positions-pvp")
     .then(response => response.json())
           .then(data => {
@@ -117,15 +125,15 @@ async function gameWon() {
         if (data == 1) {
             gameOverScreen.classList.remove('hidden');
             whoWonText.textContent = users[0] + " Won!"
-            boardContainer.classList.add('hidden');
+            //boardContainer.classList.add('hidden');
         } else if (data == 2) {
             gameOverScreen.classList.remove('hidden');
             whoWonText.textContent = users[1] + " Won!"
-            boardContainer.classList.add('hidden');
+            //boardContainer.classList.add('hidden');
         } else if(data == 3) {
             gameOverScreen.classList.remove('hidden');
             whoWonText.textContent = "Draw"
-            boardContainer.classList.add('hidden');
+            //boardContainer.classList.add('hidden');
         }
     });
 }
@@ -134,7 +142,7 @@ async function newGame() {
     fetch('/tic-tac-toe/api/game/new-game-pvp');
     await updateBoard();
     gameOverScreen.classList.add('hidden');
-    boardContainer.classList.remove('hidden');
+    //boardContainer.classList.remove('hidden');
     await updateBoard();
 }
 
