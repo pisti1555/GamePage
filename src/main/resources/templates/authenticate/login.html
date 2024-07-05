@@ -18,7 +18,6 @@
     <div class="container">
         <h1 class="title">Login page</h1>
         <form class="login-form" action="/login" method="post">
-
             <div class="alert error" th:if="${param.error}">Invalid username or password</div>
             <div class="alert logout" th:if="${param.logout}">You have been logged out</div>
 
@@ -36,7 +35,7 @@
         </form>
 
         <div class="registerBox">
-            <span>New user? <a href="/" th:href="@{/register}">Register here</a></span>
+            <span>or <a th:href="@{/register}">create an account</a></span>
         </div>
     </div>
 </body>

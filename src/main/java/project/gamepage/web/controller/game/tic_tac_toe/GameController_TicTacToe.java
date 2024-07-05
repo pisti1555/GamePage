@@ -5,10 +5,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import project.gamepage.data.model.game.PvP;
-import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
 

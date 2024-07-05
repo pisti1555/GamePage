@@ -18,23 +18,23 @@ body {
     transform: translate(-50%, -50%);
     border: 1px solid aliceblue;
     border-radius: 20px;
-    width: fit-content;
+    width: 40vw;
     height: fit-content;
-    margin: 20px;
+    margin: 10px;
     padding: 20px;
-    background: #001d5b7f;
-    backdrop-filter: blur(30px);
+    background: #020023cb;
+    backdrop-filter: blur(3px);
 }
 
 h1 {
     font-size: 20px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
     margin-bottom: 20px;
 }
 
 a {
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
     color: #ffffff;
     cursor: pointer;
 }
@@ -46,24 +46,33 @@ a:hover {
 .alert {
     font-size: 15px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
     border-radius: 10px;
     padding: 10px;
-    margin-bottom: 10px;
+}
+
+.main-alert-info {
+    background-color: #070086dc;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .alert-info {
-    background-color: #6495ed;
+    background-color: #070086dc;
 }
 
 .data {
-    margin-bottom: 10px;
+    margin-top: 25px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
 label {
     font-size: 15px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
     margin-right: 10px;
 }
 
@@ -72,7 +81,7 @@ label {
     border-radius: 20px;
     padding: 10px;
     background: aliceblue;
-    width: 200px;
+    width: 300px;
 }
 
 .loginBox {
@@ -81,8 +90,8 @@ label {
 
 .button {
     color: #ffffff;
-    backdrop-filter: blur(10px);
-    background: transparent;
+    backdrop-filter: blur(1px);
+    background: #070086dc;
     padding: 10px 20px;
     text-align: center;
     text-transform: uppercase;
@@ -110,5 +119,5 @@ label {
 .loginBox span {
     font-size: 15px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
 }

@@ -22,8 +22,8 @@ body {
     height: fit-content;
     margin: 20px;
     padding: 20px;
-    background: #001d5b7f;
-    backdrop-filter: blur(30px);
+    background: #020023cb;
+    backdrop-filter: blur(3px);
 }
 
 .container h1 {
@@ -33,20 +33,20 @@ body {
 .title {
     font-size: 20px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 .alert {
     font-size: 15px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
 }
 
 .error {
-    background-color: #ff6347;
+    background-color: #c70000;
 }
 
 .logout {
@@ -60,10 +60,12 @@ body {
 .data label {
     font-size: 15px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .input {
+    margin-top: 5px;
+    margin-bottom: 10px;
     background-color: #31005b54;
     border-radius: 20px;
     padding: 10px;
@@ -78,7 +80,7 @@ body {
 .registerBox {
     margin: 10px;
     color: #ffffff;
-    font-family: Franklin Gothic;
+    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
 }
 
@@ -94,8 +96,8 @@ body {
 .button {
     margin: 10px;
     color: #ffffff;
-    backdrop-filter: blur(10px);
-    background: transparent;
+    backdrop-filter: blur(1px);
+    background: #070086dc;
     padding: 10px 20px;
     text-align: center;
     text-transform: uppercase;

@@ -125,15 +125,12 @@ async function gameWon() {
         if (data == 1) {
             gameOverScreen.classList.remove('hidden');
             whoWonText.textContent = users[0] + " Won!"
-            //boardContainer.classList.add('hidden');
         } else if (data == 2) {
             gameOverScreen.classList.remove('hidden');
             whoWonText.textContent = users[1] + " Won!"
-            //boardContainer.classList.add('hidden');
         } else if(data == 3) {
             gameOverScreen.classList.remove('hidden');
             whoWonText.textContent = "Draw"
-            //boardContainer.classList.add('hidden');
         }
     });
 }
@@ -142,7 +139,6 @@ async function newGame() {
     fetch('/tic-tac-toe/api/game/new-game-pvp');
     await updateBoard();
     gameOverScreen.classList.add('hidden');
-    //boardContainer.classList.remove('hidden');
     await updateBoard();
 }
 
