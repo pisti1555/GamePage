@@ -24,6 +24,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-left: 1%;
 }
 
 .nav-left a {
@@ -48,7 +49,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-right: 5px;
+    margin-right: 1%;
 }
 
 .nav-right .profile {
@@ -78,6 +79,7 @@
 .nav-right .dropdown .inv-button {
     display: flex;
     margin-top: 5px;
+    margin-bottom: 5px;
     margin-left: 10px;
     width: 50px;
     height: 50px;

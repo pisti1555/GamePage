@@ -56,6 +56,14 @@
             <div th:if="${param.passwordInvalid}">
                 <div class="alert alert-info">Password must be at least 6 characters long and contain minimum 1 number and 1 letter</div>
             </div>
+
+            <div class="data">
+                <label for="confirmPassword">Confirm password:</label>
+                <input class="input" type="password" id="confirmPassword" th:name="confirmPassword" required>
+            </div>
+            <div th:if="${param.passwordConfirmationError}">
+                <div class="alert alert-info">Passwords don't match</div>
+            </div>
             
             <div class="data">
                 <label for="firstName">First Name:</label>

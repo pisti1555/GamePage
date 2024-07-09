@@ -1,5 +1,6 @@
 package project.gamepage.configuration;
 
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import project.gamepage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,9 +40,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((csrf) -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     auth
+                            .requestMatchers("/favicon.ico").permitAll()
                             .requestMatchers("/js/**", "/img/**", "/css/**").permitAll()
                             .requestMatchers(HttpMethod.POST).permitAll()
                             .requestMatchers("/register/**").permitAll()

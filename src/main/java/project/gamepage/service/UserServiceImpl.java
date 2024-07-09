@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
         boolean isEmailAvailable = false;
         boolean isUsernameValid = !dto.getUsername().contains(" ");
         boolean isPasswordValid = false;
+        boolean passwordsMatch = dto.getPassword().equals(dto.getConfirmPassword());
         boolean isEmailValid;
 
         if (userRepository.findByUsername(dto.getUsername()) == null) isUsernameAvailable = true;
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
         if (!isUsernameValid) builder.append("&usernameInvalid");
         if (!isEmailValid) builder.append("&emailInvalid");
         if (!isPasswordValid) builder.append("&passwordInvalid");
+        if (!passwordsMatch) builder.append("&passwordConfirmationError");
 
         if (builder.isEmpty()) {
             String password = passwordEncoder.encode(dto.getPassword());
