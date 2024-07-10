@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Lobby - Tic-Tac-Toe</title>
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/tic_tac_toe/lobby.css}"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <nav th:replace="navbar :: navbar"></nav>
+
+    <div class="container">
+        <section id="lobby" class="block">
+            <h2>Lobby</h2>
+            <div th:if="${lobby.user1 !=  null}" class="player-container">
+                <div class="info">
+                    <img th:src="@{/img/player/player_logo_small.svg}">
+                    <h3 th:text="${lobby.user1}"></h3>
+                </div>
+                <div class="is-ready">
+                    <p th:if="${!lobby.isUser1Ready}">Not ready</p>
+                    <p th:if="${lobby.isUser1Ready}">Ready</p>    
+                </div>
+            </div>
+            <div th:if="${lobby.user2 !=  null}" class="player-container">
+                <div class="info">
+                    <img th:src="@{/img/player/player_logo_small.svg}">
+                    <h3 th:text="${lobby.user2}"></h3>
+                </div>
+                <div class="is-ready">
+                    <p th:if="${!lobby.isUser2Ready}">Not ready</p>
+                    <p th:if="${lobby.isUser2Ready}">Ready</p>
+                </div>
+            </div>
+            <div th:if="${lobby.user2 ==  null}" class="player-container not-ingame">
+                <div class="info">
+                    <img th:src="@{/img/player/computer.svg}">
+                    <h3>Computer</h3>
+                </div>
+                <div class="is-ready">
+                    <p>Ready</p>
+                </div>
+            </div>
+        </section>
+    
+        <section id="friends" class="block">
+            <h2>Friends</h2>
+            <ul id="friend-list"></ul>
+        </section>
+    </div>
+
+    <div id="button-container" class="button-container">
+        <a th:href="@{/tic-tac-toe/leave}" class="main-button">Leave Lobby</a>
+
+        <a th:if="${lobby.user1 == username and lobby.user2 != null and !lobby.isUser1Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Ready</a>
+        <a th:if="${lobby.user1 == username and lobby.user2 != null and lobby.isUser1Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Unready</a>
+
+        <a th:if="${lobby.user2 == username and !lobby.isUser2Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Ready</a>
+        <a th:if="${lobby.user2 == username and lobby.isUser2Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Unready</a>
+
+        <a th:if="${lobby.user1 == username and lobby.user2 == null}" th:href="@{/tic-tac-toe/game/ai}" class="main-button">Play against AI</a>
+        <a th:if="${lobby.user1 == username and isReady}" th:href="@{/tic-tac-toe/start}" class="main-button">Start game</a>
+    </div>
+
+    <script th:src="@{/js/tic_tac_toe/lobby.js}"></script>
+
+</body>
+</html>

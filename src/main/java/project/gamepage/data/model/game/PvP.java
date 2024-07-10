@@ -8,6 +8,8 @@ public class PvP <Game> {
     String user2;
     boolean user1InGame;
     boolean user2InGame;
+    boolean isUser1Ready;
+    boolean isUser2Ready;
     boolean isOver;
     @JsonIgnore
     Game board;
@@ -18,6 +20,8 @@ public class PvP <Game> {
         this.user2 = user2;
         this.user1InGame = false;
         this.user2InGame = false;
+        this.isUser1Ready = false;
+        this.isUser2Ready = false;
         this.isOver = false;
         this.board = board;
     }
@@ -26,15 +30,10 @@ public class PvP <Game> {
     }
 
     public boolean isReadyToStart() {
-        return user1 != null && user2 != null && board != null && !user1InGame && !user2InGame;
+        return user1 != null && user2 != null && board != null && isUser1Ready && isUser2Ready && !user1InGame && !user2InGame;
     }
 
     public boolean isInProgress() {
-        System.out.println("user1: " + user1);
-        System.out.println("user2: " + user2);
-        System.out.println("board: " + board);
-        System.out.println("user1-ingame: " + user1InGame);
-        System.out.println("user2-ingame: " + user2InGame);
         return user1 != null && user2 != null && board != null && user1InGame && user2InGame;
     }
 
@@ -84,6 +83,22 @@ public class PvP <Game> {
 
     public void setUser2InGame(boolean user2InGame) {
         this.user2InGame = user2InGame;
+    }
+
+    public boolean isUser1Ready() {
+        return isUser1Ready;
+    }
+
+    public void setUser1Ready(boolean user1Ready) {
+        isUser1Ready = user1Ready;
+    }
+
+    public boolean isUser2Ready() {
+        return isUser2Ready;
+    }
+
+    public void setUser2Ready(boolean isUser2Ready) {
+        this.isUser2Ready = isUser2Ready;
     }
 
     public boolean isOver() {

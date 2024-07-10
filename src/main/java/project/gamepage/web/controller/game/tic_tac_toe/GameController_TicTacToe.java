@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
@@ -26,6 +27,8 @@ public class GameController_TicTacToe {
     @GetMapping("/ai")
     public String getGamePageAI(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
+        PvC<TicTacToe> pvc = service.getPvC(principal.getName());
+        pvc.setBoard(new TicTacToe());
         return "game/tic_tac_toe/game_page_ai";
     }
 
@@ -38,7 +41,7 @@ public class GameController_TicTacToe {
         System.out.println("game of " + username);
         System.out.println("user2: " + pvp.getUser2() + "\nisUser2InGame" + pvp.isUser2InGame());
         if (pvp.isUser1InGame() && pvp.isUser2InGame()) return "game/tic_tac_toe/game_page_pvp";
-        if (pvp.getUser2() == null || !pvp.isReadyToStart()) return "redirect:/tic-tac-toe/pvp";
+        if (pvp.getUser2() == null || !pvp.isReadyToStart()) return "redirect:/tic-tac-toe/lobby";
         pvp.setUser1InGame(true);
         pvp.setUser2InGame(true);
         return "game/tic_tac_toe/game_page_pvp";
@@ -47,7 +50,7 @@ public class GameController_TicTacToe {
     @GetMapping("/leave-game")
     public String leaveGame(Principal principal) {
         PvP<TicTacToe> pvp = service.getPvP(principal.getName());
-        if (!pvp.isInProgress()) return "redirect:/tic-tac-toe/pvp";
+        if (!pvp.isInProgress()) return "redirect:/tic-tac-toe/lobby";
         if (pvp.getUser1().equals(principal.getName())) {
             service.quitLobby(principal.getName());
             template.convertAndSendToUser(pvp.getUser2(), "/topic/game/update", "return");
@@ -56,7 +59,7 @@ public class GameController_TicTacToe {
             service.quitLobby(principal.getName());
             template.convertAndSendToUser(pvp.getUser1(), "/topic/game/update", "return");
         }
-        return "redirect:/tic-tac-toe/pvp";
+        return "redirect:/tic-tac-toe/lobby";
     }
 
     @GetMapping("/return-to-lobby")
@@ -70,6 +73,6 @@ public class GameController_TicTacToe {
             template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "return");
         }
 
-        return "redirect:/tic-tac-toe/pvp";
+        return "redirect:/tic-tac-toe/lobby";
     }
 }
