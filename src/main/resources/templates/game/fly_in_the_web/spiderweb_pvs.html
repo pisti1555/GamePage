@@ -39,7 +39,7 @@
 </head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
-    <a th:href="@{/fly-in-the-web/game}" class="back-button">Leave game</a>
+    <a th:href="@{/fly-in-the-web/lobby}" class="back-button">Leave game</a>
     
     <div class="gameboard" id="gameboard">
         <canvas id="canvas" width="700" height="700"></canvas>
@@ -47,7 +47,7 @@
 
     <div class="popup closed" id="gameOver">
         <h1 id="won"></h1>
-        <a class='button' th:href="@{/fly-in-the-web/game}">Quit game</a>
+        <a class='button' th:href="@{/fly-in-the-web/lobby}">Quit game</a>
     </div>
 
    <script th:src="@{/js/fly_in_the_web/pvs.js}"></script>

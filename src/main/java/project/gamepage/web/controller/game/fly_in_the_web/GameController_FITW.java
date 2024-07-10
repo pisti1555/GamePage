@@ -31,9 +31,8 @@ public class GameController_FITW {
     }
 
     @GetMapping
-    public String getGamePage_FITW(Principal principal, Model model) {
-        model.addAttribute("username", principal.getName());
-        return "game/fly_in_the_web/gameMenu";
+    public String redirectFromGame(Principal principal, Model model) {
+        return "redirect:/fly-in-the-web/lobby";
     }
 
     @GetMapping("/pvp")
@@ -45,8 +44,9 @@ public class GameController_FITW {
         if (pvp.getUser2() == null || !pvp.isReadyToStart())  return "redirect:/fly-in-the-web/lobby?error=noGameFound";
         pvp.setUser1InGame(true);
         pvp.setUser2InGame(true);
+        pvp.setUser1Ready(false);
+        pvp.setUser2Ready(false);
         pvp.setOver(false);
-
         return "game/fly_in_the_web/spiderweb_pvp";
     }
 

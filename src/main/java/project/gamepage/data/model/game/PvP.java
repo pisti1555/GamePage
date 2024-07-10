@@ -6,6 +6,8 @@ public class PvP <Game> {
     String id;
     String user1;
     String user2;
+    short primaryPiece; //FLY (FITW) or X (Tic-Tac-Toe) - means which player uses this piece
+    short secondaryPiece; //SPIDERS (FITW) or O (Tic-Tac-Toe) - means which player uses this piece
     boolean user1InGame;
     boolean user2InGame;
     boolean isUser1Ready;
@@ -18,6 +20,8 @@ public class PvP <Game> {
         this.id = user1;
         this.user1 = user1;
         this.user2 = user2;
+        this.primaryPiece = 1;
+        this.secondaryPiece = 2;
         this.user1InGame = false;
         this.user2InGame = false;
         this.isUser1Ready = false;
@@ -59,6 +63,22 @@ public class PvP <Game> {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public short getPrimaryPiece() {
+        return primaryPiece;
+    }
+
+    public void setPrimaryPiece(short primaryPiece) {
+        this.primaryPiece = primaryPiece;
+    }
+
+    public short getSecondaryPiece() {
+        return secondaryPiece;
+    }
+
+    public void setSecondaryPiece(short secondaryPiece) {
+        this.secondaryPiece = secondaryPiece;
     }
 
     public Game getBoard() {

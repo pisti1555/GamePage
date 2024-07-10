@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.ai.tic_tac_toe.AI_TicTacToe;
+import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.Pieces_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.invitations.InvitationService;
@@ -175,12 +176,14 @@ public class GameService_TicTacToe {
             return true;
         }
         if (
-                board[0][0].equals(O) && board[0][1].equals(O) && board[0][2].equals(O)
-                || board[0][0].equals(O) && board[1][0].equals(O) && board[2][0].equals(O)
-                || board[0][2].equals(O) && board[1][2].equals(O) && board[2][2].equals(O)
-                || board[2][0].equals(O) && board[2][1].equals(O) && board[2][2].equals(O)
-                || board[0][2].equals(O) && board[1][1].equals(O) && board[2][0].equals(O)
-                || board[0][0].equals(O) && board[1][1].equals(O) && board[2][2].equals(O)
+                board[0][0].equals(O) && board[0][1].equals(O) && board[0][2].equals(O) ||
+                board[1][0].equals(O) && board[1][1].equals(O) && board[1][2].equals(O) ||
+                board[2][0].equals(O) && board[2][1].equals(O) && board[2][2].equals(O) ||
+                board[0][0].equals(O) && board[1][0].equals(O) && board[2][0].equals(O) ||
+                board[0][1].equals(O) && board[1][1].equals(O) && board[2][1].equals(O) ||
+                board[0][2].equals(O) && board[1][2].equals(O) && board[2][2].equals(O) ||
+                board[0][0].equals(O) && board[1][1].equals(O) && board[2][2].equals(O) ||
+                board[0][2].equals(O) && board[1][1].equals(O) && board[2][0].equals(O)
         ) {
             game.setGameRunning(false);
             game.setWinnerPiece(O);
@@ -188,6 +191,29 @@ public class GameService_TicTacToe {
         }
 
         return false;
+    }
+
+    public boolean newGamePvC(String gameMode, String username) {
+        PvC<TicTacToe> pvc = getPvC(username);
+        switch (gameMode) {
+            case "x": {
+                pvc.setBoard(new TicTacToe());
+                pvc.getBoard().setGameMode(false);
+                pvc.getBoard().setGameRunning(true);
+                pvc.getBoard().setWinnerPiece(Pieces_TicTacToe.EMPTY);
+                pvc.getBoard().setXTurn(true);
+                return true;
+            }
+            case "o": {
+                pvc.setBoard(new TicTacToe());
+                pvc.getBoard().setGameMode(false);
+                pvc.getBoard().setGameRunning(true);
+                pvc.getBoard().setWinnerPiece(Pieces_TicTacToe.EMPTY);
+                pvc.getBoard().setXTurn(false);
+                return true;
+            }
+            default: return false;
+        }
     }
 
 

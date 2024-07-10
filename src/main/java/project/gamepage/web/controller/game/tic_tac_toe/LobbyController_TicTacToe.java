@@ -9,15 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
+import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
 import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/tic-tac-toe")
@@ -61,6 +60,21 @@ public class LobbyController_TicTacToe {
         return "game/tic_tac_toe/lobby";
     }
 
+    @GetMapping("/swap-piece")
+    public String swapPiece(Principal principal) {
+        PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        if (!pvp.getUser1().equals(principal.getName())) return "redirect:/tic-tac-toe/lobby?swap-denied";
+        if (pvp.isUser1Ready() || pvp.isUser2Ready()) return "redirect:/tic-tac-toe/lobby?swap-denied";
+
+        short temp = pvp.getPrimaryPiece();
+        pvp.setPrimaryPiece(pvp.getSecondaryPiece());
+        pvp.setSecondaryPiece(temp);
+        if (pvp.getUser2() != null) {
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "update");
+        }
+        return "redirect:/tic-tac-toe/lobby?swap-success";
+    }
+
     @GetMapping("/ready")
     public String ready(Principal principal) {
         PvP<TicTacToe> pvp = service.getPvP(principal.getName());
@@ -84,15 +98,10 @@ public class LobbyController_TicTacToe {
         PvP<TicTacToe> pvp = service.getPvP(username);
         if (pvp.isReadyToStart()) {
             pvp.setBoard(new TicTacToe());
-            pvp.setUser1InGame(true);
-            pvp.setUser2InGame(true);
-            pvp.setUser1Ready(false);
-            pvp.setUser2Ready(false);
+            if (pvp.getPrimaryPiece() == 2) pvp.getBoard().setXTurn(false);
             template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/start", "update");
             return "redirect:/tic-tac-toe/game/pvp";
-        } else {
-            return "redirect:/tic-tac-toe/lobby?error=gameNotReady";
-        }
+        } else return "redirect:/tic-tac-toe/lobby?error=gameNotReady";
     }
 
     @PostMapping("/invite")

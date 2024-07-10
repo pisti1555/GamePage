@@ -6,107 +6,88 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Lobby - Tic-Tac-Toe</title>
+    <title>Lobby - Fly in the web</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/fly_in_the_web/lobby.css}"/>
-    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <!--    end libs for stomp and sockjs-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <style th:inline="text">
-        body {
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: url([[@{/img/fly_in_the_web/game_background.jpg}]]) no-repeat center center fixed;
-            filter: brightness(80%);
-            z-index: -1;
-        }
-    </style>
 
 </head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
+    <a th:href="@{/fly-in-the-web}" class="back-button">Back</a>
 
-    <div id="lobby" class="lobby_container">
+    <div class="container">
+        <section id="lobby" class="block">
+            <h2>Lobby</h2>
+            <div th:if="${lobby.user1 != null}" class="player-container">
+                <div class="info">
+                    <img th:src="@{/img/player/player_logo_small.svg}">
+                    <h3 th:text="${lobby.user1}"></h3>
+                    <p th:if="${lobby.primaryPiece == 1}">playing FLY</p>
+                    <p th:if="${lobby.primaryPiece == 2}">playing SPIDERS</p>
+                </div>
+                <div class="is-ready">
+                    <p th:if="${!lobby.isUser1Ready}">Not ready</p>
+                    <p th:if="${lobby.isUser1Ready}">Ready</p>    
+                </div>
+            </div>
 
-        <div th:if="${user1InGame}" class="player_container inGame" id="player1">
-            <img th:src="@{/img/player/player_in_game.svg}" alt="Player 1">
-            <h1 th:text="${player1}"></h1>
-        </div>
+            <div class="swap">
+                <a th:if="${lobby.user1 == username and !lobby.isUser1Ready and !lobby.isUser2Ready}" th:href="@{/fly-in-the-web/lobby/swap-piece}">
+                    <img th:src="@{/img/fly_in_the_web/swap_vertical_30px.svg}">
+                </a>
+            </div>
 
-        <div th:if="${!user1InGame}" class="player_container ready" id="player1">
-            <img th:src="@{/img/player/player_logo.svg}" alt="Player 1">
-            <h1 th:text="${player1}"></h1>
-        </div>
-
-
-
-        <a th:if="${player2 != null and !user2InGame}" class="player_container ready" id="player2">
-            <img th:src="@{/img/player/player_logo.svg}" alt="Player 2">
-            <h1 id="player2" th:text="${player2}"></h1>
-        </a>
-
-        <a th:if="${user2InGame}" class="player_container inGame" id="player2">
-            <img th:src="@{/img/player/player_in_game.svg}" alt="Player 2">
-            <h1 id="player2" th:text="${player2}"></h1>
-        </a>
-
-        <a th:if="${player2 == null}" class="player_container null" id="player2" onclick="openPopUp('friendlist')">
-            <img th:src="@{/img/player/player_invite.svg}" alt="Invite a friend">
-            <h1 id="player2">Invite a friend</h1>
-        </a>
-        
-    </div>
-
-    <div id="friendlist" class="popup_container closed">
-        <ul th:if="${friends != null && !friends.isEmpty()}">
-            <li class="row" th:each="friend : ${friends}">
-                <span th:text="${friend}"></span>
-                <form th:action="@{/fly-in-the-web/lobby/invite}" method="post">
-                    <input type="hidden" name="friendUsername" th:value="${friend}" />
-                    <button class="button" type="submit">Invite</button>
-                </form>   
-            </li>
-            <button class="button" onclick="closePopUp('friendlist'); openPopUp('lobby');">Close</button>
-        </ul>
+            <div th:if="${lobby.user2 != null}" class="player-container">
+                <div class="info">
+                    <img th:src="@{/img/player/player_logo_small.svg}">
+                    <h3 th:text="${lobby.user2}"></h3>
+                    <p th:if="${lobby.primaryPiece == 2}">playing FLY</p>
+                    <p th:if="${lobby.primaryPiece == 1}">playing SPIDERS</p>
+                </div>
+                <div class="is-ready">
+                    <p th:if="${!lobby.isUser2Ready}">Not ready</p>
+                    <p th:if="${lobby.isUser2Ready}">Ready</p>
+                </div>
+            </div>
+            <div th:if="${lobby.user2 == null}" class="player-container not-ingame">
+                <div class="info">
+                    <img th:src="@{/img/player/computer.svg}">
+                    <h3>Computer</h3>
+                    <p th:if="${lobby.primaryPiece == 2}">playing FLY</p>
+                    <p th:if="${lobby.primaryPiece == 1}">playing SPIDERS</p>
+                </div>
+                <div class="is-ready">
+                    <p>Ready</p>
+                </div>
+            </div>
+        </section>
     
-        <div th:if="${friends == null || friends.isEmpty()}">
-            <span>You do not have any friends</span>
-            <button class="button" onclick="closePopUp('friendlist'); openPopUp('lobby');">Close</button>
-        </div>
-        
+        <section id="friends" class="block">
+            <h2>Friends</h2>
+            <ul id="friend-list"></ul>
+        </section>
     </div>
 
-    <div th:if="${user1InGame}" class="notReady">
-        <h2><span th:text="${player1}"></span> is in-game</h2>
-    </div>
-    <div th:if="${user2InGame}" class="notReady">
-        <h2><span th:text="${player2}"></span> is in-game</h2>
+    <div id="button-container" class="button-container">
+        <a th:href="@{/fly-in-the-web/lobby/leave}" class="main-button">Leave Lobby</a>
+
+        <a th:if="${lobby.user1 == username and lobby.user2 != null and !lobby.isUser1Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Ready</a>
+        <a th:if="${lobby.user1 == username and lobby.user2 != null and lobby.isUser1Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Unready</a>
+
+        <a th:if="${lobby.user2 == username and !lobby.isUser2Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Ready</a>
+        <a th:if="${lobby.user2 == username and lobby.isUser2Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Unready</a>
+
+        <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 1}" th:href="@{/fly-in-the-web/game/pvs}" class="main-button">Play against AI</a>
+        <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 2}" th:href="@{/fly-in-the-web/game/pvf}" class="main-button">Play against AI</a>
+        <a th:if="${lobby.user1 == username and isReady}" th:href="@{/fly-in-the-web/lobby/start}" class="main-button">Start game</a>
     </div>
 
-    <div th:if="${isReady and player2 == username}" class="notReady">
-        <h2>Waiting for <span th:text="${player1}"></span> to start the game</h2>
-    </div>
-
-    <div class="button-container">
-        <a th:href="@{/fly-in-the-web/lobby/leave}" class="start-leave-button">Leave Lobby</a>
-        <a th:if="${isReady and player1 == username}" th:href="@{/fly-in-the-web/lobby/start}" class="start-leave-button">Start Game</a>
-    </div>
-
-    <script th:src="@{/js/popup.js}"></script>
     <script th:src="@{/js/fly_in_the_web/lobby.js}"></script>
-   
+
 </body>
 </html>

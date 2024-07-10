@@ -33,11 +33,20 @@ public class GameAPIController_TicTacToe {
         PvP<TicTacToe> pvp = service.getPvP(principal.getName());
         TicTacToe game = service.getPvP(principal.getName()).getBoard();
 
-        if (pvp.getUser1().equals(principal.getName())) {
+
+        if (pvp.getPrimaryPiece() == 1 && pvp.getUser1().equals(principal.getName())) {
             boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.X);
             if (isSomebodyWon) pvp.setOver(true);
         }
-        if (pvp.getUser2().equals(principal.getName())) {
+        if (pvp.getPrimaryPiece() == 1 && pvp.getUser2().equals(principal.getName())) {
+            boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.O);
+            if (isSomebodyWon) pvp.setOver(true);
+        }
+        if (pvp.getPrimaryPiece() == 2 && pvp.getUser2().equals(principal.getName())) {
+            boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.X);
+            if (isSomebodyWon) pvp.setOver(true);
+        }
+        if (pvp.getPrimaryPiece() == 2 && pvp.getUser1().equals(principal.getName())) {
             boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.O);
             if (isSomebodyWon) pvp.setOver(true);
         }
@@ -50,15 +59,8 @@ public class GameAPIController_TicTacToe {
     public boolean movePvC(@RequestParam("row")int row, @RequestParam("col")int col, Principal principal) {
         PvC<TicTacToe> pvc = service.getPvC(principal.getName());
         TicTacToe game = service.getPvC(principal.getName()).getBoard();
-
-        if (pvc.getUser().equals(principal.getName())) {
-            return service.moveAI(row, col, game, Pieces_TicTacToe.X);
-        }
-        if (pvc.getUser2().equals(principal.getName())) {
-            return service.moveAI(row, col, game, Pieces_TicTacToe.O);
-        }
-
-        return false;
+        Pieces_TicTacToe currentPiece = game.isXTurn() ? Pieces_TicTacToe.X : Pieces_TicTacToe.O;
+        return service.moveAI(row, col, game, currentPiece);
     }
 
     @GetMapping("/which-won-pvp")
@@ -116,6 +118,8 @@ public class GameAPIController_TicTacToe {
     public void newGamePvC(Principal principal) {
         PvC<TicTacToe> pvc = service.getPvC(principal.getName());
         pvc.setBoard(new TicTacToe());
+        PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        if (pvp.getPrimaryPiece() == 2) pvc.getBoard().setXTurn(false);
     }
 
     @GetMapping("/get-lobby-users-pvc")

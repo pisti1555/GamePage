@@ -9,7 +9,7 @@
     <title>Lobby - Tic-Tac-Toe</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
-    <link rel="stylesheet" th:href="@{/css/tic_tac_toe/lobby.css}"/>
+    <link rel="stylesheet" th:href="@{/css/lobby.css}"/>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -18,6 +18,7 @@
 </head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
+    <a th:href="@{/}" class="back-button">return Home</a>
 
     <div class="container">
         <section id="lobby" class="block">
@@ -26,16 +27,27 @@
                 <div class="info">
                     <img th:src="@{/img/player/player_logo_small.svg}">
                     <h3 th:text="${lobby.user1}"></h3>
+                    <p th:if="${lobby.primaryPiece == 1}">playing X</p>
+                    <p th:if="${lobby.primaryPiece == 2}">playing O</p>
                 </div>
                 <div class="is-ready">
                     <p th:if="${!lobby.isUser1Ready}">Not ready</p>
                     <p th:if="${lobby.isUser1Ready}">Ready</p>    
                 </div>
             </div>
+
+            <div class="swap">
+                <a th:if="${lobby.user1 == username and !lobby.isUser1Ready and !lobby.isUser2Ready}" th:href="@{/tic-tac-toe/swap-piece}">
+                    <img th:src="@{/img/fly_in_the_web/swap_vertical_30px.svg}">
+                </a>
+            </div>
+
             <div th:if="${lobby.user2 !=  null}" class="player-container">
                 <div class="info">
                     <img th:src="@{/img/player/player_logo_small.svg}">
                     <h3 th:text="${lobby.user2}"></h3>
+                    <p th:if="${lobby.primaryPiece == 2}">playing X</p>
+                    <p th:if="${lobby.primaryPiece == 1}">playing O</p>
                 </div>
                 <div class="is-ready">
                     <p th:if="${!lobby.isUser2Ready}">Not ready</p>
@@ -46,6 +58,8 @@
                 <div class="info">
                     <img th:src="@{/img/player/computer.svg}">
                     <h3>Computer</h3>
+                    <p th:if="${lobby.primaryPiece == 2}">playing X</p>
+                    <p th:if="${lobby.primaryPiece == 1}">playing O</p>
                 </div>
                 <div class="is-ready">
                     <p>Ready</p>
@@ -68,7 +82,8 @@
         <a th:if="${lobby.user2 == username and !lobby.isUser2Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Ready</a>
         <a th:if="${lobby.user2 == username and lobby.isUser2Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Unready</a>
 
-        <a th:if="${lobby.user1 == username and lobby.user2 == null}" th:href="@{/tic-tac-toe/game/ai}" class="main-button">Play against AI</a>
+        <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 1}" th:href="@{/tic-tac-toe/game/ai-x}" class="main-button">Play against AI</a>
+        <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 2}" th:href="@{/tic-tac-toe/game/ai-o}" class="main-button">Play against AI</a>
         <a th:if="${lobby.user1 == username and isReady}" th:href="@{/tic-tac-toe/start}" class="main-button">Start game</a>
     </div>
 

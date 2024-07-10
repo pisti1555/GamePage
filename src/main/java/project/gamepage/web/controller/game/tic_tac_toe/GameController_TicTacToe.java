@@ -24,11 +24,17 @@ public class GameController_TicTacToe {
         this.service = service;
     }
 
-    @GetMapping("/ai")
-    public String getGamePageAI(Principal principal, Model model) {
+    @GetMapping("/ai-x")
+    public String getGamePageAI_X(Principal principal, Model model) {
         model.addAttribute("username", principal.getName());
-        PvC<TicTacToe> pvc = service.getPvC(principal.getName());
-        pvc.setBoard(new TicTacToe());
+        service.newGamePvC("x", principal.getName());
+        return "game/tic_tac_toe/game_page_ai";
+    }
+
+    @GetMapping("/ai-o")
+    public String getGamePageAI_O(Principal principal, Model model) {
+        model.addAttribute("username", principal.getName());
+        service.newGamePvC("o", principal.getName());
         return "game/tic_tac_toe/game_page_ai";
     }
 
@@ -38,12 +44,12 @@ public class GameController_TicTacToe {
         model.addAttribute("username", username);
 
         PvP<TicTacToe> pvp = service.getPvP(username);
-        System.out.println("game of " + username);
-        System.out.println("user2: " + pvp.getUser2() + "\nisUser2InGame" + pvp.isUser2InGame());
         if (pvp.isUser1InGame() && pvp.isUser2InGame()) return "game/tic_tac_toe/game_page_pvp";
         if (pvp.getUser2() == null || !pvp.isReadyToStart()) return "redirect:/tic-tac-toe/lobby";
         pvp.setUser1InGame(true);
         pvp.setUser2InGame(true);
+        pvp.setUser1Ready(false);
+        pvp.setUser2Ready(false);
         return "game/tic_tac_toe/game_page_pvp";
     }
 

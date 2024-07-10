@@ -75,24 +75,15 @@ function placePieces(locations) {
 }
 
 async function gameWon() {
-    let users = ["Player", "Computer"];
-
-    await fetch('/tic-tac-toe/api/game/get-lobby-users-pvc')
-    .then(response => response.json())
-    .then(data => {
-        users[0] = data[0];
-        users[1] = data[1];
-    });
-
     await fetch('/tic-tac-toe/api/game/which-won-pvc')
     .then(response => response.json())
     .then(data => {
         if (data == 1) {
             gameOverScreen.classList.remove('hidden');
-            whoWonText.textContent = users[0] + " Won!"
+            whoWonText.textContent = "X Won!"
         } else if (data == 2) {
             gameOverScreen.classList.remove('hidden');
-            whoWonText.textContent = users[1] + " Won!"
+            whoWonText.textContent = "O Won!"
         } else if(data == 3) {
             gameOverScreen.classList.remove('hidden');
             whoWonText.textContent = "Draw"
