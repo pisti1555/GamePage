@@ -119,7 +119,7 @@ public class LobbyController_FITW {
     @GetMapping("/leave")
     public String quit_FITW(Principal principal) {
         PvP<FITW> pvp = service.getPvP(principal.getName());
-        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/fly-in-the-web/lobby";
+        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/fly-in-the-web";
         service.quitLobby(principal.getName());
         if (pvp.getUser2() != null && pvp.getUser1().equals(principal.getName())) {
             template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "quit");
@@ -127,7 +127,7 @@ public class LobbyController_FITW {
         if (pvp.getUser1() != null && pvp.getUser2().equals(principal.getName())) {
             template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "quit");
         }
-        return "redirect:/fly-in-the-web/lobby";
+        return "redirect:/fly-in-the-web";
     }
 
 }

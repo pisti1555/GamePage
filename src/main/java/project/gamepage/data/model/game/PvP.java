@@ -1,6 +1,9 @@
 package project.gamepage.data.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import project.gamepage.data.model.chat.ChatMessage;
+
+import java.util.ArrayList;
 
 public class PvP <Game> {
     String id;
@@ -13,6 +16,7 @@ public class PvP <Game> {
     boolean isUser1Ready;
     boolean isUser2Ready;
     boolean isOver;
+    ArrayList<ChatMessage> lobbyChat;
     @JsonIgnore
     Game board;
 
@@ -27,6 +31,7 @@ public class PvP <Game> {
         this.isUser1Ready = false;
         this.isUser2Ready = false;
         this.isOver = false;
+        this.lobbyChat = new ArrayList<>();
         this.board = board;
     }
 
@@ -127,5 +132,12 @@ public class PvP <Game> {
 
     public void setOver(boolean isOver) {
         this.isOver = isOver;
+    }
+
+    public ArrayList<ChatMessage> getChatMessages() {
+        return lobbyChat;
+    }
+    public void sendMessage(ChatMessage message) {
+        this.lobbyChat.add(message);
     }
 }

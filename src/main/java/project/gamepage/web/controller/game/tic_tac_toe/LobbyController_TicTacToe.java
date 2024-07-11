@@ -131,7 +131,7 @@ public class LobbyController_TicTacToe {
     @GetMapping("/leave")
     public String quit_TicTacToe(Principal principal) {
         PvP<TicTacToe> pvp = service.getPvP(principal.getName());
-        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/tic-tac-toe";
+        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/";
         service.quitLobby(principal.getName());
         if (pvp.getUser2() != null && pvp.getUser1().equals(principal.getName())) {
             template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "quit");
@@ -139,6 +139,6 @@ public class LobbyController_TicTacToe {
         if (pvp.getUser1() != null && pvp.getUser2().equals(principal.getName())) {
             template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "quit");
         }
-        return "redirect:/tic-tac-toe";
+        return "redirect:/";
     }
 }

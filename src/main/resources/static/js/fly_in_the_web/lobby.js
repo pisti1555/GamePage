@@ -142,5 +142,80 @@ async function getUninvitedUsers() {
     }
 }
 
+// ------------------------------- Chat ---------------------------------------
+
+async function getMessages() {
+    const lobby = await getLobbyUsers();
+    const username = lobby[0];
+    try {
+        const response = await fetch("/chat/get-lobby-chat?game=FITW");
+        if (!response.ok) {
+            throw new Error(`HTTP error - Status: ${response.status}`);
+        }
+        const data = await response.json();
+        const chatContent = document.getElementById('chat-content');
+        chatContent.innerHTML = '';
+        for (var i = 0; i < data.length; i++) {
+            let li = document.createElement('li');
+            if (username == data[i].username) {
+                console.log('ugyanaz');
+                li.innerHTML = `
+                    <span class="sender right-side">${data[i].username}</span>
+                    <span class="message right-side">${data[i].message}</span>
+                `;
+            } else {
+                console.log('nem ugyanaz');
+                console.log(username);
+                console.log('data username: ' + data.username);
+                li.innerHTML = `
+                    <span class="sender">${data[i].username}</span>
+                    <span class="message">${data[i].message}</span>
+                `;
+            }
+            
+            chatContent.appendChild(li);
+        }
+    } catch (error) {
+        console.error('Error fetching chat messages', error);
+    }
+}
+
+
+async function sendMessage() {
+    const message = document.getElementById('message-content').value;
+    if (message == '') return null;
+
+    const params = new URLSearchParams();
+    params.append('message', message);
+    params.append('game', 'FITW');
+    await fetch("/chat/send-message-to-lobby", {
+        method: "POST",
+           headers: {
+             "Content-Type": "application/x-www-form-urlencoded"
+            },
+           body: params.toString()
+      });
+
+      document.getElementById('message-content').value = '';
+      getMessages();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var chatContent = document.querySelector('.chat-content');
+    chatContent.scrollTop = chatContent.scrollHeight;
+
+    var messageInput = document.getElementById('message-content');
+    messageInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+});
+
+
+
+
 connectToWebSocket();
 getFriendsToInvite();
+getMessages();
