@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Lobby - Fly in the web</title>
+    <title>Lobby - Tic-Tac-Toe</title>
 
     <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/lobby.css}"/>
@@ -18,18 +18,18 @@
 </head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
-    <div class="main-container">
 
+    <div class="main-container">
         <div class="container-vertical">
             <div class="container-horizontal">
                 <section id="lobby" class="block">
                     <h2>Lobby</h2>
-                    <div th:if="${lobby.user1 != null}" class="player-container">
+                    <div th:if="${lobby.user1 !=  null}" class="player-container">
                         <div class="info">
                             <img th:src="@{/img/player/player_logo_small.svg}">
                             <h3 th:text="${lobby.user1}"></h3>
-                            <p th:if="${lobby.primaryPiece == 1}">playing FLY</p>
-                            <p th:if="${lobby.primaryPiece == 2}">playing SPIDERS</p>
+                            <p th:if="${lobby.primaryPiece == 1}">playing X</p>
+                            <p th:if="${lobby.primaryPiece == 2}">playing O</p>
                         </div>
                         <div class="is-ready">
                             <p th:if="${!lobby.isUser1Ready}">Not ready</p>
@@ -38,29 +38,29 @@
                     </div>
         
                     <div class="swap">
-                        <a th:if="${lobby.user1 == username and !lobby.isUser1Ready and !lobby.isUser2Ready}" th:href="@{/fly-in-the-web/lobby/swap-piece}">
+                        <a th:if="${lobby.user1 == username and !lobby.isUser1Ready and !lobby.isUser2Ready}" th:href="@{/tic-tac-toe/swap-piece}">
                             <img th:src="@{/img/fly_in_the_web/swap_vertical_30px.svg}">
                         </a>
                     </div>
         
-                    <div th:if="${lobby.user2 != null}" class="player-container">
+                    <div th:if="${lobby.user2 !=  null}" class="player-container">
                         <div class="info">
                             <img th:src="@{/img/player/player_logo_small.svg}">
                             <h3 th:text="${lobby.user2}"></h3>
-                            <p th:if="${lobby.primaryPiece == 2}">playing FLY</p>
-                            <p th:if="${lobby.primaryPiece == 1}">playing SPIDERS</p>
+                            <p th:if="${lobby.primaryPiece == 2}">playing X</p>
+                            <p th:if="${lobby.primaryPiece == 1}">playing O</p>
                         </div>
                         <div class="is-ready">
                             <p th:if="${!lobby.isUser2Ready}">Not ready</p>
                             <p th:if="${lobby.isUser2Ready}">Ready</p>
                         </div>
                     </div>
-                    <div th:if="${lobby.user2 == null}" class="player-container not-ingame">
+                    <div th:if="${lobby.user2 ==  null}" class="player-container not-ingame">
                         <div class="info">
                             <img th:src="@{/img/player/computer.svg}">
                             <h3>Computer</h3>
-                            <p th:if="${lobby.primaryPiece == 2}">playing FLY</p>
-                            <p th:if="${lobby.primaryPiece == 1}">playing SPIDERS</p>
+                            <p th:if="${lobby.primaryPiece == 2}">playing X</p>
+                            <p th:if="${lobby.primaryPiece == 1}">playing O</p>
                         </div>
                         <div class="is-ready">
                             <p>Ready</p>
@@ -73,20 +73,24 @@
                     <ul id="friend-list"></ul>
                 </section>
             </div>
-            <div id="button-container" class="button-container">
-                <a th:href="@{/fly-in-the-web/lobby/leave}" class="main-button">Leave Lobby</a>
+
+            <section id="button-container" class="button-container">
+                <a th:href="@{/tic-tac-toe/leave}" class="main-button">Leave Lobby</a>
         
-                <a th:if="${lobby.user1 == username and lobby.user2 != null and !lobby.isUser1Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Ready</a>
-                <a th:if="${lobby.user1 == username and lobby.user2 != null and lobby.isUser1Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Unready</a>
+                <a th:if="${lobby.user1 == username and lobby.user2 != null and !lobby.isUser1Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Ready</a>
+                <a th:if="${lobby.user1 == username and lobby.user2 != null and lobby.isUser1Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Unready</a>
         
-                <a th:if="${lobby.user2 == username and !lobby.isUser2Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Ready</a>
-                <a th:if="${lobby.user2 == username and lobby.isUser2Ready}" th:href="@{/fly-in-the-web/lobby/ready}" class="main-button">Unready</a>
+                <a th:if="${lobby.user2 == username and !lobby.isUser2Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Ready</a>
+                <a th:if="${lobby.user2 == username and lobby.isUser2Ready}" th:href="@{/tic-tac-toe/ready}" class="main-button">Unready</a>
         
-                <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 1}" th:href="@{/fly-in-the-web/game/pvs}" class="main-button">Play against AI</a>
-                <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 2}" th:href="@{/fly-in-the-web/game/pvf}" class="main-button">Play against AI</a>
-                <a th:if="${lobby.user1 == username and isReady}" th:href="@{/fly-in-the-web/lobby/start}" class="main-button">Start game</a>
-            </div>
+                <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 1}" th:href="@{/tic-tac-toe/game/ai-x}" class="main-button">Play against AI</a>
+                <a th:if="${lobby.user1 == username and lobby.user2 == null and lobby.primaryPiece == 2}" th:href="@{/tic-tac-toe/game/ai-o}" class="main-button">Play against AI</a>
+                <a th:if="${lobby.user1 == username and isReady}" th:href="@{/tic-tac-toe/start}" class="main-button">Start game</a>
+            </section>
+
         </div>
+        
+        
 
         <section class="chat-block">
             <h2>Chat</h2>
@@ -98,9 +102,10 @@
                 <button type="submit" class="button" onclick="sendMessage()">send</button>
             </div>
         </section>
+
     </div>
 
-    <script th:src="@{/js/fly_in_the_web/lobby.js}"></script>
+    <script th:src="@{/js/tic_tac_toe/lobby.js}"></script>
 
 </body>
 </html>

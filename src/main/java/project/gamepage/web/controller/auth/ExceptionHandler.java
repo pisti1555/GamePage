@@ -11,6 +11,18 @@ public class ExceptionHandler {
             return "redirect:/login";
         }
 
+        if (request.getAttribute("javax.servlet.error.status_code") != null) {
+            int status = (int) request.getAttribute("javax.servlet.error.status_code");
+            return switch (status) {
+                case 400 -> "400";
+                case 401 -> "401";
+                case 403 -> "403";
+                case 404 -> "404";
+                case 500 -> "500";
+                default -> "error";
+            };
+        }
+
         return "error";
     }
 }

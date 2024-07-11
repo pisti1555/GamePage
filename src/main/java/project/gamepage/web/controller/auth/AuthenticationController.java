@@ -1,6 +1,5 @@
 package project.gamepage.web.controller.auth;
 
-import project.gamepage.data.model.user.User;
 import project.gamepage.service.UserServiceImpl;
 import project.gamepage.web.dto.RegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +25,9 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute("registrationDto") RegistrationDto dto) {
-        User user = userServiceImpl.register(dto);
-        if (user == null) {
-            return "redirect:/register?error";
-        }
-        return "redirect:/register?success";
+        String message = userServiceImpl.register(dto);
+        if (message.isEmpty()) return "redirect:/register?success";
+        return "redirect:/register?error" + message;
     }
 
     @GetMapping("/login")

@@ -44,4 +44,20 @@ public class InvitationService {
         }
     }
 
+    public boolean isInvitationSent(String username, String inver, String game) {
+        for (Map.Entry<String, List<GameInvitation>> entry : invites.entrySet()) {
+            String invited = entry.getKey();
+            if (invited.equals(username)) {
+                List<GameInvitation> invitations = entry.getValue();
+                for (GameInvitation invitation : invitations) {
+                    if (invitation.getInviter().equals(inver) && invitation.getGame().equals(game)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

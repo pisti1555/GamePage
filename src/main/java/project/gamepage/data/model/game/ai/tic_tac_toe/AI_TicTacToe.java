@@ -40,9 +40,15 @@ public class AI_TicTacToe {
     private int minimax(Pieces_TicTacToe[][] board, int depth, boolean isMax) {
         AI_TicTacToe_Outcomes result = checkWinner(board);
         if (result != AI_TicTacToe_Outcomes.ONGOING) {
-            if (result == AI_TicTacToe_Outcomes.X) return -10 + depth;
-            if (result == AI_TicTacToe_Outcomes.O) return 10 - depth;
-            if (result == AI_TicTacToe_Outcomes.DRAW) return 0;
+            if (User_Piece.equals(Pieces_TicTacToe.X)) {
+                if (result == AI_TicTacToe_Outcomes.X) return -10 + depth;
+                if (result == AI_TicTacToe_Outcomes.O) return 10 - depth;
+                if (result == AI_TicTacToe_Outcomes.DRAW) return 0;
+            } else {
+                if (result == AI_TicTacToe_Outcomes.X) return 10 - depth;
+                if (result == AI_TicTacToe_Outcomes.O) return -10 + depth;
+                if (result == AI_TicTacToe_Outcomes.DRAW) return 0;
+            }
         }
         if (isMax) {
             int bestScore = Integer.MIN_VALUE;
@@ -87,12 +93,14 @@ public class AI_TicTacToe {
                         board[0][2].equals(X) && board[1][1].equals(X) && board[2][0].equals(X)
         ) return AI_TicTacToe_Outcomes.X;
         if (
-                board[0][0].equals(O) && board[0][1].equals(O) && board[0][2].equals(O)
-                        || board[0][0].equals(O) && board[1][0].equals(O) && board[2][0].equals(O)
-                        || board[0][2].equals(O) && board[1][2].equals(O) && board[2][2].equals(O)
-                        || board[2][0].equals(O) && board[2][1].equals(O) && board[2][2].equals(O)
-                        || board[0][2].equals(O) && board[1][1].equals(O) && board[2][0].equals(O)
-                        || board[0][0].equals(O) && board[1][1].equals(O) && board[2][2].equals(O)
+                board[0][0].equals(O) && board[0][1].equals(O) && board[0][2].equals(O) ||
+                        board[1][0].equals(O) && board[1][1].equals(O) && board[1][2].equals(O) ||
+                        board[2][0].equals(O) && board[2][1].equals(O) && board[2][2].equals(O) ||
+                        board[0][0].equals(O) && board[1][0].equals(O) && board[2][0].equals(O) ||
+                        board[0][1].equals(O) && board[1][1].equals(O) && board[2][1].equals(O) ||
+                        board[0][2].equals(O) && board[1][2].equals(O) && board[2][2].equals(O) ||
+                        board[0][0].equals(O) && board[1][1].equals(O) && board[2][2].equals(O) ||
+                        board[0][2].equals(O) && board[1][1].equals(O) && board[2][0].equals(O)
         ) return AI_TicTacToe_Outcomes.O;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {

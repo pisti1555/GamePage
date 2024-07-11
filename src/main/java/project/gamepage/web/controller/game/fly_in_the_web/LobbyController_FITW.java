@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/fly-in-the-web/lobby")
@@ -35,7 +34,6 @@ public class LobbyController_FITW {
         String username = principal.getName();
         PvP<FITW> pvp = service.getPvP(username);
 
-
         if (pvp.getUser1().equals(username) && pvp.isOver()) {
             pvp.setUser1InGame(false);
         }
@@ -45,20 +43,41 @@ public class LobbyController_FITW {
             }
         }
 
-
-
         model.addAttribute("username", username);
-        model.addAttribute("user1InGame", pvp.isUser1InGame());
-        model.addAttribute("user2InGame", pvp.isUser2InGame());
+        model.addAttribute("lobby", service.getPvP(username));
         model.addAttribute("isReady", pvp.isReadyToStart());
-        model.addAttribute("player1", pvp.getUser1());
-        model.addAttribute("player2", pvp.getUser2());
-
-        List<String> friendList;
-        friendList = friendsService.getUserFriendsList(principal.getName());
-        model.addAttribute("friends", friendList);
 
         return "game/fly_in_the_web/lobby";
+    }
+
+    @GetMapping("/swap-piece")
+    public String swapPiece(Principal principal) {
+        PvP<FITW> pvp = service.getPvP(principal.getName());
+        if (!pvp.getUser1().equals(principal.getName())) return "redirect:/fly-in-the-web/lobby?swap-denied";
+        short temp = pvp.getPrimaryPiece();
+        pvp.setPrimaryPiece(pvp.getSecondaryPiece());
+        pvp.setSecondaryPiece(temp);
+        if (pvp.getUser2() != null) {
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "update");
+        }
+        return "redirect:/fly-in-the-web/lobby?swap-success";
+    }
+
+    @GetMapping("/ready")
+    public String ready(Principal principal) {
+        PvP<FITW> pvp = service.getPvP(principal.getName());
+        if (pvp.getUser2() == null) return "redirect:/fly-in-the-web/lobby";
+        if (pvp.getUser1().equals(principal.getName())) {
+            pvp.setUser1Ready(!pvp.isUser1Ready());
+            template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "update");
+            return "redirect:/fly-in-the-web/lobby";
+        }
+        if (pvp.getUser2().equals(principal.getName())) {
+            pvp.setUser2Ready(!pvp.isUser2Ready());
+            template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "update");
+            return "redirect:/fly-in-the-web/lobby";
+        }
+        return "redirect:/fly-in-the-web/lobby";
     }
 
     @PostMapping("/invite")
@@ -89,21 +108,18 @@ public class LobbyController_FITW {
     public String startGame_FITW(Model model, Principal principal) {
         String username = principal.getName();
         PvP<FITW> pvp = service.getPvP(username);
-
         if (pvp.isReadyToStart()) {
             pvp.setBoard(new FITW());
-            template.convertAndSendToUser(principal.getName(), "/topic/lobby/start", "update");
+            if (pvp.getPrimaryPiece() == 2) pvp.getBoard().isFlysTurn = false;
             template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/start", "update");
             return "redirect:/fly-in-the-web/game/pvp";
-        } else {
-            return "redirect:/fly-in-the-web/lobby?error=gameNotReady";
-        }
+        } else return "redirect:/fly-in-the-web/lobby?error=gameNotReady";
     }
 
     @GetMapping("/leave")
     public String quit_FITW(Principal principal) {
         PvP<FITW> pvp = service.getPvP(principal.getName());
-        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/fly-in-the-web/game";
+        if (pvp.getUser1() == null || pvp.getUser2() == null) return "redirect:/fly-in-the-web";
         service.quitLobby(principal.getName());
         if (pvp.getUser2() != null && pvp.getUser1().equals(principal.getName())) {
             template.convertAndSendToUser(pvp.getUser2(), "/topic/lobby/update", "quit");
@@ -111,7 +127,7 @@ public class LobbyController_FITW {
         if (pvp.getUser1() != null && pvp.getUser2().equals(principal.getName())) {
             template.convertAndSendToUser(pvp.getUser1(), "/topic/lobby/update", "quit");
         }
-        return "redirect:/fly-in-the-web/game";
+        return "redirect:/fly-in-the-web";
     }
 
 }

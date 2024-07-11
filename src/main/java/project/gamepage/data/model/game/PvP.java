@@ -1,14 +1,22 @@
 package project.gamepage.data.model.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import project.gamepage.data.model.chat.ChatMessage;
+
+import java.util.ArrayList;
 
 public class PvP <Game> {
     String id;
     String user1;
     String user2;
+    short primaryPiece; //FLY (FITW) or X (Tic-Tac-Toe) - means which player uses this piece
+    short secondaryPiece; //SPIDERS (FITW) or O (Tic-Tac-Toe) - means which player uses this piece
     boolean user1InGame;
     boolean user2InGame;
+    boolean isUser1Ready;
+    boolean isUser2Ready;
     boolean isOver;
+    ArrayList<ChatMessage> lobbyChat;
     @JsonIgnore
     Game board;
 
@@ -16,9 +24,14 @@ public class PvP <Game> {
         this.id = user1;
         this.user1 = user1;
         this.user2 = user2;
+        this.primaryPiece = 1;
+        this.secondaryPiece = 2;
         this.user1InGame = false;
         this.user2InGame = false;
+        this.isUser1Ready = false;
+        this.isUser2Ready = false;
         this.isOver = false;
+        this.lobbyChat = new ArrayList<>();
         this.board = board;
     }
 
@@ -26,15 +39,10 @@ public class PvP <Game> {
     }
 
     public boolean isReadyToStart() {
-        return user1 != null && user2 != null && board != null && !user1InGame && !user2InGame;
+        return user1 != null && user2 != null && board != null && isUser1Ready && isUser2Ready && !user1InGame && !user2InGame;
     }
 
     public boolean isInProgress() {
-        System.out.println("user1: " + user1);
-        System.out.println("user2: " + user2);
-        System.out.println("board: " + board);
-        System.out.println("user1-ingame: " + user1InGame);
-        System.out.println("user2-ingame: " + user2InGame);
         return user1 != null && user2 != null && board != null && user1InGame && user2InGame;
     }
 
@@ -62,6 +70,22 @@ public class PvP <Game> {
         this.id = id;
     }
 
+    public short getPrimaryPiece() {
+        return primaryPiece;
+    }
+
+    public void setPrimaryPiece(short primaryPiece) {
+        this.primaryPiece = primaryPiece;
+    }
+
+    public short getSecondaryPiece() {
+        return secondaryPiece;
+    }
+
+    public void setSecondaryPiece(short secondaryPiece) {
+        this.secondaryPiece = secondaryPiece;
+    }
+
     public Game getBoard() {
         return board;
     }
@@ -86,11 +110,34 @@ public class PvP <Game> {
         this.user2InGame = user2InGame;
     }
 
+    public boolean isUser1Ready() {
+        return isUser1Ready;
+    }
+
+    public void setUser1Ready(boolean user1Ready) {
+        isUser1Ready = user1Ready;
+    }
+
+    public boolean isUser2Ready() {
+        return isUser2Ready;
+    }
+
+    public void setUser2Ready(boolean isUser2Ready) {
+        this.isUser2Ready = isUser2Ready;
+    }
+
     public boolean isOver() {
         return isOver;
     }
 
     public void setOver(boolean isOver) {
         this.isOver = isOver;
+    }
+
+    public ArrayList<ChatMessage> getChatMessages() {
+        return lobbyChat;
+    }
+    public void sendMessage(ChatMessage message) {
+        this.lobbyChat.add(message);
     }
 }

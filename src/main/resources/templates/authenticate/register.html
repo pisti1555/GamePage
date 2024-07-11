@@ -18,7 +18,10 @@
     <div class="container">
 
         <div th:if="${param.success}">
-            <div class="alert alert-info">You've successfully registered</div>
+            <div class="alert main-alert-info">You've successfully registered</div>
+        </div>
+        <div th:if="${param.error}">
+            <div class="alert main-alert-info">Registration data is invalid</div>
         </div>
 
         <h1>Registration</h1>
@@ -28,15 +31,38 @@
                 <label for="username">Username:</label>
                 <input class="input" type="text" id="username" th:name="username" required>
             </div>
+            <div th:if="${param.usernameTaken}">
+                <div class="alert alert-info">This username is already taken</div>
+            </div>
+            <div th:if="${param.usernameInvalid}">
+                <div class="alert alert-info">Username can not contain whitespace</div>
+            </div>
             
             <div class="data">
                 <label for="email">Email:</label>
                 <input class="input" type="email" id="email" th:name="email" required>
             </div>
+            <div th:if="${param.emailTaken}">
+                <div class="alert alert-info">This E-Mail is already taken</div>
+            </div>
+            <div th:if="${param.emailInvalid}">
+                <div class="alert alert-info">Invalid E-Mail format</div>
+            </div>
 
             <div class="data">
                 <label for="password">Password:</label>
                 <input class="input" type="password" id="password" th:name="password" required>
+            </div>
+            <div th:if="${param.passwordInvalid}">
+                <div class="alert alert-info">Password must be at least 6 characters long and contain minimum 1 number and 1 letter</div>
+            </div>
+
+            <div class="data">
+                <label for="confirmPassword">Confirm password:</label>
+                <input class="input" type="password" id="confirmPassword" th:name="confirmPassword" required>
+            </div>
+            <div th:if="${param.passwordConfirmationError}">
+                <div class="alert alert-info">Passwords don't match</div>
             </div>
             
             <div class="data">
@@ -47,11 +73,11 @@
             <div class="data">
                 <label for="lastName">Last Name:</label>
                 <input class="input" type="text" id="lastName" th:name="lastName" required>
-            </div>                
+            </div>            
 
             <div class="loginBox">
                 <button type="submit" class="button">Register</button>
-                <span> Already registered? <a href="/" th:href="@{/login}">Login here</a> </span>
+                <span> Already registered? <a th:href="@{/login}">Login here</a> </span>
             </div>
 
         </form>

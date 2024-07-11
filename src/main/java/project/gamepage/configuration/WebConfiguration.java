@@ -1,7 +1,6 @@
 package project.gamepage.configuration;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,11 +14,13 @@ public class WebConfiguration implements WebMvcConfigurer {
                         "/webjars/**",
                         "/img/**",
                         "/css/**",
-                        "/js/**")
+                        "/js/**",
+                        "/favicon.ico")
                 .addResourceLocations(
                         "classpath:/META-INF/resources/webjars/",
                         "classpath:/static/img/",
                         "classpath:/static/css/",
-                        "classpath:/static/js/");
+                        "classpath:/static/js/",
+                        "classpath:/static");
     }
 }
