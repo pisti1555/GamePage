@@ -8,14 +8,10 @@
 
     <title>Fly in the web</title>
     
-    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
     <link rel="stylesheet" th:href="@{/css/fly_in_the_web/home.css}"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <!--    end libs for stomp and sockjs-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script th:replace="init :: init"></script>
     
     <style th:inline="text">
         body {
@@ -27,14 +23,10 @@
 
 <body>
     <nav th:replace="navbar :: navbar"></nav>
-    <a th:href="@{/}" class="back-button">return to Home</a>
     
     <div class="container">
         <div class="row">
             <a th:href="@{'/fly-in-the-web/lobby'}" type="button" class="button">Play</a>
-        </div>
-        <div class="row">
-            <a th:href="@{'/friends'}" type="button" class="button">Friends</a>
         </div>
         <div class="row">
             <a th:href="@{'/fly-in-the-web/scoreboard'}" type="button" class="button">Scoreboard</a>

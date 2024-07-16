@@ -7,54 +7,122 @@
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Friend list</title>
-    
-    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
-    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
-    <link rel="stylesheet" th:href="@{/css/fly_in_the_web/scoreboard.css}"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <!--    end libs for stomp and sockjs-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/user/friendlist.css}"/>
 
+    <script th:replace="init :: init"></script>
 
-    <style th:inline="text">
-        body {
-            background: url([[@{/img/main/background.png}]]) no-repeat center center fixed;
-            background-size: cover;
-        }
-    </style>
 </head>
-
 <body>
     <nav th:replace="navbar :: navbar"></nav>
-    <a th:href="@{/}" class="back-button">return Home</a>
 
-    <div th:if="${success}" class="container">
-        <h2 class="title">Friend list</h2>
+    <div class="main-container">
+        <section class="friendlist-section">
+            <h2 class="title">Friend list</h2>
+            <p th:text="'Total: ' + ${dto.friends.size}"></p>
+            <ul id="friend-list">
+                <li th:each="friend : ${dto.friends}">
+                    <a th:href="@{'/profile/' + ${friend.username}}">
+                        <div class="image-container">
+                            <img th:src="@{'/img/avatar/' + ${friend.avatar} + '.png'}"/>
+                        </div>
+                        <span th:text="${friend.username}"></span>
+                    </a>    
+                </li>
+            </ul>
+        </section>
 
-        <table>
-            <p class="friendCount">Total Friends: <span th:text="${count}"></span></p>
-            <a class="button" th:href="@{'/friends/add'}">
-                Add new friend
-            </a>
-            <thead>
-                <tr>
-                    <th>Username</th>               
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="friend : ${friends}">
-                    <td>
-                        <a th:href="@{'/profile/' + ${friend}}" th:text="${friend}"></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        
+        <section class="search-section">
+            <div class="head">
+                <h2>Find new friends</h2>
+                <div class="search">
+                    <input id="query" type="text" placeholder="search by username..." oninput="updateUserSearchList()" onchange="updateUserSearchList()">
+                </div>
+            </div>
+            <ul id="user-list">
+                
+            </ul>
+        </section>
     </div>
 
-    <script th:src="@{/js/popup.js}"></script>
-    
+
+    <script>
+        async function updateUserSearchList() {
+            const query = document.getElementById('query').value;
+            
+            const users = await searchUsers();
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+
+            if (users.length == 0) {
+                var h3 = document.createElement('h3');
+                h3.innerText = 'No user found';
+                userList.appendChild(h3);
+            }
+            
+            for (var i = 0; i < users.length; i++) {
+                var li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="player-data">
+                        <div class="image-container">
+                            <img src="/img/avatar/${users[i].avatar}.png">
+                        </div>
+                        <span>${users[i].username}</span>
+                    </div>
+                    <div class="search-list-buttons">
+                        <a href="/profile/${users[i].username}">
+                            <img src="/img/player/profile_logo_30px.svg" alt="visit profile">
+                        </a>
+                        <a onclick="sendFriendRequest('${users[i].username}')">
+                            <img src="/img/player/add_button.svg" alt="add as friend">
+                        </a>
+                    </div>
+                `;
+                userList.appendChild(li);
+            }
+        }
+
+        async function searchUsers() {
+            const query = document.getElementById('query').value;
+            const response = await fetch('/users/search?query=' + query.toString());
+            if (!response.ok) {
+                throw new Error ('response is not ok. status: ' + status);
+            }
+            const data = await response.json();
+            console.log('searchdata: ', data);
+            const unaddedUsers = await getUnaddedUsers();
+            let userList = [];
+            let index = 0;
+
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < unaddedUsers.length; j++) {
+                    if (data[i].username == unaddedUsers[j].username) {
+                        userList[index] = data[i];
+                        index++;
+                        break;
+                    }
+                }
+            }
+
+            console.log('userlist: ', userList);
+            return userList;
+        }
+
+        async function getUnaddedUsers() {
+            const response = await fetch('/users/friends/show-unadded-players');
+            if (!response.ok) {
+                throw new Error ('response is not ok. status: ' + status);
+            }
+            const data = await response.json();
+            console.log('unadded: ', data);
+            return data;
+        }
+
+        function sendFriendRequest(param) {
+            fetch('/users/friends/add?invited=' + param.toString());
+        }
+
+        updateUserSearchList();
+    </script>
 </body>
 </html>

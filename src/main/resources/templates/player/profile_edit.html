@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Edit profile</title>
+    <link rel="stylesheet" th:href="@{/css/user/edit_profile.css}">
+    <script th:replace="init :: init"></script>
+</head>
+
+<body>
+<nav th:replace="navbar :: navbar"></nav>
+
+<div class="main-container">
+    <div class="button-container">
+        <a th:href="@{/profile}">return to Profile</a>
+    </div>
+    <section class="image-section">
+        <div id="avatar-field" class="avatar">
+            <div id="image-container-preview" class="image-container">
+                <img th:src="@{'/img/avatar/' + ${user.avatar} + '.png'}" />
+            </div>
+            <button onclick="editField('avatar')">Edit avatar</button>
+        </div>
+        <div id="avatar-edit" class="edit">
+            <div class="image-swap">
+                <h1 onclick="previousAvatar()"><</h1>
+                <div id="image-container-edit" class="image-container"></div>
+                <h1 onclick="nextAvatar()">></h1>
+            </div>
+            <form th:action="@{/profile/update}" method="post" th:object="${dto}">
+                <input hidden id="avatar-input" type="text" name="avatar">
+                <button type="submit">Save</button>
+            </form>
+            <button onclick="discard('avatar')">Discard</button>
+        </div>
+    </section>
+
+    <div id="field-description" class="field">
+        <h2>Description:</h2>
+        <p th:if="${user.description == null}">You haven't set description to your profile.</p>
+        <p th:if="${user.description != null}" th:text="${user.description}"></p>
+        <div class="button-container">
+            <button onclick="editField('description')">Edit description</button>
+        </div>
+    </div>
+    <div id="field-description-edit" class="field-edit">
+        <h2>Description:</h2>
+        <form th:action="@{/profile/update}" method="post" th:object="${dto}">
+            <input id="description-input" type="text" name="description" placeholder="set the description of your profile...">
+            <button type="submit">Save</button>
+        </form>
+        <div class="button-container">
+            <button onclick="discard('description')">Discard</button>
+        </div>
+    </div>
+
+    <div id="field-username" class="field">
+        <h2>Username:</h2>
+        <p th:text="${user.username}"></p>
+        <div class="button-container">
+            <button onclick="editField('username')">Edit username</button>
+        </div>
+    </div>
+    <div id="field-username-edit" class="field-edit">
+        <h2>Username:</h2>
+        <form th:action="@{/profile/update}" method="post" th:object="${dto}">
+            <input id="description-input" type="text" name="username" placeholder="enter your new username...">
+            <button type="submit">Save</button>
+        </form>
+        <div class="button-container">
+            <button onclick="discard('username')">Discard</button>
+        </div>
+    </div>
+
+    <div id="field-email" class="field">
+        <h2>E-Mail:</h2>
+        <p th:text="${user.email}"></p>
+        <div class="button-container">
+            <button onclick="editField('email')">Edit e-mail</button>
+        </div>
+    </div>
+    <div id="field-email-edit" class="field-edit">
+        <h2>E-Mail:</h2>
+        <form th:action="@{/profile/update}" method="post" th:object="${dto}">
+            <input id="description-input" type="text" name="email" placeholder="enter your new e-mail...">
+            <button type="submit">Save</button>
+        </form>
+        <div class="button-container">
+            <button onclick="discard('email')">Discard</button>
+        </div>
+    </div>
+
+    <div id="field-firstName" class="field">
+        <h2>First name:</h2>
+        <p th:text="${user.firstName}"></p>
+        <div class="button-container">
+            <button onclick="editField('firstName')">Edit first name</button>
+        </div>
+    </div>
+    <div id="field-firstName-edit" class="field-edit">
+        <h2>First name:</h2>
+        <form th:action="@{/profile/update}" method="post" th:object="${dto}">
+            <input id="description-input" type="text" name="firstName" placeholder="change your first name...">
+            <button type="submit">Save</button>
+        </form>
+        <div class="button-container">
+            <button onclick="discard('firstName')">Discard</button>
+        </div>
+    </div>
+
+    <div id="field-lastName" class="field">
+        <h2>Last name:</h2>
+        <p th:text="${user.lastName}"></p>
+        <div class="button-container">
+            <button onclick="editField('lastName')">Edit last name</button>
+        </div>
+    </div>
+    <div id="field-lastName-edit" class="field-edit">
+        <h2>First name:</h2>
+        <form th:action="@{/profile/update}" method="post" th:object="${dto}">
+            <input id="description-input" type="text" name="lastName" placeholder="change your last name...">
+            <button type="submit">Save</button>
+        </form>
+        <div class="button-container">
+            <button onclick="discard('lastName')">Discard</button>
+        </div>
+    </div>
+
+    <div id="field-password" class="field">
+        <h2>Password:</h2>
+        <p>****** hidden ******</p>
+        <div class="button-container">
+            <button onclick="editField('password')">Edit password</button>
+        </div>
+    </div>
+    <div id="field-password-edit" class="field-edit">
+        <h2>First name:</h2>
+        <form th:action="@{/profile/update}" method="post" th:object="${dto}">
+            <input id="description-input" type="text" name="password" placeholder="enter your new password...">
+            <input id="description-input" type="text" name="confirmPassword" placeholder="enter it again...">
+            <button type="submit">Save</button>
+        </form>
+        <div class="button-container">
+            <button onclick="discard('password')">Discard</button>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    var avatarNumber = 1;
+    const imgContainer = document.getElementById('image-container-edit');
+    const avatarInput = document.getElementById('avatar-input');
+    
+    function nextAvatar() {
+        if (avatarNumber >= 21) return null;
+        avatarNumber++;
+        updateAvatar();
+        console.log(avatarNumber);
+    }
+    function previousAvatar() {
+        if (avatarNumber <= 1) return null;
+        avatarNumber--;
+        updateAvatar();
+    }
+    function updateAvatar() {
+        imgContainer.innerHTML = `
+        <img src="/img/avatar/avatar${avatarNumber}.png"></img>
+    `;
+    avatarInput.value = ("avatar" + avatarNumber).toString();
+    }
+    updateAvatar();
+
+
+
+
+
+    function editField(field) {
+        if (field == 'avatar') {
+            document.getElementById('avatar-field').style.display = 'none';
+            document.getElementById('avatar-edit').style.display = 'flex';
+        }
+        if (field == 'description') {
+            document.getElementById('field-description').style.display = 'none';
+            document.getElementById('field-description-edit').style.display = 'flex';
+        }
+        if (field == 'username') {
+            document.getElementById('field-username').style.display = 'none';
+            document.getElementById('field-username-edit').style.display = 'flex';
+        }
+        if (field == 'email') {
+            document.getElementById('field-email').style.display = 'none';
+            document.getElementById('field-email-edit').style.display = 'flex';
+        }
+        if (field == 'firstName') {
+            document.getElementById('field-firstName').style.display = 'none';
+            document.getElementById('field-firstName-edit').style.display = 'flex';
+        }
+        if (field == 'lastName') {
+            document.getElementById('field-lastName').style.display = 'none';
+            document.getElementById('field-lastName-edit').style.display = 'flex';
+        }
+        if (field == 'password') {
+            document.getElementById('field-password').style.display = 'none';
+            document.getElementById('field-password-edit').style.display = 'flex';
+        }
+    }
+
+    function discard(item) {
+        if (item == 'avatar') {
+            document.getElementById('avatar-field').style.display = 'flex';
+            document.getElementById('avatar-edit').style.display = 'none';
+        }
+        if (item == 'description') {
+            document.getElementById('field-description').style.display = 'flex';
+            document.getElementById('field-description-edit').style.display = 'none';
+        }
+        if (item == 'username') {
+            document.getElementById('field-username').style.display = 'flex';
+            document.getElementById('field-username-edit').style.display = 'none';
+        }
+        if (item == 'email') {
+            document.getElementById('field-email').style.display = 'flex';
+            document.getElementById('field-email-edit').style.display = 'none';
+        }
+        if (item == 'firstName') {
+            document.getElementById('field-firstName').style.display = 'flex';
+            document.getElementById('field-firstName-edit').style.display = 'none';
+        }
+        if (item == 'lastName') {
+            document.getElementById('field-lastName').style.display = 'flex';
+            document.getElementById('field-lastName-edit').style.display = 'none';
+        }
+        if (item == 'password') {
+            document.getElementById('field-password').style.display = 'flex';
+            document.getElementById('field-password-edit').style.display = 'none';
+        }
+    }
+
+
+</script>
+
+
+</body>
+</html>

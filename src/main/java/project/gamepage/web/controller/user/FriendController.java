@@ -1,5 +1,7 @@
 package project.gamepage.web.controller.user;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import project.gamepage.data.model.user.User;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
@@ -10,11 +12,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import project.gamepage.web.dto.ProfileDto;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/friends")
@@ -35,45 +36,43 @@ public class FriendController {
     @GetMapping
     public String getFriendList(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-        List<String> friendList = service.getUserFriendsList(principal.getName());
-
-        if (friendList != null) {
-            model.addAttribute("success", true);
-            model.addAttribute("friends", friendList);
-            model.addAttribute("count", friendList.size());
-        }
-
+        ProfileDto dto = new ProfileDto(userService.findByUsername(principal.getName()));
+        model.addAttribute("dto", dto);
         return "player/friendList";
     }
 
     @GetMapping("/add")
-    public String getAddFriend(Model model, Principal principal) {
-        model.addAttribute("username", principal.getName());
-        return "player/addFriend";
-    }
-
-    @PostMapping("/add")
-    public String addFriend(Model model, Principal principal, String invited, HttpServletRequest http) {
+    private boolean addFriend(Model model, Principal principal, String invited, HttpServletRequest http) {
         User invitedUser = userService.findByUsername(invited);
-        if (invitedUser == null) {
-            return "redirect:/friends/add?userNotFound";
-        }
+        if (invitedUser == null) return false;
 
         service.addUserFriends(principal.getName(), invited);
         template.convertAndSendToUser(invited, "/topic/invites", "friend-request");
-        return "redirect:" + http.getHeader("Referer");
+        return true;
+    }
+
+    @GetMapping("/is-friend")
+    private ResponseEntity<Boolean> isFriend(Principal principal, @RequestParam("user")String user) {
+        boolean result = service.isFriend(principal.getName(), user);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/is-friend-request-sent")
+    private ResponseEntity<Boolean> isFriendRequestSent(Principal principal, @RequestParam("user")String user) {
+        boolean result = service.isFriendInvitationSent(principal.getName(), user);
+        return ResponseEntity.ok(result);
     }
 
 
-    @PostMapping("/decline-friend-request")
-    public String declineFriendRequest(Model model, Principal principal, String inviter, HttpServletRequest http) {
+    @GetMapping("/decline-friend-request")
+    public ResponseEntity<Boolean> declineFriendRequest(Principal principal, @RequestParam("inviter")String inviter) {
         service.declineFriendRequest(principal.getName(), inviter);
-        return "redirect:" + http.getHeader("Referer");
+        return ResponseEntity.ok(true);
     }
 
-    @PostMapping("/delete-friend")
-    public String deleteFriend(Model model, Principal principal, String user2, HttpServletRequest http) {
+    @GetMapping("/delete-friend")
+    public ResponseEntity<Boolean> deleteFriend(Principal principal, @RequestParam("user2")String user2) {
         service.deleteFriends(principal.getName(), user2);
-        return "redirect:" + http.getHeader("Referer");
+        return ResponseEntity.ok(true);
     }
 }

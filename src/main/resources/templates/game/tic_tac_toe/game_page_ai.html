@@ -8,14 +8,10 @@
 
     <title>Play - Tic-Tac-Toe</title>
 
-    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/tic_tac_toe/game_page.css}"/>
     <link rel="stylesheet" th:href="@{/css/popup.css}"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <!--    end libs for stomp and sockjs-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script th:replace="init :: init"></script>
 
     <style th:inline="text">
         body {

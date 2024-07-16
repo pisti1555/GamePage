@@ -4,66 +4,38 @@ function connectToWebSocket() {
     var socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/user/topic/lobby/update', function (message) {
-            console.log('Received message: ' + message.body);
             window.location.reload();
         });
         stompClient.subscribe('/user/topic/lobby/start', function (message) {
-            console.log('Received message: ' + message.body);
             window.location.href = '/fly-in-the-web/game/pvp';
         });
         stompClient.subscribe('/user/topic/invites', function (message) {
-            console.log('Received message: ' + message.body);
-            window.location.reload();
+            loadNavBar();
         });
     });
 }
 
 
-async function getLobbyUsers() {
-    try {
-        const response = await fetch("/api/lobby/get-lobby-users?game=FITW");
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error - Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching data', error);
-    }
+
+async function showLobbyUsers() {
+    const users = await getLobbyUsers();
+    const user1Name = document.getElementById('lobby_user1_name');
+    const user1Avatar = document.getElementById('lobby_user1_avatar');
+    const user2Name = document.getElementById('lobby_user2_name');
+    const user2Avatar = document.getElementById('lobby_user2_avatar');
+    
+    user1Name.innerText = users[0].username;
+    user1Avatar.src = '/img/avatar/' + users[0].avatar + '.png';
+
+    if (users[1] == null) return null;
+    user2Name.innerText = users[1].username;
+    user2Avatar.src = '/img/avatar/' + users[1].avatar + '.png';
 }
 
-async function getInvitedUsers() {
-    try {
-        const response = await fetch("/api/lobby/already-invited-friend-list?game=FITW");
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error - Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching data', error);
-    }
-}
 
-async function getUninvitedUsers() {
-    try {
-        const response = await fetch("/api/lobby/uninvited-friend-list?game=FITW");
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error - Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching data', error);
-    }
-}
 
-async function getFriendsToInvite() {
+async function showFriendsToInvite() {
     const lobbyUsers = await getLobbyUsers();
     const alreadyInvitedFriends = await getInvitedUsers();
     const uninvitedFriends = await getUninvitedUsers();
@@ -79,27 +51,29 @@ async function getFriendsToInvite() {
     }
 
     for (let friend of alreadyInvitedFriends) {
-        if (friend == lobbyUsers[0] || friend == lobbyUsers[1]) continue;
+        if (friend.username == lobbyUsers[0].username || (lobby[1] != null && friend.username == lobbyUsers[1].username)) continue;
             const li = document.createElement('li');
             li.innerHTML = `
-                <h3>${friend}</h3>
+                <h3>${friend.username}</h3>
                 <button disabled class="button-disabled">Invited</button>
             `;
             friendList.appendChild(li);
     }
     for (let friend of uninvitedFriends) {
-        if (friend == lobbyUsers[0] || friend == lobbyUsers[1]) continue;
+        if (friend.username == lobbyUsers[0].username || (lobby[1] != null && friend.username == lobbyUsers[1].username)) continue;
         const li = document.createElement('li');
         li.innerHTML = `
-            <h3>${friend}</h3>
+            <h3>${friend.username}</h3>
             <form action="/fly-in-the-web/lobby/invite" method="post">
-                <input type="hidden" name="friendUsername" value="${friend}"/>
+                <input type="hidden" name="friendUsername" value="${friend.username}"/>
                 <button class="button" type="submit">Invite</button>
             </form>
         `;
         friendList.appendChild(li);
     }
 }
+
+
 
 // --------------------- Lobby status --------------------------
 
@@ -146,7 +120,7 @@ async function getUninvitedUsers() {
 
 async function getMessages() {
     const lobby = await getLobbyUsers();
-    const username = lobby[0];
+    const username = lobby[0].username;
     try {
         const response = await fetch("/chat/get-lobby-chat?game=FITW");
         if (!response.ok) {
@@ -158,15 +132,11 @@ async function getMessages() {
         for (var i = 0; i < data.length; i++) {
             let li = document.createElement('li');
             if (username == data[i].username) {
-                console.log('ugyanaz');
                 li.innerHTML = `
                     <span class="sender right-side">${data[i].username}</span>
                     <span class="message right-side">${data[i].message}</span>
                 `;
             } else {
-                console.log('nem ugyanaz');
-                console.log(username);
-                console.log('data username: ' + data.username);
                 li.innerHTML = `
                     <span class="sender">${data[i].username}</span>
                     <span class="message">${data[i].message}</span>
@@ -217,5 +187,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 connectToWebSocket();
-getFriendsToInvite();
+showLobbyUsers();
+showFriendsToInvite();
 getMessages();

@@ -1,15 +1,19 @@
 package project.gamepage.web.controller.game;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
+import project.gamepage.service.ProfileDataService;
 import project.gamepage.service.UserFriendsService;
+import project.gamepage.service.UserService;
 import project.gamepage.service.game.fly_in_the_web.GameService_FITW;
 import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
 import project.gamepage.service.invitations.InvitationService;
+import project.gamepage.web.dto.ProfileDto;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -19,24 +23,30 @@ import java.util.List;
 @RequestMapping("/api/lobby")
 public class APILobbyController {
     private final UserFriendsService friendsService;
+    private final ProfileDataService profileDataService;
+    private final UserService userService;
     private final InvitationService invitationService;
     private final GameService_TicTacToe ticTacToeService;
     private final GameService_FITW fitwService;
+    private final SimpMessagingTemplate template;
     @Autowired
-    public APILobbyController(UserFriendsService friendsService, InvitationService invitationService, GameService_TicTacToe ticTacToeService, GameService_FITW fitwService) {
+    public APILobbyController(UserFriendsService friendsService, ProfileDataService profileDataService, UserService userService, InvitationService invitationService, GameService_TicTacToe ticTacToeService, GameService_FITW fitwService, SimpMessagingTemplate template) {
         this.friendsService = friendsService;
+        this.profileDataService = profileDataService;
+        this.userService = userService;
         this.invitationService = invitationService;
         this.ticTacToeService = ticTacToeService;
         this.fitwService = fitwService;
+        this.template = template;
     }
 
     @GetMapping("/already-invited-friend-list")
-    private List<String> getAlreadyInvitedFriendList(Principal principal, @RequestParam("game")String game) {
+    public List<ProfileDto> getAlreadyInvitedFriendList(Principal principal, @RequestParam("game")String game) {
         String username = principal.getName();
-        List<String> friendList = friendsService.getUserFriendsList(username);
-        ArrayList<String> invitedList = new ArrayList<>();
-        for (String user : friendList) {
-            if(invitationService.isInvitationSent(user, username, game)) {
+        List<ProfileDto> friendList = friendsService.getUserFriendsList(username);
+        ArrayList<ProfileDto> invitedList = new ArrayList<>();
+        for (ProfileDto user : friendList) {
+            if(invitationService.isInvitationSent(user.getUsername(), username, game)) {
                 invitedList.add(user);
             }
         }
@@ -44,45 +54,46 @@ public class APILobbyController {
     }
 
     @GetMapping("/uninvited-friend-list")
-    private List<String> getUninvitedFriendList(Principal principal, @RequestParam("game")String game) {
+    public List<ProfileDto> getUninvitedFriendList(Principal principal, @RequestParam("game")String game) {
         String username = principal.getName();
-        List<String> friendList = friendsService.getUserFriendsList(username);
-        ArrayList<String> uninvitedList = new ArrayList<>();
-        for (String user : friendList) {
-            if(!invitationService.isInvitationSent(user, username, game)) {
+        List<ProfileDto> friendList = friendsService.getUserFriendsList(username);
+        ArrayList<ProfileDto> uninvitedList = new ArrayList<>();
+        for (ProfileDto user : friendList) {
+            if(!invitationService.isInvitationSent(user.getUsername(), username, game)) {
                 uninvitedList.add(user);
             }
         }
+
         return uninvitedList;
     }
 
     @GetMapping("/get-lobby-users")
-    private String[] getLobbyUsers(Principal principal, @RequestParam("game")String game) {
+    public ProfileDto[] getLobbyUsers(Principal principal, @RequestParam("game")String game) {
         String username = principal.getName();
         if (game.equals("TicTacToe")) {
             PvP<TicTacToe> pvp = ticTacToeService.getPvP(username);
-            String[] users = new String[2];
-            users[0] = pvp.getUser1();
-            users[1] = pvp.getUser2();
+            ProfileDto[] users = new ProfileDto[2];
+            users[0] = new ProfileDto(userService.findByUsername(pvp.getUser1()));
+            if (pvp.getUser2() != null) users[1] = new ProfileDto(userService.findByUsername(pvp.getUser2()));
             return users;
         }
         if (game.equals("FITW")) {
             PvP<FITW> pvp = fitwService.getPvP(username);
-            String[] users = new String[2];
-            users[0] = pvp.getUser1();
-            users[1] = pvp.getUser2();
+            ProfileDto[] users = new ProfileDto[2];
+            users[0] = profileDataService.getProfileData(pvp.getUser1());
+            if (pvp.getUser2() != null) users[1] = new ProfileDto(userService.findByUsername(pvp.getUser2()));
             return users;
         }
         return null;
     }
 
     @GetMapping("/get-username")
-    private String getUsername(Principal principal) {
+    public String getUsername(Principal principal) {
         return principal.getName();
     }
 
     @GetMapping("is-player1-ready")
-    private boolean isPlayer1Ready(Principal principal, @RequestParam("game")String game) {
+    public boolean isPlayer1Ready(Principal principal, @RequestParam("game")String game) {
         String username = principal.getName();
         if (game.equals("TicTacToe")) {
             PvP<TicTacToe> pvp = ticTacToeService.getPvP(username);
@@ -96,7 +107,7 @@ public class APILobbyController {
     }
 
     @GetMapping("is-player2-ready")
-    private boolean isPlayer2Ready(Principal principal, @RequestParam("game")String game) {
+    public boolean isPlayer2Ready(Principal principal, @RequestParam("game")String game) {
         String username = principal.getName();
         if (game.equals("TicTacToe")) {
             PvP<TicTacToe> pvp = ticTacToeService.getPvP(username);
@@ -110,7 +121,7 @@ public class APILobbyController {
     }
 
     @GetMapping("set-ready")
-    private void ready(Principal principal, @RequestParam("game")String game) {
+    public void ready(Principal principal, @RequestParam("game")String game) {
         String username = principal.getName();
         if (game.equals("TicTacToe")) {
             PvP<TicTacToe> pvp = ticTacToeService.getPvP(username);
@@ -131,7 +142,7 @@ public class APILobbyController {
     }
 
     @GetMapping("/is-all-ready")
-    private boolean isAllReady(Principal principal, @RequestParam("game")String game) {
+    public boolean isAllReady(Principal principal, @RequestParam("game")String game) {
         if (game.equals("TicTacToe")) {
             PvP<TicTacToe> pvp = ticTacToeService.getPvP(principal.getName());
             return pvp.isReadyToStart();
@@ -144,7 +155,9 @@ public class APILobbyController {
     }
 
     @GetMapping("/decline-lobby-invitation")
-    public void declineLobbyInvitation_TicTacToe(HttpServletRequest http, Principal principal, @RequestParam("inviter")String inviter, @RequestParam("game")String game) {
+    public ResponseEntity<Boolean> declineLobbyInvitation_TicTacToe(Principal principal, @RequestParam("inviter")String inviter, @RequestParam("game")String game) {
         invitationService.removeInvitation(principal.getName(), inviter, game);
+        template.convertAndSendToUser(inviter, "/topic/lobby/update", "update");
+        return ResponseEntity.ok(true);
     }
 }

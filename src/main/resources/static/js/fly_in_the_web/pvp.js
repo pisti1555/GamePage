@@ -6,13 +6,10 @@ function connectToWebSocket() {
     var socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/user/topic/game/update', function (message) {
-            console.log('Received message: ' + message.body);
             fetchPositions();
         });
         stompClient.subscribe('/user/topic/game/return-to-lobby', function (message) {
-            console.log('Received message: ' + message.body);
             fetchPositions();
         });
     });

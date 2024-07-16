@@ -25,6 +25,8 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    private String avatar;
+    private String description;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
@@ -36,22 +38,21 @@ public class User implements UserDetails {
 
     @ManyToMany
     @JoinTable(name = "user_friend_requests", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id") )
-    private Set<User> userFriendRequest;
+    private Set<User> userFriendRequests;
     @ManyToMany
     @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id") )
-    private Set<User> userFriend;
+    private Set<User> userFriends;
     private int gamesPlayed;
     private int gamesWon;
     private int movesDone;
-
-
 
     public User() {
         super();
         this.roles = new HashSet<>();
     }
-    public User(String username, String email, String password, String firstName, String lastName, Collection<Role> roles, int gamesPlayed, int gamesWon, int movesDone) {
+    public User(String username, String avatar, String email, String password, String firstName, String lastName, Collection<Role> roles, int gamesPlayed, int gamesWon, int movesDone) {
         this.username = username;
+        this.avatar = avatar;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -63,17 +64,17 @@ public class User implements UserDetails {
     }
 
     public void sendFriendRequest(User user) {
-        if (CollectionUtils.isEmpty(this.userFriendRequest)) {
-            this.userFriendRequest = new HashSet<>();
+        if (CollectionUtils.isEmpty(this.userFriendRequests)) {
+            this.userFriendRequests = new HashSet<>();
         }
-        this.userFriendRequest.add(user);
+        this.userFriendRequests.add(user);
     }
 
     public void addFriend(User user) {
-        if (CollectionUtils.isEmpty(this.userFriend)) {
-            this.userFriend = new HashSet<>();
+        if (CollectionUtils.isEmpty(this.userFriends)) {
+            this.userFriends = new HashSet<>();
         }
-        this.userFriend.add(user);
+        this.userFriends.add(user);
     }
 
     public Long getId() {
@@ -88,20 +89,20 @@ public class User implements UserDetails {
         return username;
     }
 
-    public Set<User> getUserFriendRequest() {
-        return userFriendRequest;
+    public Set<User> getUserFriendRequests() {
+        return userFriendRequests;
     }
 
-    public Set<User> getUserFriend() {
-        return userFriend;
+    public Set<User> getUserFriends() {
+        return userFriends;
     }
 
-    public void setUserFriend(Set<User> userFriend) {
-        this.userFriend = userFriend;
+    public void setUserFriends(Set<User> userFriends) {
+        this.userFriends = userFriends;
     }
 
-    public void setUserFriendRequest(Set<User> userFriendRequest) {
-        this.userFriendRequest = userFriendRequest;
+    public void setUserFriendRequests(Set<User> userFriendRequests) {
+        this.userFriendRequests = userFriendRequests;
     }
 
     @Override
@@ -195,5 +196,21 @@ public class User implements UserDetails {
 
     public void setMovesDone(int movesDone) {
         this.movesDone = movesDone;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

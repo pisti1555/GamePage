@@ -3,7 +3,7 @@ package project.gamepage.service;
 import project.gamepage.data.model.user.Role;
 import project.gamepage.data.model.user.User;
 import project.gamepage.data.repository.UserRepository;
-import project.gamepage.web.dto.RegistrationDto;
+import project.gamepage.web.dto.UserDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String register(RegistrationDto dto) {
+    public String validateDto(UserDto dto) {
         StringBuilder builder = new StringBuilder();
         boolean isUsernameAvailable = false;
         boolean isEmailAvailable = false;
@@ -57,47 +57,102 @@ public class UserServiceImpl implements UserService {
         if (!isPasswordValid) builder.append("&passwordInvalid");
         if (!passwordsMatch) builder.append("&passwordConfirmationError");
 
-        if (builder.isEmpty()) {
-            String password = passwordEncoder.encode(dto.getPassword());
-            User user = new User(dto.getUsername(), dto.getEmail(), password,
-                    dto.getFirstName(), dto.getLastName(),
-                    List.of(new Role("ROLE_USER")), 0, 0, 0);
-            userRepository.save(user);
-        }
-
         return builder.toString();
     }
 
     @Override
-    public String validateUserData(String username, String password, String email) {
-        StringBuilder builder = new StringBuilder();
-        boolean isUsernameAvailable = false;
-        boolean isEmailAvailable = false;
-        boolean isUsernameValid = !username.contains(" ");
-        boolean isPasswordValid = false;
-        boolean isEmailValid;
+    public User editProfile(User user, UserDto dto) {
+        if (dto.getUsername() != null && !dto.getUsername().isEmpty()) {
+            if (!user.getUsername().equals(dto.getUsername())) {
+                if (
+                        userRepository.findByUsername(dto.getUsername()) == null
+                                && !dto.getUsername().contains(" ")
+                ) {
+                    user.setUsername(dto.getUsername());
+                    update(user);
+                    return user;
+                }
+            }
+        }
 
-        if (userRepository.findByUsername(username) == null) isUsernameAvailable = true;
-        if (userRepository.findByEmail(email) == null) isEmailAvailable = true;
+        if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+            if (!user.getEmail().equals(dto.getEmail())) {
+                String emailRegex = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+                Pattern emailPattern = Pattern.compile(emailRegex);
+                Matcher emailMatcher = emailPattern.matcher(dto.getEmail());
+                if (
+                        userRepository.findByEmail(dto.getEmail()) == null
+                                && emailMatcher.matches()
+                ) {
+                    user.setEmail(dto.getEmail());
+                    update(user);
+                    return user;
+                }
+            }
+        }
 
-        if (password.length() >= 6 && password.length() <= 30 &&
-                password.matches(".*[a-zA-Z].*") &&
-                password.matches(".*[0-9].*")) isPasswordValid = true;
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            if (!user.getPassword().equals(dto.getPassword())) {
+                if (
+                        dto.getPassword().equals(dto.getConfirmPassword()) &&
+                        dto.getPassword().length() >= 6 && dto.getPassword().length() <= 30 &&
+                                dto.getPassword().matches(".*[a-zA-Z].*") &&
+                                dto.getPassword().matches(".*[0-9].*")
+                ) {
+                    String password = passwordEncoder.encode(dto.getPassword());
+                    user.setPassword(password);
+                    update(user);
+                    return user;
+                }
+            }
+        }
 
-        String emailRegex = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        Pattern emailPattern = Pattern.compile(emailRegex);
-        Matcher emailMatcher = emailPattern.matcher(email);
-        isEmailValid = emailMatcher.matches();
+        if (dto.getFirstName() != null && !dto.getFirstName().isEmpty()) {
+            if (!user.getFirstName().equals(dto.getFirstName())) {
+                user.setFirstName(dto.getFirstName());
+                update(user);
+                return user;
+            }
+        }
 
-        if (!isUsernameAvailable) builder.append("&username-taken");
-        if (!isEmailAvailable) builder.append("&email-taken");
-        if (!isUsernameValid) builder.append("&username-invalid");
-        if (!isEmailValid) builder.append("&email-invalid");
-        if (!isPasswordValid) builder.append("&password-invalid");
+        if (dto.getLastName() != null && !dto.getLastName().isEmpty()) {
+            if (!user.getLastName().equals(dto.getLastName())) {
+                user.setLastName(dto.getLastName());
+                update(user);
+                return user;
+            }
+        }
 
-        builder.deleteCharAt(0);
+        if (dto.getDescription() != null && !dto.getDescription().isEmpty()) {
+            if (!user.getDescription().equals(dto.getDescription())) {
+                user.setDescription(dto.getDescription());
+                update(user);
+                return user;
+            }
+        }
 
-        return builder.toString();
+        if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
+            if (!user.getAvatar().equals(dto.getAvatar())) {
+                user.setAvatar(dto.getAvatar());
+                update(user);
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public String register(UserDto dto) {
+        String response = validateDto(dto);
+        if (response.isEmpty()) {
+            String password = passwordEncoder.encode(dto.getPassword());
+            User user = new User(dto.getUsername(), dto.getAvatar(), dto.getEmail(), password,
+                    dto.getFirstName(), dto.getLastName(),
+                    List.of(new Role("ROLE_USER")), 0, 0, 0);
+            userRepository.save(user);
+        }
+        return response;
     }
 
     @Override
@@ -113,6 +168,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public List<User> searchUsers(String query) {
+        return userRepository.searchByUsername(query);
     }
 
     @Override
