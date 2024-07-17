@@ -79,17 +79,9 @@ async function loadNavBar() {
     for (let request of friendRequestList) {
         const li = document.createElement('li');
         li.innerHTML = `
-            <div class="row">
-                <h3 class="requestMessage">${request} has sent a friend request</h3>
-                <form action="/friends/add" method="post">
-                    <input type="hidden" name="invited" value="${request}" />
-                    <button class="nav-button" type="submit">Accept</button>
-                </form>
-                <form action="/friends/decline-friend-request" method="post">
-                    <input type="hidden" name="inviter" value="${request}" />
-                    <button class="nav-button" type="submit">Decline</button>
-                </form>
-            </div>
+            <h3 class="requestMessage">${request.username} has sent a friend request</h3>
+            <button class="nav-button" onclick="acceptFriendRequest('${request.username}')">Accept</button>
+            <button class="nav-button" onclick="declineFriendRequest('${request.username}')">Decline</button>
         `;
         friendRequestListDoc.appendChild(li);
     }
@@ -111,27 +103,23 @@ async function loadNavBar() {
         const li = document.createElement('li');
         if (invite.game == "FITW") {
             li.innerHTML = `
-            <div class="row">
                 <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
                 <form action="/fly-in-the-web/lobby/join" method="post">
                     <input type="hidden" name="inviter" value="${invite.inviter}" />
                     <button class="nav-button" type="submit">Join</button>
                 </form>
                 <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter}')">Decline</button>
-            </div>
-        `;
+            `;
         }
         if (invite.game == "TicTacToe") {
             li.innerHTML = `
-            <div class="row">
                 <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
                 <form action="/tic-tac-toe/join" method="post">
                     <input type="hidden" name="inviter" value="${invite.inviter}" />
                     <button class="nav-button" type="submit">Join</button>
                 </form>
                 <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter}')">Decline</button>
-            </div>
-        `;
+            `;
         }
         
         gameInvitationListDoc.appendChild(li);
@@ -147,6 +135,24 @@ async function loadNavBar() {
     } else {
         gameInvitationCountDoc.style.display = 'none';
         gameInvitationText.style.display = 'flex';
+    }
+}
+
+async function acceptFriendRequest(username) {
+    try {
+        await fetch('/friends/add?invited=' + username);
+        await loadNavBar();
+    } catch (error) {
+        console.error('Error sending friend request:', error);
+    }
+}
+
+async function declineFriendRequest(username) {
+    try {
+        await fetch('/friends/decline-friend-request?inviter=' + username);
+        await loadNavBar();
+    } catch (error) {
+        console.error('Error deleting friend:', error);
     }
 }
 

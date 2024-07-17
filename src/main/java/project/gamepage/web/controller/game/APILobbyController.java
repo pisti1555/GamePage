@@ -10,8 +10,8 @@ import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.ProfileDataService;
 import project.gamepage.service.UserFriendsService;
 import project.gamepage.service.UserService;
-import project.gamepage.service.game.fly_in_the_web.GameService_FITW;
-import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
+import project.gamepage.service.game.GameService_FITW;
+import project.gamepage.service.game.GameService_TicTacToe;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.web.dto.ProfileDto;
 

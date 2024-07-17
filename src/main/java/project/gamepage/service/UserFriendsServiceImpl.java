@@ -1,27 +1,26 @@
 package project.gamepage.service;
 
 import project.gamepage.data.model.user.User;
-import project.gamepage.data.repository.FriendRequestDao;
-import project.gamepage.data.repository.UserFriendDao;
+import project.gamepage.data.repository.FriendRequestRepository;
+import project.gamepage.data.repository.FriendRepository;
 import project.gamepage.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.gamepage.web.dto.ProfileDto;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserFriendsServiceImpl implements UserFriendsService {
 
-    private final FriendRequestDao request;
-    private final UserFriendDao dao;
+    private final FriendRequestRepository request;
+    private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserFriendsServiceImpl(UserFriendDao dao, FriendRequestDao request, UserRepository userRepository) {
+    public UserFriendsServiceImpl(FriendRepository friendRepository, FriendRequestRepository request, UserRepository userRepository) {
         this.request = request;
-        this.dao = dao;
+        this.friendRepository = friendRepository;
         this.userRepository = userRepository;
     }
 
@@ -57,8 +56,8 @@ public class UserFriendsServiceImpl implements UserFriendsService {
             user1.addFriend(user2);
             user2.addFriend(user1);
 
-            this.dao.save(user1);
-            this.dao.save(user2);
+            this.friendRepository.save(user1);
+            this.friendRepository.save(user2);
 
             this.request.deleteFriendRequest(user1.getId(), user2.getId());
             this.request.deleteFriendRequest(user2.getId(), user1.getId());
@@ -69,7 +68,7 @@ public class UserFriendsServiceImpl implements UserFriendsService {
 
     @Override
     public List<ProfileDto> getUserFriendsList(String username) {
-        User user = this.dao.findByUsername(username);
+        User user = this.friendRepository.findByUsername(username);
         if (user == null) return null;
         List<ProfileDto> list = new ArrayList<>();
         for (User u : user.getUserFriends()) {
@@ -84,13 +83,14 @@ public class UserFriendsServiceImpl implements UserFriendsService {
         for (User i : userRepository.findAll()) {
             boolean areFriends = false;
             for (ProfileDto j : getUserFriendsList(username)) {
-                if (i.getUsername().equals(j.getUsername()) || i.getUsername().equals(username)) {
+                if (i.getUsername().equals(j.getUsername())) {
                     areFriends = true;
                     break;
                 }
             }
             if (!areFriends) users.add(new ProfileDto(i.getUsername(), i.getAvatar()));
         }
+        users.removeIf(i -> i.getUsername().equals(username));
         return users;
     }
 
@@ -138,16 +138,16 @@ public class UserFriendsServiceImpl implements UserFriendsService {
             Long user1Id = user1.getId();
             Long user2Id = user2.getId();
 
-            dao.deleteFriend(user1Id, user2Id);
-            dao.deleteFriend(user2Id,  user1Id);
+            friendRepository.deleteFriend(user1Id, user2Id);
+            friendRepository.deleteFriend(user2Id,  user1Id);
         }
     }
 
 
     @Override
     public boolean isFriend(String principal, String username) {
-        User client = this.dao.findByUsername(principal);
-        User user = this.dao.findByUsername(username);
+        User client = this.friendRepository.findByUsername(principal);
+        User user = this.friendRepository.findByUsername(username);
 
         return user != null && user.getUserFriends().contains(client) || client == user;
     }

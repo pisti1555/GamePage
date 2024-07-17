@@ -15,10 +15,12 @@ import java.util.List;
 @RequestMapping("/users")
 public class ProfileDtoController {
     private final ProfileDataService service;
+    private final UserFriendsService friendsService;
     private final SimpMessagingTemplate template;
     @Autowired
-    public ProfileDtoController(ProfileDataService service, UserService userService, UserFriendsService friendsService, SimpMessagingTemplate template) {
+    public ProfileDtoController(ProfileDataService service, UserFriendsService friendsService, SimpMessagingTemplate template) {
         this.service = service;
+        this.friendsService = friendsService;
         this.template = template;
     }
 
@@ -28,14 +30,15 @@ public class ProfileDtoController {
     }
 
     @GetMapping("/get-all")
-    private List<ProfileDto> getAll() {
-        return service.getAll();
+    private List<ProfileDto> getAll(Principal principal) {
+        List<ProfileDto> list = service.getAll();
+        list.removeIf(i -> i.getUsername().equals(principal.getName()));
+        return list;
     }
-
 
     // ---------------- Friends --------------------
     @GetMapping("/friends/show-unadded-players")
     private List<ProfileDto> showUnaddedFriends(Principal principal) {
-        return service.showUnaddedFriends(principal.getName());
+        return friendsService.getUnaddedUsers(principal.getName());
     }
 }

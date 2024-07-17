@@ -8,6 +8,7 @@ import project.gamepage.web.dto.ProfileDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProfileDataService {
@@ -38,34 +39,4 @@ public class ProfileDataService {
         }
         return list;
     }
-
-
-
-    // ---------------------- Friends --------------------------
-    public boolean addFriend(String inviter, String invited) {
-        User invitedUser = userService.findByUsername(invited);
-        if (invitedUser == null) return false;
-        friendsService.addUserFriends(inviter, invited);
-        return true;
-    }
-
-    public List<ProfileDto> showUnaddedFriends(String username) {
-        List<ProfileDto> users = new ArrayList<>();
-        for (User i : userService.findAll()) {
-            boolean areFriends = false;
-            for (ProfileDto j : friendsService.getUserFriendsList(username)) {
-                if (i.getUsername().equals(j.getUsername()) || i.getUsername().equals(username)) {
-                    areFriends = true;
-                    break;
-                }
-            }
-            if (!areFriends) users.add(new ProfileDto(i.getUsername(), i.getAvatar()));
-        }
-        return users;
-    }
-
-
-
-
-
 }

@@ -33,6 +33,12 @@ public class ProfileDto {
             friendss.put(u.getUsername(), u.getAvatar());
             friends.add(new ProfileDto(u.getUsername(), u.getAvatar()));
         }
+        this.fitwGamesPlayed = user.getFitwStats().getGamesPlayed();
+        this.fitwGamesWon = user.getFitwStats().getGamesWon();
+        this.fitwStepsMade = user.getFitwStats().getStepsMade();
+        this.tictactoeGamesPlayed = user.getTicTacToeStats().getGamesPlayed();
+        this.tictactoeGamesWon = user.getTicTacToeStats().getGamesWon();
+        this.tictactoeMovesDone = user.getTicTacToeStats().getMovesMade();
     }
 
     public ProfileDto(String username, String avatar) {

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
+import project.gamepage.data.model.game.stats.FitwStats;
+import project.gamepage.data.model.game.stats.TicTacToeStats;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -45,6 +47,12 @@ public class User implements UserDetails {
     private int gamesPlayed;
     private int gamesWon;
     private int movesDone;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinTable(name = "stats_fitw", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "fitw_id") )
+    private FitwStats fitwStats;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinTable(name = "stats_tictactoe", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tictactoe_id") )
+    private TicTacToeStats ticTacToeStats;
 
     public User() {
         super();
@@ -61,6 +69,8 @@ public class User implements UserDetails {
         this.gamesPlayed = gamesPlayed;
         this.gamesWon = gamesWon;
         this.movesDone = movesDone;
+        this.ticTacToeStats = new TicTacToeStats(this, 0, 0, 0);
+        this.fitwStats = new FitwStats(this, 0, 0, 0);
     }
 
     public void sendFriendRequest(User user) {
@@ -212,5 +222,21 @@ public class User implements UserDetails {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public FitwStats getFitwStats() {
+        return fitwStats;
+    }
+
+    public void setFitwStats(FitwStats fitwStats) {
+        this.fitwStats = fitwStats;
+    }
+
+    public TicTacToeStats getTicTacToeStats() {
+        return ticTacToeStats;
+    }
+
+    public void setTicTacToeStats(TicTacToeStats ticTacToeStats) {
+        this.ticTacToeStats = ticTacToeStats;
     }
 }

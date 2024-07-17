@@ -1,7 +1,11 @@
 package project.gamepage.service;
 
+import project.gamepage.data.model.game.stats.FitwStats;
+import project.gamepage.data.model.game.stats.TicTacToeStats;
 import project.gamepage.data.model.user.Role;
 import project.gamepage.data.model.user.User;
+import project.gamepage.data.repository.FitwRepository;
+import project.gamepage.data.repository.TicTacToeRepository;
 import project.gamepage.data.repository.UserRepository;
 import project.gamepage.web.dto.UserDto;
 import jakarta.transaction.Transactional;
@@ -20,11 +24,15 @@ import java.util.regex.Pattern;
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final FitwRepository fitwRepository;
+    private final TicTacToeRepository ticTacToeRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, FitwRepository fitwRepository, TicTacToeRepository ticTacToeRepository) {
         this.userRepository = userRepository;
+        this.fitwRepository = fitwRepository;
+        this.ticTacToeRepository = ticTacToeRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -95,7 +103,7 @@ public class UserServiceImpl implements UserService {
             if (!user.getPassword().equals(dto.getPassword())) {
                 if (
                         dto.getPassword().equals(dto.getConfirmPassword()) &&
-                        dto.getPassword().length() >= 6 && dto.getPassword().length() <= 30 &&
+                                dto.getPassword().length() >= 6 && dto.getPassword().length() <= 30 &&
                                 dto.getPassword().matches(".*[a-zA-Z].*") &&
                                 dto.getPassword().matches(".*[0-9].*")
                 ) {

@@ -1,4 +1,4 @@
-package project.gamepage.web.controller.auth;
+package project.gamepage.web.controller.user;
 
 import project.gamepage.service.UserServiceImpl;
 import project.gamepage.web.dto.UserDto;

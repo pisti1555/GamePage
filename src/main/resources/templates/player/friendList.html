@@ -29,6 +29,7 @@
                         <span th:text="${friend.username}"></span>
                     </a>    
                 </li>
+                <li th:if="${dto.friends.size == 0}">You do not have any friends</li>
             </ul>
         </section>
 
@@ -114,12 +115,16 @@
                 throw new Error ('response is not ok. status: ' + status);
             }
             const data = await response.json();
-            console.log('unadded: ', data);
             return data;
         }
 
-        function sendFriendRequest(param) {
-            fetch('/users/friends/add?invited=' + param.toString());
+        async function sendFriendRequest(username) {
+            try {
+                await fetch('/friends/add?invited=' + username);
+                await updateUserSearchList();
+            } catch (error) {
+                console.error('Error sending friend request:', error);
+            }
         }
 
         updateUserSearchList();

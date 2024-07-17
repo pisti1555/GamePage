@@ -1,13 +1,14 @@
-package project.gamepage.service.game.tic_tac_toe;
+package project.gamepage.service.game;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.ai.tic_tac_toe.AI_TicTacToe;
-import project.gamepage.data.model.game.fly_in_the_web.FITW;
+import project.gamepage.data.model.game.stats.TicTacToeStats;
 import project.gamepage.data.model.game.tic_tac_toe.Pieces_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
+import project.gamepage.data.model.user.User;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserService;
 
@@ -21,12 +22,14 @@ public class GameService_TicTacToe {
     private final List<PvC<TicTacToe>> pvcList;
     private final UserService userService;
     private final InvitationService invitationService;
+    private final GameStatsService gameStatsService;
     private final Random random;
 
     @Autowired
-    public GameService_TicTacToe(InvitationService invitationService, UserService userService) {
+    public GameService_TicTacToe(InvitationService invitationService, UserService userService, GameStatsService gameStatsService) {
         this.invitationService = invitationService;
         this.userService = userService;
+        this.gameStatsService = gameStatsService;
         this.pvpList = new ArrayList<>();
         this.pvcList = new ArrayList<>();
         this.random = new Random();
@@ -92,6 +95,11 @@ public class GameService_TicTacToe {
         if (isMoveValid(row, col, piece, game)) {
             game.getBoard()[row][col] = piece;
             game.setXTurn(!game.isXTurn());
+            if (piece.equals(Pieces_TicTacToe.X)) {
+                game.setX_movesMade(game.getX_movesMade() + 1);
+            } else {
+                game.setO_movesMade(game.getO_movesMade() + 1);
+            }
             return isSomebodyWon(game);
         }
         return false;
@@ -216,5 +224,51 @@ public class GameService_TicTacToe {
         }
     }
 
+    public int gameOver(PvP<TicTacToe> pvp) {
+        TicTacToe game = pvp.getBoard();
+        if (pvp.isOver()) return whichWon(game);
+        User user1 = userService.findByUsername(pvp.getUser1());
+        User user2 = userService.findByUsername(pvp.getUser2());
+        TicTacToeStats user1Stats = user1.getTicTacToeStats();
+        TicTacToeStats user2Stats = user2.getTicTacToeStats();
 
+        if (whichWon(game) == 1) {
+            if (pvp.getPrimaryPiece() == 1) {
+                user1Stats.setMovesMade(user1Stats.getMovesMade() + pvp.getBoard().getX_movesMade());
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
+                user1Stats.setGamesWon(user1Stats.getGamesWon() + 1);
+
+                user2Stats.setMovesMade(user2Stats.getMovesMade() + pvp.getBoard().getO_movesMade());
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
+            } else {
+                user2Stats.setMovesMade(user2Stats.getMovesMade() + pvp.getBoard().getX_movesMade());
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
+                user2Stats.setGamesWon(user2Stats.getGamesWon() + 1);
+
+                user1Stats.setMovesMade(user1Stats.getMovesMade() + pvp.getBoard().getO_movesMade());
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
+            }
+        } else if (whichWon(game) == 2) {
+            if (pvp.getSecondaryPiece() == 2) {
+                user2Stats.setMovesMade(user2Stats.getMovesMade() + pvp.getBoard().getO_movesMade());
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
+                user2Stats.setGamesWon(user2Stats.getGamesWon() + 1);
+
+                user1Stats.setMovesMade(user1Stats.getMovesMade() + pvp.getBoard().getX_movesMade());
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
+            } else {
+                user1Stats.setMovesMade(user1Stats.getMovesMade() + pvp.getBoard().getX_movesMade());
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
+                user1Stats.setGamesWon(user1Stats.getGamesWon() + 1);
+
+                user2Stats.setMovesMade(user2Stats.getMovesMade() + pvp.getBoard().getO_movesMade());
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
+            }
+        }
+
+        gameStatsService.saveTicTacToe(user1.getTicTacToeStats());
+        gameStatsService.saveTicTacToe(user2.getTicTacToeStats());
+        pvp.setOver(true);
+        return whichWon(game);
+    }
 }

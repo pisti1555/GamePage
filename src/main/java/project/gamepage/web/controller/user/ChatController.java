@@ -7,8 +7,8 @@ import project.gamepage.data.model.chat.ChatMessage;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
-import project.gamepage.service.game.fly_in_the_web.GameService_FITW;
-import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
+import project.gamepage.service.game.GameService_FITW;
+import project.gamepage.service.game.GameService_TicTacToe;
 
 import java.security.Principal;
 import java.util.ArrayList;

@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import project.gamepage.data.model.game.PvP;
-import project.gamepage.data.model.game.fly_in_the_web.FITW;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
-import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
+import project.gamepage.service.game.GameService_TicTacToe;
 
 import java.security.Principal;
 

@@ -42,10 +42,9 @@ public class FriendController {
     }
 
     @GetMapping("/add")
-    private boolean addFriend(Model model, Principal principal, String invited, HttpServletRequest http) {
+    private boolean addFriend(Model model, Principal principal, @RequestParam("invited")String invited) {
         User invitedUser = userService.findByUsername(invited);
         if (invitedUser == null) return false;
-
         service.addUserFriends(principal.getName(), invited);
         template.convertAndSendToUser(invited, "/topic/invites", "friend-request");
         return true;

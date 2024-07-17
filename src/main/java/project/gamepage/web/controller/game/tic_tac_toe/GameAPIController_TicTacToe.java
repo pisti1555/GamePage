@@ -1,13 +1,14 @@
 package project.gamepage.web.controller.game.tic_tac_toe;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.tic_tac_toe.Pieces_TicTacToe;
 import project.gamepage.data.model.game.tic_tac_toe.TicTacToe;
-import project.gamepage.service.game.tic_tac_toe.GameService_TicTacToe;
+import project.gamepage.service.game.GameService_TicTacToe;
 
 import java.security.Principal;
 
@@ -36,19 +37,19 @@ public class GameAPIController_TicTacToe {
 
         if (pvp.getPrimaryPiece() == 1 && pvp.getUser1().equals(principal.getName())) {
             boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.X);
-            if (isSomebodyWon) pvp.setOver(true);
+            if (isSomebodyWon) gameOver(principal);
         }
         if (pvp.getPrimaryPiece() == 1 && pvp.getUser2().equals(principal.getName())) {
             boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.O);
-            if (isSomebodyWon) pvp.setOver(true);
+            if (isSomebodyWon)gameOver(principal);
         }
         if (pvp.getPrimaryPiece() == 2 && pvp.getUser2().equals(principal.getName())) {
             boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.X);
-            if (isSomebodyWon) pvp.setOver(true);
+            if (isSomebodyWon) gameOver(principal);
         }
         if (pvp.getPrimaryPiece() == 2 && pvp.getUser1().equals(principal.getName())) {
             boolean isSomebodyWon = service.move(row, col, game, Pieces_TicTacToe.O);
-            if (isSomebodyWon) pvp.setOver(true);
+            if (isSomebodyWon) gameOver(principal);
         }
 
         template.convertAndSendToUser(pvp.getUser1(), "/topic/game/update", "update");
@@ -138,6 +139,13 @@ public class GameAPIController_TicTacToe {
         users[0] = pvp.getUser1();
         users[1] = pvp.getUser2();
         return users;
+    }
+
+    @GetMapping("/game-over")
+    public boolean gameOver(Principal principal) {
+        PvP<TicTacToe> pvp = service.getPvP(principal.getName());
+        service.gameOver(pvp);
+        return true;
     }
 
 }

@@ -1,6 +1,8 @@
-package project.gamepage.service.game.fly_in_the_web;
+package project.gamepage.service.game;
 
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
+import project.gamepage.data.model.game.stats.FitwStats;
+import project.gamepage.data.model.game.stats.TicTacToeStats;
 import project.gamepage.data.model.user.User;
 import project.gamepage.data.model.game.PvC;
 import project.gamepage.data.model.game.PvP;
@@ -15,19 +17,22 @@ import java.util.*;
 
 @Service
 public class GameService_FITW {
-    List<PvP<FITW>> pvpList;
-    List<PvC<FITW>> pvcList;
-    UserService userService;
-    InvitationService invitationService;
-    Random random;
+    private final List<PvP<FITW>> pvpList;
+    private final List<PvC<FITW>> pvcList;
+    private final UserService userService;
+    private final InvitationService invitationService;
+    private final Random random;
+    private final GameStatsService gameStatsService;
+
     private final short PVP = 1;
     private final short PVS = 2;
     private final short PVF = 3;
 
     @Autowired
-    public GameService_FITW(InvitationService invitationService, UserService userService) {
+    public GameService_FITW(InvitationService invitationService, UserService userService, GameStatsService gameStatsService) {
         this.invitationService = invitationService;
         this.userService = userService;
+        this.gameStatsService = gameStatsService;
         this.pvpList = new ArrayList<>();
         this.pvcList = new ArrayList<>();
         this.random = new Random();
@@ -354,46 +359,47 @@ public class GameService_FITW {
 
     public int gameOver(PvP<FITW> pvp) {
         if (pvp.isOver()) return whoWon(pvp.getBoard());
-
         User user1 = userService.findByUsername(pvp.getUser1());
         User user2 = userService.findByUsername(pvp.getUser2());
+        FitwStats user1Stats = gameStatsService.findByUsername_Fitw(user1.getUsername());
+        FitwStats user2Stats = gameStatsService.findByUsername_Fitw(user2.getUsername());
 
         if (whoWon(pvp.getBoard()) == 1) {
             if (pvp.getPrimaryPiece() == 1) {
-                user1.setMovesDone(user1.getMovesDone() + pvp.getBoard().flyStepsDone);
-                user1.setGamesPlayed(user1.getGamesPlayed() + 1);
-                user1.setGamesWon(user1.getGamesWon() + 1);
+                user1Stats.setStepsMade(user1Stats.getStepsMade() + pvp.getBoard().flyStepsDone);
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
+                user1Stats.setGamesWon(user1Stats.getGamesWon() + 1);
 
-                user2.setMovesDone(user2.getMovesDone() + pvp.getBoard().spiderStepsDone);
-                user2.setGamesPlayed(user2.getGamesPlayed() + 1);
+                user2Stats.setStepsMade(user2Stats.getStepsMade() + pvp.getBoard().spiderStepsDone);
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
             } else {
-                user2.setMovesDone(user2.getMovesDone() + pvp.getBoard().flyStepsDone);
-                user2.setGamesPlayed(user2.getGamesPlayed() + 1);
-                user2.setGamesWon(user2.getGamesWon() + 1);
+                user2Stats.setStepsMade(user2Stats.getStepsMade() + pvp.getBoard().flyStepsDone);
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
+                user2Stats.setGamesWon(user2Stats.getGamesWon() + 1);
 
-                user1.setMovesDone(user1.getMovesDone() + pvp.getBoard().spiderStepsDone);
-                user1.setGamesPlayed(user1.getGamesPlayed() + 1);
+                user1Stats.setStepsMade(user1Stats.getStepsMade() + pvp.getBoard().spiderStepsDone);
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
             }
         } else if (whoWon(pvp.getBoard()) == 2) {
             if (pvp.getSecondaryPiece() == 2) {
-                user2.setMovesDone(user2.getMovesDone() + pvp.getBoard().spiderStepsDone);
-                user2.setGamesPlayed(user2.getGamesPlayed() + 1);
-                user2.setGamesWon(user2.getGamesWon() + 1);
+                user2Stats.setStepsMade(user2Stats.getStepsMade() + pvp.getBoard().spiderStepsDone);
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
+                user2Stats.setGamesWon(user2Stats.getGamesWon() + 1);
 
-                user1.setMovesDone(user1.getMovesDone() + pvp.getBoard().flyStepsDone);
-                user1.setGamesPlayed(user1.getGamesPlayed() + 1);
+                user1Stats.setStepsMade(user1Stats.getStepsMade() + pvp.getBoard().flyStepsDone);
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
             } else {
-                user1.setMovesDone(user1.getMovesDone() + pvp.getBoard().flyStepsDone);
-                user1.setGamesPlayed(user1.getGamesPlayed() + 1);
-                user1.setGamesWon(user1.getGamesWon() + 1);
+                user1Stats.setStepsMade(user1Stats.getStepsMade() + pvp.getBoard().flyStepsDone);
+                user1Stats.setGamesPlayed(user1Stats.getGamesPlayed() + 1);
+                user1Stats.setGamesWon(user1Stats.getGamesWon() + 1);
 
-                user2.setMovesDone(user2.getMovesDone() + pvp.getBoard().spiderStepsDone);
-                user2.setGamesPlayed(user2.getGamesPlayed() + 1);
+                user2Stats.setStepsMade(user2Stats.getStepsMade() + pvp.getBoard().spiderStepsDone);
+                user2Stats.setGamesPlayed(user2Stats.getGamesPlayed() + 1);
             }
         }
 
-        userService.update(user1);
-        userService.update(user2);
+        gameStatsService.saveFitw(user1Stats);
+        gameStatsService.saveFitw(user2Stats);
         pvp.setOver(true);
         return whoWon(pvp.getBoard());
     }

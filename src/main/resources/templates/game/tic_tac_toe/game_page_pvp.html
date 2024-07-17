@@ -54,9 +54,7 @@
     <div class="game_over hidden" id="game-over-screen">
         <h1 class="text" id="whoWonText"></h1>
         <div class="button_container">
-            <form th:action="@{/tic-tac-toe/game/return-to-lobby}">
-                <button class="button" type="submit">return to Lobby</button>
-            </form>
+            <a class="button" th:href="@{/tic-tac-toe/game/return-to-lobby}">return to Lobby</a>
         </div>
     </div>
 

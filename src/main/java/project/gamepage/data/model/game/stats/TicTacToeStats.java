@@ -11,14 +11,16 @@ public class TicTacToeStats {
     @Column(name = "tictactoe_id")
     private Long id;
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id")
     private User user;
+    private String username;
     private int gamesPlayed;
     private int gamesWon;
     private int movesMade;
 
     public TicTacToeStats(User user, int gamesPlayed, int gamesWon, int movesMade) {
         this.user = user;
+        this.username = user.getUsername();
         this.gamesPlayed = gamesPlayed;
         this.gamesWon = gamesWon;
         this.movesMade = movesMade;
@@ -65,5 +67,13 @@ public class TicTacToeStats {
 
     public void setMovesMade(int movesMade) {
         this.movesMade = movesMade;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

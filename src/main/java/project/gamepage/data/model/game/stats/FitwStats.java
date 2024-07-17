@@ -1,6 +1,7 @@
 package project.gamepage.data.model.game.stats;
 
 import jakarta.persistence.*;
+import project.gamepage.data.model.user.User;
 
 @Entity
 @Table(name = "stats_fitw")
@@ -9,6 +10,9 @@ public class FitwStats {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fitw_id")
     private Long id;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     private String username;
     private int gamesPlayed;
     private int gamesWon;
@@ -17,8 +21,9 @@ public class FitwStats {
     public FitwStats() {
     }
 
-    public FitwStats(String username, int gamesPlayed, int gamesWon, int stepsMade) {
-        this.username = username;
+    public FitwStats(User user, int gamesPlayed, int gamesWon, int stepsMade) {
+        this.user = user;
+        this.username = user.getUsername();
         this.gamesPlayed = gamesPlayed;
         this.gamesWon = gamesWon;
         this.stepsMade = stepsMade;
@@ -32,11 +37,19 @@ public class FitwStats {
         this.id = id;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public String getUsername() {
         return username;
     }
 
-    public void setUser(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -63,5 +76,4 @@ public class FitwStats {
     public void setStepsMade(int stepsMade) {
         this.stepsMade = stepsMade;
     }
-
 }

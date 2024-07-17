@@ -66,13 +66,13 @@ async function updateBoard() {
               placePieces(data);
            });
 
-    await fetch('/tic-tac-toe/api/game/which-won-pvp')
-        .then(response => response.json())
+    await fetch("/tic-tac-toe/api/game/which-won-pvp")
+    .then(response => response.json())
             .then(data => {
                 if (data == 1 || data == 2 || data == 3) {
                     gameWon();
                 }
-    });
+            });
 }
 
 async function move(row, col) {
@@ -108,18 +108,18 @@ function placePieces(locations) {
 async function gameWon() {
     await fetch('/tic-tac-toe/api/game/which-won-pvp')
     .then(response => response.json())
-    .then(data => {
-        if (data == 1) {
-            gameOverScreen.classList.remove('hidden');
-            whoWonText.textContent = "X Won!"
-        } else if (data == 2) {
-            gameOverScreen.classList.remove('hidden');
-            whoWonText.textContent = "O Won!"
-        } else if(data == 3) {
-            gameOverScreen.classList.remove('hidden');
-            whoWonText.textContent = "Draw"
-        }
-    });
+        .then(data => {
+            if (data == 1) {
+                gameOverScreen.classList.remove('hidden');
+                whoWonText.textContent = "X Won!"
+            } else if (data == 2) {
+                gameOverScreen.classList.remove('hidden');
+                whoWonText.textContent = "O Won!"
+            } else if(data == 3) {
+                gameOverScreen.classList.remove('hidden');
+                whoWonText.textContent = "Draw"
+            }
+        });
 }
 
 async function newGame() {
