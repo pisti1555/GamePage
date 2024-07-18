@@ -79,6 +79,9 @@ async function loadNavBar() {
     for (let request of friendRequestList) {
         const li = document.createElement('li');
         li.innerHTML = `
+            <div class="image-container">
+                <img src="/img/avatar/${request.avatar}.png" />
+            </div>
             <h3 class="requestMessage">${request.username} has sent a friend request</h3>
             <button class="nav-button" onclick="acceptFriendRequest('${request.username}')">Accept</button>
             <button class="nav-button" onclick="declineFriendRequest('${request.username}')">Decline</button>
@@ -88,7 +91,6 @@ async function loadNavBar() {
 
     // Friend request count
     friendRequestCountDoc.textContent = friendRequestCount;
-    friendRequestText.textContent = 'You do not have any friend request';
     if (friendRequestCount > 0) {
         friendRequestCountDoc.style.display = 'flex';
         friendRequestText.style.display = 'none';
@@ -103,22 +105,28 @@ async function loadNavBar() {
         const li = document.createElement('li');
         if (invite.game == "FITW") {
             li.innerHTML = `
-                <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
+                <div class="image-container">
+                    <img src="/img/avatar/${invite.inviter.avatar}.png" />
+                </div>
+                <h3 class="invMessage">${invite.inviter.username} invited you to play ${invite.game}</h3>
                 <form action="/fly-in-the-web/lobby/join" method="post">
-                    <input type="hidden" name="inviter" value="${invite.inviter}" />
+                    <input type="hidden" name="inviter" value="${invite.inviter.username}" />
                     <button class="nav-button" type="submit">Join</button>
                 </form>
-                <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter}')">Decline</button>
+                <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter.username}')">Decline</button>
             `;
         }
         if (invite.game == "TicTacToe") {
             li.innerHTML = `
-                <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
+                <div class="image-container">
+                    <img src="/img/avatar/${invite.inviter.avatar}.png" />
+                </div>
+                <h3 class="invMessage">${invite.inviter.username} invited you to play ${invite.game}</h3>
                 <form action="/tic-tac-toe/join" method="post">
-                    <input type="hidden" name="inviter" value="${invite.inviter}" />
+                    <input type="hidden" name="inviter" value="${invite.inviter.username}" />
                     <button class="nav-button" type="submit">Join</button>
                 </form>
-                <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter}')">Decline</button>
+                <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter.username}')">Decline</button>
             `;
         }
         
@@ -126,7 +134,6 @@ async function loadNavBar() {
     }
 
     // Game invitation count
-    gameInvitationText.textContent = 'You do not have any invitation';
     gameInvitationCountDoc.textContent = gameInvitationCount;
     if (gameInvitationCount > 0) {
         

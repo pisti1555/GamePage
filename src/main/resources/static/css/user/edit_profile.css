@@ -144,6 +144,17 @@ body {
     font-weight: 600;
 }
 
+.field .error {
+    width: 50%;
+    border: transparent;
+    border-radius: 10px;
+    background: #830000;
+    padding-inline: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
 .field-edit{
     display: none;
     flex-direction: column;

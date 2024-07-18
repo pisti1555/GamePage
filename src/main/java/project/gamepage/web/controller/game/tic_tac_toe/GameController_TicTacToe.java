@@ -15,8 +15,8 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/tic-tac-toe/game")
 public class GameController_TicTacToe {
-    SimpMessagingTemplate template;
-    GameService_TicTacToe service;
+    private final SimpMessagingTemplate template;
+    private final GameService_TicTacToe service;
     @Autowired
     public GameController_TicTacToe(SimpMessagingTemplate template, GameService_TicTacToe service) {
         this.template = template;

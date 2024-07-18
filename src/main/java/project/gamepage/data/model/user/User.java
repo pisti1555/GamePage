@@ -44,9 +44,6 @@ public class User implements UserDetails {
     @ManyToMany
     @JoinTable(name = "user_friends", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_id") )
     private Set<User> userFriends;
-    private int gamesPlayed;
-    private int gamesWon;
-    private int movesDone;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JoinTable(name = "stats_fitw", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "fitw_id") )
     private FitwStats fitwStats;
@@ -58,7 +55,7 @@ public class User implements UserDetails {
         super();
         this.roles = new HashSet<>();
     }
-    public User(String username, String avatar, String email, String password, String firstName, String lastName, Collection<Role> roles, int gamesPlayed, int gamesWon, int movesDone) {
+    public User(String username, String avatar, String email, String password, String firstName, String lastName, Collection<Role> roles) {
         this.username = username;
         this.avatar = avatar;
         this.email = email;
@@ -66,9 +63,6 @@ public class User implements UserDetails {
         this.firstName = firstName;
         this.lastName = lastName;
         this.roles = roles;
-        this.gamesPlayed = gamesPlayed;
-        this.gamesWon = gamesWon;
-        this.movesDone = movesDone;
         this.ticTacToeStats = new TicTacToeStats(this, 0, 0, 0);
         this.fitwStats = new FitwStats(this, 0, 0, 0);
     }
@@ -182,30 +176,6 @@ public class User implements UserDetails {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
-    }
-
-    public int getGamesPlayed() {
-        return gamesPlayed;
-    }
-
-    public void setGamesPlayed(int gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
-    }
-
-    public int getGamesWon() {
-        return gamesWon;
-    }
-
-    public void setGamesWon(int gamesWon) {
-        this.gamesWon = gamesWon;
-    }
-
-    public int getMovesDone() {
-        return movesDone;
-    }
-
-    public void setMovesDone(int movesDone) {
-        this.movesDone = movesDone;
     }
 
     public String getAvatar() {

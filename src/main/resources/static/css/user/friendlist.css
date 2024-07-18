@@ -147,12 +147,14 @@ body {
 .search-section ul li a {
     display: flex;
     background: #000219;
+    border: 1px solid transparent;
     border-radius: 50%;
     align-items: center;
     justify-content: center;
     margin: 10px;
     cursor: pointer;
     margin-inline: 10px;
+    transition: all 0.1s;
 }
 
 

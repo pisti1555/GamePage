@@ -37,6 +37,7 @@
 
     <div id="field-description" class="field">
         <h2>Description:</h2>
+        <div th:if="${param.descriptionTooLong}" class="alert alert-info">Description has to be maximum 100 character long</div>
         <p th:if="${user.description == null}">You haven't set description to your profile.</p>
         <p th:if="${user.description != null}" th:text="${user.description}"></p>
         <div class="button-container">
@@ -46,7 +47,7 @@
     <div id="field-description-edit" class="field-edit">
         <h2>Description:</h2>
         <form th:action="@{/profile/update}" method="post" th:object="${dto}">
-            <input id="description-input" type="text" name="description" placeholder="set the description of your profile...">
+            <input type="text" name="description" placeholder="set the description of your profile...">
             <button type="submit">Save</button>
         </form>
         <div class="button-container">
@@ -54,26 +55,11 @@
         </div>
     </div>
 
-    <div id="field-username" class="field">
-        <h2>Username:</h2>
-        <p th:text="${user.username}"></p>
-        <div class="button-container">
-            <button onclick="editField('username')">Edit username</button>
-        </div>
-    </div>
-    <div id="field-username-edit" class="field-edit">
-        <h2>Username:</h2>
-        <form th:action="@{/profile/update}" method="post" th:object="${dto}">
-            <input id="description-input" type="text" name="username" placeholder="enter your new username...">
-            <button type="submit">Save</button>
-        </form>
-        <div class="button-container">
-            <button onclick="discard('username')">Discard</button>
-        </div>
-    </div>
-
     <div id="field-email" class="field">
         <h2>E-Mail:</h2>
+        <div th:if="${param.emailInvalid}" class="error">E-mail format was invalid</div>
+        <div th:if="${param.emailTaken}" class="error">E-mail is already taken</div>
+        <div th:if="${param.emailMatchesPrevious}" class="error">E-mail address cannot be the same as the previous one</div>
         <p th:text="${user.email}"></p>
         <div class="button-container">
             <button onclick="editField('email')">Edit e-mail</button>
@@ -82,7 +68,7 @@
     <div id="field-email-edit" class="field-edit">
         <h2>E-Mail:</h2>
         <form th:action="@{/profile/update}" method="post" th:object="${dto}">
-            <input id="description-input" type="text" name="email" placeholder="enter your new e-mail...">
+            <input type="text" name="email" placeholder="enter your new e-mail...">
             <button type="submit">Save</button>
         </form>
         <div class="button-container">
@@ -92,6 +78,7 @@
 
     <div id="field-firstName" class="field">
         <h2>First name:</h2>
+        <div th:if="${param.firstnameMatchesPrevious}" class="error">First name is the same as the previous one</div>
         <p th:text="${user.firstName}"></p>
         <div class="button-container">
             <button onclick="editField('firstName')">Edit first name</button>
@@ -100,7 +87,7 @@
     <div id="field-firstName-edit" class="field-edit">
         <h2>First name:</h2>
         <form th:action="@{/profile/update}" method="post" th:object="${dto}">
-            <input id="description-input" type="text" name="firstName" placeholder="change your first name...">
+            <input type="text" name="firstName" placeholder="change your first name...">
             <button type="submit">Save</button>
         </form>
         <div class="button-container">
@@ -110,6 +97,7 @@
 
     <div id="field-lastName" class="field">
         <h2>Last name:</h2>
+        <div th:if="${param.lastnameMatchesPrevious}" class="error">Last name is the same as the previous one</div>
         <p th:text="${user.lastName}"></p>
         <div class="button-container">
             <button onclick="editField('lastName')">Edit last name</button>
@@ -118,7 +106,7 @@
     <div id="field-lastName-edit" class="field-edit">
         <h2>First name:</h2>
         <form th:action="@{/profile/update}" method="post" th:object="${dto}">
-            <input id="description-input" type="text" name="lastName" placeholder="change your last name...">
+            <input type="text" name="lastName" placeholder="change your last name...">
             <button type="submit">Save</button>
         </form>
         <div class="button-container">
@@ -128,16 +116,19 @@
 
     <div id="field-password" class="field">
         <h2>Password:</h2>
+        <div th:if="${param.passwordInvalid}" class="error">Password is invalid: minimum 6 characters, 1 letter and 1 number</div>
+        <div th:if="${param.passwordMatchesPrevious}" class="error">Password cannot be the same as the previous one</div>
+        <div th:if="${param.passwordConfirmationError}" class="error">Passwords do not match</div>
         <p>****** hidden ******</p>
         <div class="button-container">
             <button onclick="editField('password')">Edit password</button>
         </div>
     </div>
     <div id="field-password-edit" class="field-edit">
-        <h2>First name:</h2>
+        <h2>Password</h2>
         <form th:action="@{/profile/update}" method="post" th:object="${dto}">
-            <input id="description-input" type="text" name="password" placeholder="enter your new password...">
-            <input id="description-input" type="text" name="confirmPassword" placeholder="enter it again...">
+            <input type="text" name="password" placeholder="enter your new password...">
+            <input type="text" name="confirmPassword" placeholder="enter it again...">
             <button type="submit">Save</button>
         </form>
         <div class="button-container">
@@ -186,10 +177,6 @@
             document.getElementById('field-description').style.display = 'none';
             document.getElementById('field-description-edit').style.display = 'flex';
         }
-        if (field == 'username') {
-            document.getElementById('field-username').style.display = 'none';
-            document.getElementById('field-username-edit').style.display = 'flex';
-        }
         if (field == 'email') {
             document.getElementById('field-email').style.display = 'none';
             document.getElementById('field-email-edit').style.display = 'flex';
@@ -216,10 +203,6 @@
         if (item == 'description') {
             document.getElementById('field-description').style.display = 'flex';
             document.getElementById('field-description-edit').style.display = 'none';
-        }
-        if (item == 'username') {
-            document.getElementById('field-username').style.display = 'flex';
-            document.getElementById('field-username-edit').style.display = 'none';
         }
         if (item == 'email') {
             document.getElementById('field-email').style.display = 'flex';

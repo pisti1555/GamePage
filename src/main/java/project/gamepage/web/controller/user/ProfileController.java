@@ -43,9 +43,9 @@ public class ProfileController {
 
     @PostMapping("/profile/update")
     public String editProfilePost(Principal principal, @ModelAttribute("dto") UserDto dto) {
-        User user = service.editProfile(service.findByUsername(principal.getName()), dto);
-        if (user != null) return "redirect:/profile/edit?success";
-        return "redirect:/profile/edit?error";
+        String message = service.editProfile(service.findByUsername(principal.getName()), dto);
+        if (message.isEmpty()) return "redirect:/profile/edit?success";
+        return "redirect:/profile/edit?error" + message;
     }
 
     @GetMapping("/profile/{userToFind}")

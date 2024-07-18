@@ -30,5 +30,4 @@ public class HomeController_FITW {
         model.addAttribute("users", profileDataService.getAll());
         return "/game/fly_in_the_web/scoreboard";
     }
-
 }

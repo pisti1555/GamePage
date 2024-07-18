@@ -57,6 +57,8 @@
         <section class="friend-container">
             <ul class="friend-list">
                 <h3>Friends</h3>
+                <p th:text="'total: ' + ${profile.friends.size}"></p>
+                <li th:if="${profile.friends.size == 0}">Friendlist is empty</li>
                 <li th:each="friend : ${profile.friends}">
                     <a class="item" th:href="@{/profile/{friend}(friend=${friend.username})}">
                         <div class="image-container">

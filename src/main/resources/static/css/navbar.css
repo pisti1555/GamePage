@@ -135,13 +135,17 @@
     display: none;
     position: absolute;
     background: linear-gradient(to bottom right, #0f0c29, #151234, #010139);
-    min-width: 400px;
-    padding: 10px;
+    width: fit-content;
+    height: fit-content;
+    padding: 20px;
     border: 1px solid #000020;
     border-radius: 5px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 100;
     right: 0;
+    align-items: center;
+    justify-content: center;
+    text-wrap: nowrap;
 }
 
 .nav-right .profile-dropdown .profile-dropdown-content {

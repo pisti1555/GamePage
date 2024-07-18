@@ -227,9 +227,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-
-
-
 connectToWebSocket();
 showLobbyUsers();
 showFriendsToInvite();

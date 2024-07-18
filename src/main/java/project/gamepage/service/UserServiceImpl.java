@@ -1,7 +1,5 @@
 package project.gamepage.service;
 
-import project.gamepage.data.model.game.stats.FitwStats;
-import project.gamepage.data.model.game.stats.TicTacToeStats;
 import project.gamepage.data.model.user.Role;
 import project.gamepage.data.model.user.User;
 import project.gamepage.data.repository.FitwRepository;
@@ -69,85 +67,68 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User editProfile(User user, UserDto dto) {
-        if (dto.getUsername() != null && !dto.getUsername().isEmpty()) {
-            if (!user.getUsername().equals(dto.getUsername())) {
-                if (
-                        userRepository.findByUsername(dto.getUsername()) == null
-                                && !dto.getUsername().contains(" ")
-                ) {
-                    user.setUsername(dto.getUsername());
-                    update(user);
-                    return user;
-                }
-            }
-        }
+    public String editProfile(User user, UserDto dto) {
+        StringBuilder builder = new StringBuilder();
 
-        if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
-            if (!user.getEmail().equals(dto.getEmail())) {
-                String emailRegex = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-                Pattern emailPattern = Pattern.compile(emailRegex);
-                Matcher emailMatcher = emailPattern.matcher(dto.getEmail());
-                if (
-                        userRepository.findByEmail(dto.getEmail()) == null
-                                && emailMatcher.matches()
-                ) {
-                    user.setEmail(dto.getEmail());
-                    update(user);
-                    return user;
-                }
-            }
-        }
-
-        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            if (!user.getPassword().equals(dto.getPassword())) {
-                if (
-                        dto.getPassword().equals(dto.getConfirmPassword()) &&
-                                dto.getPassword().length() >= 6 && dto.getPassword().length() <= 30 &&
-                                dto.getPassword().matches(".*[a-zA-Z].*") &&
-                                dto.getPassword().matches(".*[0-9].*")
-                ) {
-                    String password = passwordEncoder.encode(dto.getPassword());
-                    user.setPassword(password);
-                    update(user);
-                    return user;
-                }
-            }
-        }
-
-        if (dto.getFirstName() != null && !dto.getFirstName().isEmpty()) {
-            if (!user.getFirstName().equals(dto.getFirstName())) {
-                user.setFirstName(dto.getFirstName());
+        if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
+            if (!dto.getAvatar().equals(user.getAvatar())) {
+                user.setAvatar(dto.getAvatar());
                 update(user);
-                return user;
-            }
-        }
-
-        if (dto.getLastName() != null && !dto.getLastName().isEmpty()) {
-            if (!user.getLastName().equals(dto.getLastName())) {
-                user.setLastName(dto.getLastName());
-                update(user);
-                return user;
             }
         }
 
         if (dto.getDescription() != null && !dto.getDescription().isEmpty()) {
-            if (!user.getDescription().equals(dto.getDescription())) {
+            if (dto.getDescription().length() <= 100) {
                 user.setDescription(dto.getDescription());
                 update(user);
-                return user;
-            }
+            } else builder.append("&descriptionTooLong");
         }
 
-        if (dto.getAvatar() != null && !dto.getAvatar().isEmpty()) {
-            if (!user.getAvatar().equals(dto.getAvatar())) {
-                user.setAvatar(dto.getAvatar());
+        if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+            if (!dto.getEmail().equals(user.getEmail())) {
+                String emailRegex = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+                Pattern emailPattern = Pattern.compile(emailRegex);
+                Matcher emailMatcher = emailPattern.matcher(dto.getEmail());
+                if (userRepository.findByEmail(dto.getEmail()) == null) {
+                    if (emailMatcher.matches()) {
+                        user.setEmail(dto.getEmail());
+                        update(user);
+                    } else builder.append("&emailInvalid");
+                } else builder.append("&emailTaken");
+            } else builder.append("&emailMatchesPrevious");
+        }
+
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            if (!dto.getPassword().equals(user.getPassword())) {
+                if (dto.getPassword().equals(dto.getConfirmPassword())) {
+                    if (
+                            dto.getPassword().length() >= 6 && dto.getPassword().length() <= 30 &&
+                                    dto.getPassword().matches(".*[a-zA-Z].*") &&
+                                    dto.getPassword().matches(".*[0-9].*")
+                    ) {
+                        String password = passwordEncoder.encode(dto.getPassword());
+                        user.setPassword(password);
+                        update(user);
+                    } else builder.append("&passwordInvalid");
+                } else builder.append("&passwordConfirmationError");
+            } else builder.append("&passwordMatchesPrevious");
+        }
+
+        if (dto.getFirstName() != null && !dto.getFirstName().isEmpty()) {
+            if (!dto.getFirstName().equals(user.getFirstName())) {
+                user.setFirstName(dto.getFirstName());
                 update(user);
-                return user;
-            }
+            } else builder.append("&firstnameMatchesPrevious");
         }
 
-        return null;
+        if (dto.getLastName() != null && !dto.getLastName().isEmpty()) {
+            if (!dto.getLastName().equals(user.getLastName())) {
+                user.setLastName(dto.getLastName());
+                update(user);
+            } else builder.append("&lastnameMatchesPrevious");
+        }
+
+        return builder.toString();
     }
 
     @Override
@@ -157,7 +138,7 @@ public class UserServiceImpl implements UserService {
             String password = passwordEncoder.encode(dto.getPassword());
             User user = new User(dto.getUsername(), dto.getAvatar(), dto.getEmail(), password,
                     dto.getFirstName(), dto.getLastName(),
-                    List.of(new Role("ROLE_USER")), 0, 0, 0);
+                    List.of(new Role("ROLE_USER")));
             userRepository.save(user);
         }
         return response;

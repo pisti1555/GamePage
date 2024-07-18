@@ -1,7 +1,6 @@
 package project.gamepage.web.controller.game.tic_tac_toe;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import project.gamepage.data.model.game.PvC;
