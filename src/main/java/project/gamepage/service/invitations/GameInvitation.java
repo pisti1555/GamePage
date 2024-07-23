@@ -1,19 +1,22 @@
 package project.gamepage.service.invitations;
 
+import project.gamepage.web.dto.ProfileDto;
+
 public class GameInvitation {
-    private String inviter;
+    private ProfileDto inviter;
     private String game;
 
-    public GameInvitation(String inviter, String game) {
-        this.inviter = inviter;
+    public GameInvitation(ProfileDto dto, String game) {
+        this.inviter = dto;
         this.game = game;
     }
 
-    public String getInviter() {
-        return inviter;
-    }
 
     public String getGame() {
         return game;
+    }
+
+    public ProfileDto getInviter() {
+        return inviter;
     }
 }

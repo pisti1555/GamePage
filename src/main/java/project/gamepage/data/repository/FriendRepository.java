@@ -8,14 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FriendRequestDao extends JpaRepository<User, Long> {
+public interface FriendRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     User findByUsername(String username);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM UserFriendRequest requests WHERE requests.user.id = :user1 AND requests.friendId = :user2")
-    void deleteFriendRequest(Long user1, Long user2);
+    @Query("DELETE FROM UserFriends friends WHERE friends.user.id = :user1 AND friends.friendId = :user2")
+    void deleteFriend(Long user1, Long user2);
 
 }

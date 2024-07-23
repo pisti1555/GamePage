@@ -1,4 +1,4 @@
-package project.gamepage.web.controller.auth;
+package project.gamepage.web;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;

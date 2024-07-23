@@ -13,8 +13,7 @@
                 <span class="inv-count" id="friend-requests-count"></span>
             </button>
             <div id="friendRequestContainer" class="dropdown-content">
-                <a th:href="@{/friends}" class="nav-button">See your friendlist</a>
-                <h3 id="no-friend-request" class="requestMessage"></h3>
+                <h3 id="no-friend-request" class="requestMessage">You do not have any friend request</h3>
                 <ul id="friend-request-list"></ul>
             </div>
         </div>
@@ -24,15 +23,23 @@
                 <span class="inv-count" id="game-invitation-count"></span>
             </button>
             <div id="invContainer" class="dropdown-content">
-                <h3 id="no-game-invitation" class="invMessage"></h3>
+                <h3 id="no-game-invitation" class="invMessage">You do not have any invitation</h3>
                 <ul id="game-invitation-list"></ul>
             </div>
         </div>
-        <a id="login" class="profile" th:href="@{/profile}">
-            <h3 id="principal-username" class="username" th:text="${username}"></h3>
-            <img class="logo" id="playerLogo" th:src="@{/img/navbar/player_logo_small.svg}">
-        </a>
+        <div class="profile-dropdown">
+            <a id="login" class="profile" th:href="@{/profile}">
+                <h3 id="principal-username" class="username" th:text="${username}"></h3>
+                <div class="avatar-container" id="avatar-container"></div>
+            </a>
+            <div class="profile-dropdown-content">
+                <a th:href="@{'/profile/' + ${username}}">View profile</a>
+                <a th:href="@{/friends}">Friends</a>
+                <a th:href="@{/logout}">Log out</a>
+            </div>
+        </div>
     </div>
 </nav>
 
 <script th:src="@{/js/navbar.js}" th:fragment="navbar"></script>
+<link rel="stylesheet" th:href="@{/css/navbar.css}" th:fragment="navbar">

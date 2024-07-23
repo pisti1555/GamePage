@@ -1,5 +1,7 @@
 package project.gamepage.web.controller.user;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import project.gamepage.data.model.user.User;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
@@ -9,12 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import project.gamepage.web.dto.ProfileDto;
+import project.gamepage.web.dto.UserDto;
 
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/profile")
 public class ProfileController {
     UserService service;
     UserFriendsService friendsService;
@@ -27,24 +29,30 @@ public class ProfileController {
         this.invitationService = invitationService;
     }
 
-    @GetMapping
+    @GetMapping("/profile")
     public String profile(Model model, Principal principal) {
         return "redirect:/profile/" + principal.getName();
     }
 
-    @GetMapping("/{userToFind}")
-    public String otherUserProfile(Model model, @PathVariable String userToFind, Principal principal) {
-        boolean selfProfile = userToFind.equals(principal.getName());
-        User user = service.findByUsername(userToFind);
-
-        model.addAttribute("friend", friendsService.isFriend(principal.getName(), userToFind));
-        model.addAttribute("invitationSent", friendsService.isFriendInvitationSent(principal.getName(), userToFind));
+    @GetMapping("/profile/edit")
+    public String editProfile(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
-        model.addAttribute("name", user.getUsername());
-        model.addAttribute("gamesPlayed", user.getGamesPlayed());
-        model.addAttribute("gamesWon", user.getGamesWon());
-        model.addAttribute("movesDone", user.getMovesDone());
-        model.addAttribute("selfProfile", selfProfile);
+        model.addAttribute("user", service.findByUsername(principal.getName()));
+        return "player/profile_edit";
+    }
+
+    @PostMapping("/profile/update")
+    public String editProfilePost(Principal principal, @ModelAttribute("dto") UserDto dto) {
+        String message = service.editProfile(service.findByUsername(principal.getName()), dto);
+        if (message.isEmpty()) return "redirect:/profile/edit?success";
+        return "redirect:/profile/edit?error" + message;
+    }
+
+    @GetMapping("/profile/{userToFind}")
+    public String otherUserProfile(Model model, @PathVariable String userToFind, Principal principal) {
+        ProfileDto dto = new ProfileDto(service.findByUsername(userToFind));
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("profile", dto);
         return "player/profile";
     }
 }

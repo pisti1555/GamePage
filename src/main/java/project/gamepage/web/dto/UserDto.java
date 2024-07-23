@@ -1,15 +1,18 @@
 package project.gamepage.web.dto;
 
-public class RegistrationDto {
+public class UserDto {
     private String username;
+    private String avatar;
     private String email;
     private String password;
     private String confirmPassword;
     private String firstName;
     private String lastName;
+    private String description;
 
-    public RegistrationDto(String username, String email, String password, String confirmPassword, String firstName, String lastName) {
+    public UserDto(String username, String avatar, String email, String password, String confirmPassword, String firstName, String lastName) {
         this.username = username;
+        this.avatar = avatar;
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
@@ -17,11 +20,26 @@ public class RegistrationDto {
         this.lastName = lastName;
     }
 
-    public RegistrationDto() {
+    public UserDto(String username, String description, String avatar, String email, String password, String confirmPassword, String firstName, String lastName) {
+        this.username = username;
+        this.description = description;
+        this.avatar = avatar;
+        this.email = email;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public UserDto() {
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public String getEmail() {
@@ -48,6 +66,10 @@ public class RegistrationDto {
         this.username = username;
     }
 
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -65,5 +87,13 @@ public class RegistrationDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

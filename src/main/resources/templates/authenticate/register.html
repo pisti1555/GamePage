@@ -3,7 +3,7 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Registration</title>
-    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <link rel="stylesheet" th:href="@{/css/user/register.css}">
 
     <style th:inline="text">
         body {
@@ -25,8 +25,13 @@
         </div>
 
         <h1>Registration</h1>
+        <section class="image-section">
+            <h1 onclick="previousAvatar()"><</h1>
+            <div id="image-container" class="image-container"></div>  
+            <h1 onclick="nextAvatar()">></h1>
+        </section>
 
-        <form th:action="@{/register}" method="post" th:object="${user}">
+        <form class="form" th:action="@{/register}" method="post" th:object="${user}">
             <div class="data">
                 <label for="username">Username:</label>
                 <input class="input" type="text" id="username" th:name="username" required>
@@ -36,6 +41,10 @@
             </div>
             <div th:if="${param.usernameInvalid}">
                 <div class="alert alert-info">Username can not contain whitespace</div>
+            </div>
+
+            <div hidden>
+                <input hidden class="input" type="text" id="avatar" th:name="avatar" value="1" required>
             </div>
             
             <div class="data">
@@ -82,5 +91,29 @@
 
         </form>
     </div>
+
+    <script>
+        var avatarNumber = 1;
+        const imgContainer = document.getElementById('image-container');
+        const avatarInput = document.getElementById('avatar');
+        
+        function nextAvatar() {
+            if (avatarNumber >= 21) return null;
+            avatarNumber++;
+            updateAvatar();
+        }
+        function previousAvatar() {
+            if (avatarNumber <= 1) return null;
+            avatarNumber--;
+            updateAvatar();
+        }
+        function updateAvatar() {
+            imgContainer.innerHTML = `
+            <img src="/img/avatar/avatar${avatarNumber}.png"></img>
+        `;
+        avatarInput.value = ("avatar" + avatarNumber).toString();
+        }
+        updateAvatar();
+    </script>
 </body>
 </html>

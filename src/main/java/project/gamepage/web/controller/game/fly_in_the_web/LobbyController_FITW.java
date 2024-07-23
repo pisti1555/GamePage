@@ -1,11 +1,11 @@
 package project.gamepage.web.controller.game.fly_in_the_web;
 
+import org.springframework.http.ResponseEntity;
 import project.gamepage.data.model.game.PvP;
 import project.gamepage.data.model.game.fly_in_the_web.FITW;
-import project.gamepage.service.game.fly_in_the_web.GameService_FITW;
+import project.gamepage.service.game.GameService_FITW;
 import project.gamepage.service.invitations.InvitationService;
 import project.gamepage.service.UserFriendsService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -98,10 +98,11 @@ public class LobbyController_FITW {
         }
     }
 
-    @PostMapping("/decline-lobby-invitation")
-    public String declineLobbyInvitation_FITW(HttpServletRequest http, Principal principal, @RequestParam("inviter") String inviter) {
+    @GetMapping("/decline-lobby-invitation")
+    public ResponseEntity<Boolean> declineLobbyInvitation_FITW(Principal principal, @RequestParam("inviter") String inviter) {
         invitationService.removeInvitation(principal.getName(), inviter, "FITW");
-        return "redirect:" + http.getHeader("Referer");
+        template.convertAndSendToUser(inviter, "/topic/lobby/update", "update");
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/start")

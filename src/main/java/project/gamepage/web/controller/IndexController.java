@@ -24,7 +24,6 @@ public class IndexController {
     public String getIndexPage(Model model, Principal principal) {
         String username = principal.getName();
         model.addAttribute("username", username);
-        System.out.println("\n\n\n\n" + username + " game invites: " + invitationService.getInvites(username) + "\n\n\n\n");
         return "index";
     }
 }

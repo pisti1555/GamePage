@@ -1,0 +1,236 @@
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background: linear-gradient(to bottom right, #000428, #000551);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.image-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.image-section .avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-section .edit {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-section .edit .image-swap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-section .avatar button,
+.image-section .edit button {
+    width: fit-content;
+    height: fit-content;
+    background: #000661;
+    color: #ffff;
+    border-radius: 5px;
+    border: 1px solid #00031e;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    padding-inline: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 5px;
+}
+
+.image-section .edit h1 {
+    cursor: pointer;
+}
+
+.image-section .edit h1:hover,
+.image-section .edit h1:focus {
+    color: #008cff;
+    text-shadow: 0 0 5px #008cff, 0 0 10px #008cff, 0 0 20px #008cff;
+}
+
+.image-section .edit .image-container,
+.image-section .avatar .image-container {
+    margin: 10px;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #010011;
+}
+
+.image-section .edit .image-container img,
+.image-section .avatar .image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main-container {
+    margin: 0 auto;
+    margin-top: -10px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 80vw;
+    border: 1px solid black;
+    color: #ffff;
+    background: linear-gradient(to right, #001b33, #001629);
+    min-height: 100%;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.main-container .button-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.main-container .button-container a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    height: 30px;
+    background: #000661;
+    color: #ffff;
+    border-radius: 5px;
+    border: 1px solid #00031e;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.1s;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    background: #00101e;
+    border-radius: 5px;
+    width: 80%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.field .error {
+    width: 50%;
+    border: transparent;
+    border-radius: 10px;
+    background: #830000;
+    padding-inline: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.field-edit{
+    display: none;
+    flex-direction: column;
+    background: #00101e;
+    border-radius: 5px;
+    width: 80%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.field h3,
+.field p,
+.field-edit h3,
+.field-edit p {
+    margin: 0;
+    padding: 0;
+}
+
+.field p,
+.field-edit p {
+    margin-inline: 10px;
+}
+
+.field-edit form input {
+    width: 50%;
+    padding: 20px;
+    border-radius: 5px;
+    border: transparent;
+    margin-bottom: 10px;
+}
+
+
+
+.field .button-container,
+.field-edit .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 100%;
+    height: fit-content;
+    margin-top: 10px;
+}
+
+.field .button-container button,
+.field-edit .button-container button, 
+.field-edit form button {
+    width: 15%;
+    height: 30px;
+    background: #000661;
+    color: #ffff;
+    border-radius: 5px;
+    border: 1px solid #00031e;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 10px;
+    transition: all 0.1s;
+}
+
+.main-container .button-container a:hover,
+.main-container .button-container a:focus,
+.field .button-container button:hover,
+.field .button-container button:focus,
+.field-edit .button-container button:hover,
+.field-edit .button-container button:focus,
+.field-edit form button:hover,
+.field-edit form button:focus,
+.image-section .avatar button:hover,
+.image-section .avatar button:focus,
+.image-section .edit button:hover,
+.image-section .edit button:focus {
+    background: #008cff;
+    box-shadow: 0 0 1px #008cff, 0 0 5px #008cff, 0 0 10px #008cff, 0 0 20px #008cff;
+    border-color: #008cff;
+}
+

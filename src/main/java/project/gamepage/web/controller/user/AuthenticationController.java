@@ -1,7 +1,7 @@
-package project.gamepage.web.controller.auth;
+package project.gamepage.web.controller.user;
 
 import project.gamepage.service.UserServiceImpl;
-import project.gamepage.web.dto.RegistrationDto;
+import project.gamepage.web.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +19,12 @@ public class AuthenticationController {
 
     @GetMapping("/register")
     public String getRegisterPage(Model model) {
-        model.addAttribute("registrationDto", new RegistrationDto());
+        model.addAttribute("registrationDto", new UserDto());
         return "authenticate/register";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("registrationDto") RegistrationDto dto) {
+    public String register(@ModelAttribute("registrationDto") UserDto dto) {
         String message = userServiceImpl.register(dto);
         if (message.isEmpty()) return "redirect:/register?success";
         return "redirect:/register?error" + message;

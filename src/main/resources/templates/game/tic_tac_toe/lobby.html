@@ -8,13 +8,9 @@
 
     <title>Lobby - Tic-Tac-Toe</title>
 
-    <link rel="stylesheet" th:href="@{/css/navbar.css}"/>
     <link rel="stylesheet" th:href="@{/css/lobby.css}"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
+    <script th:replace="init :: init"></script> 
 </head>
 <body>
     <nav th:replace="navbar :: navbar"></nav>
@@ -24,10 +20,12 @@
             <div class="container-horizontal">
                 <section id="lobby" class="block">
                     <h2>Lobby</h2>
-                    <div th:if="${lobby.user1 !=  null}" class="player-container">
+                    <div th:if="${lobby.user1 != null}" class="player-container">
                         <div class="info">
-                            <img th:src="@{/img/player/player_logo_small.svg}">
-                            <h3 th:text="${lobby.user1}"></h3>
+                            <div class="image-container">
+                                <img id="lobby_user1_avatar">
+                            </div>
+                            <h3 id="lobby_user1_name" th:text="${lobby.user1}"></h3>
                             <p th:if="${lobby.primaryPiece == 1}">playing X</p>
                             <p th:if="${lobby.primaryPiece == 2}">playing O</p>
                         </div>
@@ -43,10 +41,12 @@
                         </a>
                     </div>
         
-                    <div th:if="${lobby.user2 !=  null}" class="player-container">
+                    <div th:if="${lobby.user2 != null}" class="player-container">
                         <div class="info">
-                            <img th:src="@{/img/player/player_logo_small.svg}">
-                            <h3 th:text="${lobby.user2}"></h3>
+                            <div class="image-container">
+                                <img id="lobby_user2_avatar">
+                            </div>
+                            <h3 id="lobby_user2_name" th:text="${lobby.user2}"></h3>
                             <p th:if="${lobby.primaryPiece == 2}">playing X</p>
                             <p th:if="${lobby.primaryPiece == 1}">playing O</p>
                         </div>
@@ -55,7 +55,7 @@
                             <p th:if="${lobby.isUser2Ready}">Ready</p>
                         </div>
                     </div>
-                    <div th:if="${lobby.user2 ==  null}" class="player-container not-ingame">
+                    <div th:if="${lobby.user2 == null}" class="player-container not-ingame">
                         <div class="info">
                             <img th:src="@{/img/player/computer.svg}">
                             <h3>Computer</h3>

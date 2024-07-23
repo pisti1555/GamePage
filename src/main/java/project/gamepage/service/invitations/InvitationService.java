@@ -1,6 +1,9 @@
 package project.gamepage.service.invitations;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import project.gamepage.service.UserService;
+import project.gamepage.web.dto.ProfileDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,15 +12,19 @@ import java.util.Map;
 
 @Service
 public class InvitationService {
+    private final UserService userService;
     public Map<String, List<GameInvitation>> invites;
 
-    public InvitationService() {
+    @Autowired
+    public InvitationService(UserService userService) {
+        this.userService = userService;
         this.invites = new HashMap<>();
     }
 
     public void inviteFriend(String inviter, String invited, String game) {
         List<GameInvitation> invitations = getInvites(invited);
-        invitations.add(new GameInvitation(inviter, game));
+        ProfileDto dto = new ProfileDto(userService.findByUsername(inviter));
+        invitations.add(new GameInvitation(dto, game));
         invites.put(invited, invitations);
     }
 
@@ -39,7 +46,7 @@ public class InvitationService {
             String invited = entry.getKey();
             if (invited.equals(username)) {
                 List<GameInvitation> invitations = entry.getValue();
-                invitations.removeIf(invitation -> invitation.getInviter().equals(inver) && invitation.getGame().equals(game));
+                invitations.removeIf(invitation -> invitation.getInviter().getUsername().equals(inver) && invitation.getGame().equals(game));
             }
         }
     }
@@ -50,7 +57,7 @@ public class InvitationService {
             if (invited.equals(username)) {
                 List<GameInvitation> invitations = entry.getValue();
                 for (GameInvitation invitation : invitations) {
-                    if (invitation.getInviter().equals(inver) && invitation.getGame().equals(game)) {
+                    if (invitation.getInviter().getUsername().equals(inver) && invitation.getGame().equals(game)) {
                         return true;
                     }
                 }

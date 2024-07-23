@@ -2,6 +2,7 @@ let friendRequestList = {};
 let friendRequestCount = 0;
 let gameInvitationList = {};
 let gameInvitationCount = 0;
+let avatar = 'default';
 
 var stompClient = null;
 
@@ -9,14 +10,22 @@ function connectToWebSocket() {
     var socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/user/topic/invites', function (message) {
-            console.log('Received message: ' + message.body);
             loadNavBar();
         });
     });
 }
-connectToWebSocket();
+
+async function declineGameInvitation(game, name) {
+    await fetch('/api/lobby/decline-lobby-invitation?inviter=' + name + '&game=' + game);
+    await loadNavBar();
+}
+
+async function getAvatar() {
+    const response = await fetch('/nav-bar/avatar');
+    const data = await response.text();
+    avatar = data;
+}
 
 async function getFriendInvites() {
     const response = await fetch('/nav-bar/friend-invites');
@@ -44,6 +53,7 @@ async function getGameInviteCount() {
 
 async function loadNavBar() {
     await Promise.all([
+        getAvatar(),
         getFriendInvites(),
         getFriendInviteCount(),
         getGameInvites(),
@@ -53,38 +63,40 @@ async function loadNavBar() {
     const friendRequestText = document.getElementById('no-friend-request');
     const gameInvitationText = document.getElementById('no-game-invitation');
 
+    const avatarContainerDoc = document.getElementById('avatar-container');
     const friendRequestListDoc = document.getElementById('friend-request-list');
     const friendRequestCountDoc = document.getElementById('friend-requests-count');
     const gameInvitationListDoc = document.getElementById('game-invitation-list');
     const gameInvitationCountDoc = document.getElementById('game-invitation-count');
+
+    //Avatar
+    avatarContainerDoc.innerHTML = `
+        <img src="/img/avatar/${avatar}.png"></img>
+    `;
 
     // Friend request list
     friendRequestListDoc.innerHTML = '';
     for (let request of friendRequestList) {
         const li = document.createElement('li');
         li.innerHTML = `
-            <div class="row">
-                <h3 class="requestMessage">${request} has sent a friend request</h3>
-                <form action="/friends/add" method="post">
-                    <input type="hidden" name="invited" value="${request}" />
-                    <button class="nav-button" type="submit">Accept</button>
-                </form>
-                <form action="/friends/decline-friend-request" method="post">
-                    <input type="hidden" name="inviter" value="${request}" />
-                    <button class="nav-button" type="submit">Decline</button>
-                </form>
+            <div class="image-container">
+                <img src="/img/avatar/${request.avatar}.png" />
             </div>
+            <h3 class="requestMessage">${request.username} has sent a friend request</h3>
+            <button class="nav-button" onclick="acceptFriendRequest('${request.username}')">Accept</button>
+            <button class="nav-button" onclick="declineFriendRequest('${request.username}')">Decline</button>
         `;
         friendRequestListDoc.appendChild(li);
     }
 
     // Friend request count
+    friendRequestCountDoc.textContent = friendRequestCount;
     if (friendRequestCount > 0) {
-        friendRequestCountDoc.textContent = friendRequestCount;
         friendRequestCountDoc.style.display = 'flex';
         friendRequestText.style.display = 'none';
     } else {
-        friendRequestText.textContent = 'You do not have any friend request';
+        friendRequestCountDoc.style.display = 'none';
+        friendRequestText.style.display = 'flex';
     }
 
     // Game invitation list
@@ -93,46 +105,63 @@ async function loadNavBar() {
         const li = document.createElement('li');
         if (invite.game == "FITW") {
             li.innerHTML = `
-            <div class="row">
-                <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
+                <div class="image-container">
+                    <img src="/img/avatar/${invite.inviter.avatar}.png" />
+                </div>
+                <h3 class="invMessage">${invite.inviter.username} invited you to play ${invite.game}</h3>
                 <form action="/fly-in-the-web/lobby/join" method="post">
-                    <input type="hidden" name="inviter" value="${invite.inviter}" />
+                    <input type="hidden" name="inviter" value="${invite.inviter.username}" />
                     <button class="nav-button" type="submit">Join</button>
                 </form>
-                <form action="/fly-in-the-web/lobby/decline-lobby-invitation" method="post">
-                    <input type="hidden" name="inviter" value="${invite.inviter}" />
-                    <button class="nav-button" type="submit">Decline</button>
-                </form>
-            </div>
-        `;
+                <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter.username}')">Decline</button>
+            `;
         }
         if (invite.game == "TicTacToe") {
             li.innerHTML = `
-            <div class="row">
-                <h3 class="invMessage">${invite.inviter} invited you to play ${invite.game}</h3>
+                <div class="image-container">
+                    <img src="/img/avatar/${invite.inviter.avatar}.png" />
+                </div>
+                <h3 class="invMessage">${invite.inviter.username} invited you to play ${invite.game}</h3>
                 <form action="/tic-tac-toe/join" method="post">
-                    <input type="hidden" name="inviter" value="${invite.inviter}" />
+                    <input type="hidden" name="inviter" value="${invite.inviter.username}" />
                     <button class="nav-button" type="submit">Join</button>
                 </form>
-                <form action="/tic-tac-toe/decline-lobby-invitation" method="post">
-                    <input type="hidden" name="inviter" value="${invite.inviter}" />
-                    <button class="nav-button" type="submit">Decline</button>
-                </form>
-            </div>
-        `;
+                <button class="nav-button" onclick="declineGameInvitation('${invite.game}', '${invite.inviter.username}')">Decline</button>
+            `;
         }
         
         gameInvitationListDoc.appendChild(li);
     }
 
     // Game invitation count
+    gameInvitationCountDoc.textContent = gameInvitationCount;
     if (gameInvitationCount > 0) {
-        gameInvitationCountDoc.textContent = gameInvitationCount;
+        
         gameInvitationCountDoc.style.display = 'flex';
         gameInvitationText.style.display = 'none';
     } else {
-        gameInvitationText.textContent = 'You do not have any invitation';
+        gameInvitationCountDoc.style.display = 'none';
+        gameInvitationText.style.display = 'flex';
+    }
+}
+
+async function acceptFriendRequest(username) {
+    try {
+        await fetch('/friends/add?invited=' + username);
+        await loadNavBar();
+    } catch (error) {
+        console.error('Error sending friend request:', error);
+    }
+}
+
+async function declineFriendRequest(username) {
+    try {
+        await fetch('/friends/decline-friend-request?inviter=' + username);
+        await loadNavBar();
+    } catch (error) {
+        console.error('Error deleting friend:', error);
     }
 }
 
 loadNavBar();
+connectToWebSocket();

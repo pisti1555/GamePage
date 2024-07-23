@@ -6,6 +6,8 @@ public class TicTacToe {
     private boolean gameMode; //true = PvP : false = PvC
     private boolean isGameRunning;
     private Pieces_TicTacToe winnerPiece;
+    private int X_movesMade;
+    private int O_movesMade;
 
 
     public TicTacToe() {
@@ -19,6 +21,8 @@ public class TicTacToe {
         this.isXTurn = true;
         this.isGameRunning = false;
         this.winnerPiece = Pieces_TicTacToe.EMPTY;
+        this.X_movesMade = 0;
+        this.O_movesMade = 0;
     }
 
     public Pieces_TicTacToe[][] cloneBoard() {
@@ -69,5 +73,21 @@ public class TicTacToe {
 
     public void setWinnerPiece(Pieces_TicTacToe winnerPiece) {
         this.winnerPiece = winnerPiece;
+    }
+
+    public int getX_movesMade() {
+        return X_movesMade;
+    }
+
+    public void setX_movesMade(int x_movesMade) {
+        X_movesMade = x_movesMade;
+    }
+
+    public int getO_movesMade() {
+        return O_movesMade;
+    }
+
+    public void setO_movesMade(int o_movesMade) {
+        O_movesMade = o_movesMade;
     }
 }
